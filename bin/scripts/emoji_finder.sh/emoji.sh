@@ -10,8 +10,11 @@ if [ "$1" == '--help' ]; then
 	exit 0
 fi
 
+SCRIPT=`realpath -s $0`
+SCRIPTPATH=`dirname $SCRIPT`
+
 # get matches
-emoji_matches=(`cat ./emojis.txt | grep -i "$1" | awk '{print $1}'`)
+emoji_matches=(`cat $SCRIPTPATH/emojis.txt | grep -i "$1" | awk '{print $1}'`)
 
 if [ ${#emoji_matches[@]} == 0 ]; then
 	echo "No matches were found"
