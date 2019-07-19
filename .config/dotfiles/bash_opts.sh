@@ -5,3 +5,5 @@ HISTSIZE= HISTFILESIZE= # Infinite history.
 source ~/bin/scripts/helpers.sh
 source ~/.config/dotfiles/ps1.sh
 source ~/.config/dotfiles/git.sh
+PATH=~/bin:$PATH
+PATH=~/bin/scripts/emoji_finder.sh:$PATH

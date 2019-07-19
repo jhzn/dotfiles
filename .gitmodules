@@ -1,0 +1,3 @@
+[submodule "bin/scripts/emoji_finder.sh"]
+	path = bin/scripts/emoji_finder.sh
+	url = https://github.com/jhzn/emoji_finder.sh
