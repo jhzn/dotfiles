@@ -1,5 +1,5 @@
 #!/bin/sh
-code --install-extension CoenraadS.bracket-pair-colorizer
+code --install-extension CoenraadS.bracket-pair-colorizer-2
 code --install-extension coolbear.systemd-unit-file
 code --install-extension dbaeumer.vscode-eslint
 code --install-extension DotJoshJohnson.xml
@@ -7,12 +7,12 @@ code --install-extension eamodio.gitlens
 code --install-extension emmanuelbeziat.vscode-great-icons
 code --install-extension Equinusocio.vsc-material-theme
 code --install-extension eriklynd.json-tools
+code --install-extension esbenp.prettier-vscode
 code --install-extension felixfbecker.php-debug
 code --install-extension felixfbecker.php-intellisense
 code --install-extension GregorBiswanger.json2ts
 code --install-extension hangxingliu.vscode-nginx-conf-hint
 code --install-extension HookyQR.beautify
-code --install-extension HookyQR.minify
 code --install-extension HvyIndustries.crane
 code --install-extension imperez.smarty
 code --install-extension jakebathman.mysql-syntax
@@ -27,11 +27,15 @@ code --install-extension mikestead.dotenv
 code --install-extension mrmlnc.vscode-apache
 code --install-extension ms-azuretools.vscode-docker
 code --install-extension ms-vscode.Go
+code --install-extension ms-vscode.vscode-typescript-tslint-plugin
 code --install-extension octref.vetur
 code --install-extension PKief.material-icon-theme
 code --install-extension rbbit.typescript-hero
+code --install-extension rust-lang.rust
 code --install-extension Sophisticode.php-formatter
 code --install-extension tomoki1207.selectline-statusbar
+code --install-extension vadimcn.vscode-lldb
+code --install-extension vscode-icons-team.vscode-icons
 code --install-extension wmaurer.change-case
 code --install-extension zhuangtongfa.Material-theme
 code --install-extension zxh404.vscode-proto3
