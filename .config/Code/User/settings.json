@@ -1,0 +1,69 @@
+// Place your settings in this file to overwrite the default settings
+{
+	"editor.mouseWheelScrollSensitivity": 2,
+	"typescript.check.npmIsInstalled": false,
+	"window.zoomLevel": 0,
+	"editor.insertSpaces": false,
+	"window.titleBarStyle":"custom",
+	"workbench.startupEditor": "newUntitledFile",
+	"terminal.integrated.fontSize": 15,
+	"terminal.integrated.shellArgs.linux": [
+		"-l"
+	],
+	"explorer.confirmDragAndDrop": false,
+	"extensions.ignoreRecommendations": false,
+	"telemetry.enableCrashReporter": false,
+	"telemetry.enableTelemetry": false,
+	"terminal.integrated.rendererType": "canvas",
+	"terminal.integrated.cursorStyle": "block",
+	"terminal.integrated.copyOnSelection": true,
+	"terminal.integrated.cursorBlinking": true,
+	"[php]":{
+		"editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?"
+	},
+	"files.autoGuessEncoding": false,
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"files.eol": "\n",
+	"breadcrumbs.enabled": true,
+	"editor.mouseWheelZoom": true,
+	"files.trimTrailingWhitespace": true,
+	"explorer.autoReveal": false,
+   	"diffEditor.ignoreTrimWhitespace": true,
+	"editor.autoClosingBrackets": "beforeWhitespace",
+	"go.testFlags": [
+		"-count=1",
+		"-v"
+	],
+	"go.lintTool": "gometalinter",
+	"go.lintFlags": [
+			"--disable-all",
+		"--enable=golint",
+		"--config=~/.gometalinter"
+	],
+	// "go.delveConfig": {
+	//     "apiVersion": 2,
+	//     "dlvLoadConfig": {
+	//         "followPointers": true,
+	//         "maxVariableRecurse": 5,
+	//         "maxStringLen": 64,
+	//         "maxArrayValues": 64,
+	//         "maxStructFields": -1
+	//     }
+	// },
+	"go.autocompleteUnimportedPackages": true,
+	"gitlens.advanced.telemetry.enabled": false,
+	"workbench.panel.defaultLocation": "right",
+	"workbench.iconTheme": "simple-icons",
+	"workbench.colorCustomizations": {},
+	"workbench.colorTheme": "One Dark Pro Vivid",
+	"editor.renderWhitespace": "boundary",
+	"sftp.debug": true,
+	"editor.minimap.enabled": false,
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"csharp.suppressDotnetInstallWarning": true,
+	"editor.largeFileOptimizations": false,
+	"workbench.settings.enableNaturalLanguageSearch": false,
+	"code-runner.enableAppInsights": false
+}

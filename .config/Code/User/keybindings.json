@@ -1,0 +1,69 @@
+// Place your key bindings in this file to overwrite the defaults
+[
+	{
+		"key": "ctrl+[Quote]",
+		"command": "workbench.action.toggleMaximizedPanel"
+	},
+	{
+		"key": "ctrl+shift+down",
+		"command": "editor.action.copyLinesDownAction",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "shift+alt+down",
+		"command": "-editor.action.copyLinesDownAction",
+		"when": "editorTextFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+[Semicolon]",
+		"command": "workbench.action.terminal.toggleTerminal"
+	},
+	{
+		"key": "ctrl+shift+[Equal]",
+		"command": "-workbench.action.terminal.toggleTerminal"
+	},
+	{
+		"key": "ctrl+shift+[Semicolon]",
+		"command": "workbench.action.terminal.new"
+	},
+	{
+		"key": "alt+right",
+		"command": "-workbench.action.terminal.focusNextPane",
+		"when": "terminalFocus"
+	},
+	{
+		"key": "alt+down",
+		"command": "-workbench.action.terminal.focusNextPane",
+		"when": "terminalFocus"
+	},
+	{
+		"key": "alt+left",
+		"command": "-workbench.action.terminal.focusPreviousPane",
+		"when": "terminalFocus"
+	},
+	{
+		"key": "alt+up",
+		"command": "-workbench.action.terminal.focusPreviousPane",
+		"when": "terminalFocus"
+	},
+	{
+		"key": "alt+right",
+		"command": "workbench.action.terminal.focusNextPane"
+	},
+	{
+		"key": "alt+up",
+		"command": "workbench.action.terminal.focusNext"
+	},
+	{
+		"key": "alt+down",
+		"command": "workbench.action.terminal.focusPrevious"
+	},
+	{
+		"key": "alt+left",
+		"command": "workbench.action.terminal.focusPreviousPane"
+	},
+	{
+		"key": "ctrl+[BracketLeft]",
+		"command": "workbench.action.focusPanel"
+	}
+]
