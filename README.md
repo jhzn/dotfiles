@@ -8,7 +8,10 @@
 	echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> ~/.bash_aliases && \
 	source ~/.bash_aliases && \
 	config config status.showUntrackedFiles no && \
+	config config submodule.recurse true && \
     	config reset --hard && \
+	config submodule init && \
+	config submodule update && \
     	echo "Successfully downloaded dotfiles and setup configuration. All that remains is to update .bashrc"
 	
 	#Update ~/.bashrc with dotfiles config
