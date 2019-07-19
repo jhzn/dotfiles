@@ -1,11 +1,15 @@
 ### Setup
 
 ```bash
-	#all we care about is the .git folder which is placed in ~/.dotfiles
-	git clone --separate-git-dir=$HOME/.dotfiles https://github.com/jhzn/dotfiles $HOME/dotfiles-tmp && rm -rf dotfiles-tmp
+	#All we care about is the .git folder which is placed in ~/.dotfiles and then a git reset --hard is used to place the contents of the repo in the HOME dir.
+	#git reponds with error if you try to clone a repos content directly into a directory which already has content. This circumvents that.
+ 	cd ~ && \
+	git clone --separate-git-dir=$HOME/.dotfiles https://github.com/jhzn/dotfiles $HOME/dotfiles-tmp && rm -rf dotfiles-tmp && \
 	echo "alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'" >> ~/.bash_aliases && \
 	source ~/.bash_aliases && \
-	config config status.showUntrackedFiles no && echo "Successfully downloaded dotfiles and setup configuration. All that remains is to update .bashrc"
+	config config status.showUntrackedFiles no && \
+    	config reset --hard && \
+    	echo "Successfully downloaded dotfiles and setup configuration. All that remains is to update .bashrc"
 	
 	#Update ~/.bashrc with dotfiles config
 	echo "source ~/.config/dotfiles/bash_opts.sh" >> ~/.bashrc
