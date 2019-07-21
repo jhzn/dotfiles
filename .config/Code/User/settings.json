@@ -65,5 +65,6 @@
 	"csharp.suppressDotnetInstallWarning": true,
 	"editor.largeFileOptimizations": false,
 	"workbench.settings.enableNaturalLanguageSearch": false,
-	"code-runner.enableAppInsights": false
+	"code-runner.enableAppInsights": false,
+	"latex-workshop.view.pdf.viewer": "tab"
 }

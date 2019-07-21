@@ -1,3 +1,6 @@
 [submodule "bin/scripts/emoji_finder.sh"]
 	path = bin/scripts/emoji_finder.sh
 	url = https://github.com/jhzn/emoji_finder.sh
+[submodule "bin/scripts/latex-docker"]
+	path = bin/scripts/latex-docker
+	url = https://github.com/blang/latex-docker

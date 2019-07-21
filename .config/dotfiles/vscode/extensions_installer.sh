@@ -16,6 +16,7 @@ code --install-extension HookyQR.beautify
 code --install-extension HvyIndustries.crane
 code --install-extension imperez.smarty
 code --install-extension jakebathman.mysql-syntax
+code --install-extension James-Yu.latex-workshop
 code --install-extension jolaleye.horizon-theme-vscode
 code --install-extension JPTarquino.postgresql
 code --install-extension junstyle.php-cs-fixer
