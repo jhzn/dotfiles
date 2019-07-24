@@ -1,4 +1,5 @@
 #!/bin/sh
+#Do not edit directly! File is generated.
 code --install-extension CoenraadS.bracket-pair-colorizer-2
 code --install-extension coolbear.systemd-unit-file
 code --install-extension dbaeumer.vscode-eslint
@@ -34,6 +35,7 @@ code --install-extension PKief.material-icon-theme
 code --install-extension rbbit.typescript-hero
 code --install-extension rust-lang.rust
 code --install-extension Sophisticode.php-formatter
+code --install-extension streetsidesoftware.code-spell-checker
 code --install-extension tomoki1207.selectline-statusbar
 code --install-extension vadimcn.vscode-lldb
 code --install-extension vscode-icons-team.vscode-icons

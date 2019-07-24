@@ -5,5 +5,6 @@
 FILE=~/.config/dotfiles/vscode/extensions_installer.sh
 
 printf "#!/bin/sh\n" > $FILE
+printf "#Do not edit directly! File is generated.\n" >> $FILE
 code --list-extensions | xargs -L 1 echo code --install-extension >> $FILE
 chmod +x $FILE
