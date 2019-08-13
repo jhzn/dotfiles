@@ -8,7 +8,7 @@
 cd ~ && \
 git clone --separate-git-dir=$HOME/.dotfiles https://github.com/jhzn/dotfiles $HOME/dotfiles-tmp && \
 rm -rf dotfiles-tmp && \
-alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME" && \
+source <(echo 'alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"') && \
 config reset --hard && \
 echo "source ~/.config/dotfiles/bash_opts.sh" >> ~/.bashrc && \
 source ~/.bashrc && \
