@@ -8,5 +8,6 @@ source ~/.config/dotfiles/git.sh
 source ~/.config/dotfiles/bash_aliases.sh
 
 PATH=~/bin:$PATH
+PATH=~/bin/scripts:$PATH
 PATH=~/bin/scripts/emoji_finder.sh:$PATH
 PATH=~/bin/scripts/latex-docker:$PATH
