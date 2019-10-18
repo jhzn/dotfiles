@@ -6,9 +6,10 @@ Plug 'https://github.com/rakr/vim-one.git'
 call plug#end()
 
 " ## PLUGIN STUFF ##
+" Nerdtree
 map <C-b> :NERDTreeToggle<CR>
 
-"THEME
+"Theme
 let g:airline_theme='one'
 colorscheme one
 set background=dark " for the dark version
