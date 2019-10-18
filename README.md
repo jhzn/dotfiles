@@ -24,11 +24,11 @@ config update
 
 
 ### Get vim(neovim) plugins in order
-```bash
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-#Then open vim and run :PlugInstall
-```
+Refer to this page on how to install:
+
+https://github.com/junegunn/vim-plug
+
+Then open vim and run :PlugInstall
 
 ### Usage
 
