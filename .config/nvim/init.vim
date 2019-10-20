@@ -1,18 +1,40 @@
 call plug#begin('~/.config/nvim/plugins')
 
-Plug 'https://github.com/scrooloose/nerdtree.git'
+" Themes
 Plug 'https://github.com/rakr/vim-one.git'
+Plug 'https://github.com/joshdick/onedark.vim'
+
+" Nice to have
+Plug 'https://github.com/scrooloose/nerdtree.git'
+Plug 'https://github.com/vim-airline/vim-airline'
+
+" Language stuff
+Plug 'https://github.com/Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'https://github.com/sheerun/vim-polyglot'
+Plug 'https://github.com/fatih/vim-go'
 
 call plug#end()
 
-" ## PLUGIN STUFF ##
-" Nerdtree
+" ## PLUGINS conf begin ##
+"
+" Nerdtree begin
 map <C-b> :NERDTreeToggle<CR>
+" Nerdtree end
 
-"Theme
-let g:airline_theme='one'
-colorscheme one
-set background=dark " for the dark version
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+
+" Theme begin
+
+"let g:airline_theme='one'
+"colorscheme one
+"set background=dark " for the dark version
+
+let g:airline_theme='onedark'
+syntax on
+colorscheme onedark
+
+
 "Credit joshdick
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
@@ -29,14 +51,14 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
+" Theme end
 
 
-
-" ## PLUGIN STUFF END ##
+" ## PLUGINS conf end ##
 
 set number "Show line numbers
 
-"Make VIM and X11 share the came clipboard. 
+"Make VIM and X11 share the came clipboard. Neovim require no extra thought, it works out of the box
 "Make sure you have a vim version compiled with +clipboard or +xterm_clipboard
 "Use 'vim --version | grep clipboard' and find those string
 "More info here: https://vim.fandom.com/wiki/Accessing_the_system_clipboard
@@ -44,6 +66,7 @@ set clipboard=unnamedplus
 
 set tabstop=4       " number of visual spaces per TAB
 set softtabstop=4   " number of spaces in tab when editing
+set shiftwidth=4
 set cursorline          " highlight current line
 set showmatch           " highlight matching [{()}]
 set incsearch           " search as characters are entered
