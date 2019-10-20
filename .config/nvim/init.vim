@@ -56,17 +56,19 @@ endif
 
 " ## PLUGINS conf end ##
 
-set number "Show line numbers
-
 "Make VIM and X11 share the came clipboard. Neovim require no extra thought, it works out of the box
 "Make sure you have a vim version compiled with +clipboard or +xterm_clipboard
 "Use 'vim --version | grep clipboard' and find those string
 "More info here: https://vim.fandom.com/wiki/Accessing_the_system_clipboard
 set clipboard=unnamedplus
 
+set completeopt=longest,menuone
+
+set number "Show line numbers
+set list	" Shows whitespace as a character
 set tabstop=4       " number of visual spaces per TAB
 set softtabstop=4   " number of spaces in tab when editing
-set shiftwidth=4
+set shiftwidth=4	" Make tabbing 4 spaces wide
 set cursorline          " highlight current line
 set showmatch           " highlight matching [{()}]
 set incsearch           " search as characters are entered
