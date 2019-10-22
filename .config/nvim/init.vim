@@ -17,7 +17,7 @@ call plug#end()
 " ## PLUGINS conf begin ##
 "
 " Nerdtree begin
-map <C-b> :NERDTreeToggle<CR>
+map <F2> :NERDTreeToggle<CR>
 " Nerdtree end
 
 " Theme begin
@@ -52,6 +52,10 @@ endif
 
 " ## PLUGINS conf end ##
 
+" Custom keybinding of native features
+:nnoremap <F1> :buffers<CR>:buffer<Space>
+
+
 "Make VIM and X11 share the came clipboard. Neovim require no extra thought, it works out of the box
 "Make sure you have a vim version compiled with +clipboard or +xterm_clipboard
 "Use 'vim --version | grep clipboard' and find those string
@@ -65,7 +69,7 @@ filetype plugin on "when a file is edited its plugin file is loaded(if there is 
 filetype indent on "maintain indentation
 
 
-set number "Show line numbers
+set number relativenumber "Relative linenumber and absolut linenumber where the cursor currently is 
 set list	" Shows whitespace as a character
 set tabstop=4       " number of visual spaces per TAB
 set softtabstop=4   " number of spaces in tab when editing
