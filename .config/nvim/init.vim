@@ -22,14 +22,9 @@ map <F2> :NERDTreeToggle<CR>
 
 " Theme begin
 
-"let g:airline_theme='one'
-"colorscheme one
-"set background=dark " for the dark version
-
 let g:airline_theme='onedark'
 syntax on
 colorscheme onedark
-
 
 "Credit joshdick
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
@@ -93,9 +88,6 @@ cmap w!! w !sudo tee > /dev/null %
 "  autocmd!
 "  autocmd VimEnter * :Vexplore
 "augroup END
-
-
-
 
 
 
@@ -236,6 +228,25 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 
+" vim-go
 " disable vim-go :GoDef short cut (gd)
 " this is handled by LanguageClient [LC]
 let g:go_def_mapping_enabled = 0
+"more colors
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_format_strings = 1
+
+
+
+
+let g:go_fmt_command = "goimports" "Auto import packages
