@@ -24,11 +24,14 @@ config update
 
 
 ### Get vim(neovim) plugins in order
-Refer to this page on how to install:
+Refer to this page on how to install the plugin manager:
 
 https://github.com/junegunn/vim-plug
 
-Then open vim and run :PlugInstall
+Then open a shell and run the following to install the plugins
+```sh
+vim +PlugInstall
+```
 
 ### Usage
 
