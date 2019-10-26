@@ -74,6 +74,17 @@ set showmatch           " highlight matching [{()}]
 set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
 
+
+" Shortcutting split navigation, saving a keypress:
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" Automatically deletes all trailing whitespace on save.
+autocmd BufWritePre * %s/\s\+$//e
+
+
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
 
