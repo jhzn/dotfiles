@@ -7,6 +7,7 @@ Plug 'https://github.com/joshdick/onedark.vim'
 " Nice to have
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'https://github.com/tpope/vim-surround'
 
 " Language stuff
 Plug 'https://github.com/fatih/vim-go'
@@ -64,7 +65,7 @@ filetype plugin on "when a file is edited its plugin file is loaded(if there is 
 filetype indent on "maintain indentation
 
 
-set number relativenumber "Relative linenumber and absolut linenumber where the cursor currently is 
+set number relativenumber "Relative linenumber and absolut linenumber where the cursor currently is
 set list	" Shows whitespace as a character
 set tabstop=4       " number of visual spaces per TAB
 set softtabstop=4   " number of spaces in tab when editing
