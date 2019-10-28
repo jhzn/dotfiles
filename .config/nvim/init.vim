@@ -14,11 +14,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
-" ## PLUGINS conf begin ##
-"
-" Nerdtree begin
+" Nerdtree
 map <F2> :NERDTreeToggle<CR>
-" Nerdtree end
 
 " Theme begin
 
@@ -33,16 +30,8 @@ endif
 
 " Theme end
 
-" ## PLUGINS conf end ##
 
-" Custom keybinding of native features
-:nnoremap <F1> :buffers<CR>:buffer<Space>
-
-
-"Make VIM and X11 share the came clipboard. Neovim require no extra thought, it works out of the box
-"Make sure you have a vim version compiled with +clipboard or +xterm_clipboard
-"Use 'vim --version | grep clipboard' and find those string
-"More info here: https://vim.fandom.com/wiki/Accessing_the_system_clipboard
+"Make VIM and X11 share the came clipboard
 set clipboard=unnamedplus
 
 set completeopt=longest,menuone
@@ -50,7 +39,6 @@ set completeopt=longest,menuone
 filetype on "detect files bases on type
 filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
 filetype indent on "maintain indentation
-
 
 set number relativenumber "Relative linenumber and absolut linenumber where the cursor currently is
 set list	" Shows whitespace as a character
@@ -69,24 +57,14 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
+" Custom keybinding of native features
+:nnoremap <F1> :buffers<CR>:buffer<Space>
+
 " Automatically deletes all trailing whitespace on save.
 autocmd BufWritePre * %s/\s\+$//e
 
-
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
-
-
-" taken form here https://shapeshed.com/vim-netrw/
-"let g:netrw_banner = 0
-"let g:netrw_liststyle = 3
-"let g:netrw_browse_split = 4
-"let g:netrw_altv = 1
-"let g:netrw_winsize = 25
-"augroup ProjectDrawer
-"  autocmd!
-"  autocmd VimEnter * :Vexplore
-"augroup END
 
 "Ignore filepaths when fuzzy finding
 set wildignore+=**/node_modules/**
@@ -94,8 +72,34 @@ set wildignore+=**/vendor/**
 
 
 
+" vim-go conf
+" disable vim-go :GoDef short cut (gd)
+" this is handled by LanguageClient [LC]
+let g:go_def_mapping_enabled = 0
+"more colors
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_trailing_whitespace_error = 1
+let g:go_highlight_format_strings = 1
+
+let g:go_fmt_command = "goimports" "Auto import packages
 
 
+
+
+
+
+"Coc Conf
+
+let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver']
 " COPY PASTA FROM https://github.com/neoclide/coc.nvim
 
 " if hidden is not set, TextEdit might fail.
@@ -227,26 +231,3 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-
-" vim-go
-" disable vim-go :GoDef short cut (gd)
-" this is handled by LanguageClient [LC]
-let g:go_def_mapping_enabled = 0
-"more colors
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_types = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_trailing_whitespace_error = 1
-let g:go_highlight_format_strings = 1
-
-
-
-
-let g:go_fmt_command = "goimports" "Auto import packages
