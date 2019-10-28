@@ -1,15 +1,12 @@
 call plug#begin('~/.config/nvim/plugins')
 
 " Themes
-Plug 'https://github.com/rakr/vim-one.git'
 Plug 'https://github.com/joshdick/onedark.vim'
 
 " Nice to have
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/tpope/vim-surround'
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf'
 
 " Language stuff
 Plug 'https://github.com/fatih/vim-go'
@@ -64,7 +61,7 @@ set cursorline          " highlight current line
 set showmatch           " highlight matching [{()}]
 set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
-
+set path+=** "Enables recusive :find for example
 
 " Shortcutting split navigation, saving a keypress:
 map <C-h> <C-w>h
@@ -91,8 +88,9 @@ cmap w!! w !sudo tee > /dev/null %
 "  autocmd VimEnter * :Vexplore
 "augroup END
 
-
-
+"Ignore filepaths when fuzzy finding
+set wildignore+=**/node_modules/**
+set wildignore+=**/vendor/**
 
 
 
