@@ -7,6 +7,9 @@ Plug 'https://github.com/joshdick/onedark.vim'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/tpope/vim-surround'
+Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf'
 
 " Language stuff
 Plug 'https://github.com/fatih/vim-go'
@@ -99,7 +102,7 @@ let g:go_fmt_command = "goimports" "Auto import packages
 
 "Coc Conf
 
-let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver']
+let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver', 'coc-vetur', 'coc-eslint']
 " COPY PASTA FROM https://github.com/neoclide/coc.nvim
 
 " if hidden is not set, TextEdit might fail.
