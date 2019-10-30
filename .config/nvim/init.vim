@@ -19,7 +19,8 @@ call plug#end()
 
 " Nerdtree
 map <F2> :NERDTreeToggle<CR>
-
+let NERDTreeShowHidden=1 "Show hidden files(starting with a .)
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Theme begin
 
 let g:airline_theme='onedark'
@@ -33,6 +34,8 @@ endif
 
 " Theme end
 
+" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
+set splitbelow splitright
 
 "Make VIM and X11 share the came clipboard
 set clipboard=unnamedplus
