@@ -48,6 +48,7 @@ filetype indent on "maintain indentation
 
 set number relativenumber "Relative linenumber and absolut linenumber where the cursor currently is
 set list	" Shows whitespace as a character
+set listchars=eol:¬,tab:>\ ,space:·
 set tabstop=4       " number of visual spaces per TAB
 set softtabstop=4   " number of spaces in tab when editing
 set shiftwidth=4	" Make tabbing 4 spaces wide
