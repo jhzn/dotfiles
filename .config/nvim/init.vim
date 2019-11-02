@@ -20,7 +20,15 @@ call plug#end()
 " Nerdtree
 map <F2> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1 "Show hidden files(starting with a .)
+" When exiting vim if nerdtree is the last window open close it automatically
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Cleaner UI
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+" Automatically open nerdtree if no vim args == 0
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
 " Theme begin
 
 let g:airline_theme='onedark'
