@@ -19,13 +19,14 @@ call plug#end()
 
 " Nerdtree
 map <F2> :NERDTreeToggle<CR>
+nmap ,n :NERDTreeFind<CR>
 let NERDTreeShowHidden=1 "Show hidden files(starting with a .)
 " When exiting vim if nerdtree is the last window open close it automatically
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Cleaner UI
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
-" Automatically open nerdtree if no vim args == 0
+" Automatically close nerdtree if vim args == 0
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
@@ -40,6 +41,9 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
+hi ActiveWindow ctermbg=None ctermfg=None guibg=#21242b
+hi InactiveWindow ctermbg=darkgray ctermfg=gray guibg=#282c34
+set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
 " Theme end
 
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
@@ -84,8 +88,6 @@ cmap w!! w !sudo tee > /dev/null %
 "Ignore filepaths when fuzzy finding
 set wildignore+=**/node_modules/**
 set wildignore+=**/vendor/**
-
-
 
 " vim-go conf
 " disable vim-go :GoDef short cut (gd)
