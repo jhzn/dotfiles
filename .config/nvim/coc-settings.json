@@ -1,24 +1,25 @@
 {
-  "coc.preferences.hoverTarget": "float",
-  "suggest.noselect": false,
-  "diagnostic.virtualText": true,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "javascript",
-    "typescript",
-    "json",
-    "css",
-    "markdown"
-  ],
-  "languageserver": {
-    "golang": {
-      "command": "gopls",
-      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["go"]
-    },
-    "dockerfile": {
-      "command": "docker-langserver",
-      "filetypes": ["dockerfile"],
-      "args": ["--stdio"]
-    }
-  }
+	"coc.preferences.hoverTarget": "float",
+	"suggest.noselect": false,
+	"diagnostic.virtualText": true,
+	"coc.preferences.formatOnSaveFiletypes": [
+		"javascript",
+		"typescript",
+		"json",
+		"css",
+		"markdown",
+		"rust"
+	],
+	"languageserver": {
+		"golang": {
+			"command": "gopls",
+			"rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+			"filetypes": ["go"]
+		},
+		"dockerfile": {
+			"command": "docker-langserver",
+			"filetypes": ["dockerfile"],
+			"args": ["--stdio"]
+		}
+	}
 }

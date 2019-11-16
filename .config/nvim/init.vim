@@ -55,9 +55,6 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
-hi ActiveWindow ctermbg=None ctermfg=None guibg=#21242b
-hi InactiveWindow ctermbg=darkgray ctermfg=gray guibg=#282c34
-set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
 " Theme end
 
 
@@ -143,7 +140,7 @@ let g:go_fmt_command = "goimports" "Auto import packages
 " sets up command to run prettier automatically
 command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 
-let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier']
+let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rls']
 " COPY PASTA FROM https://github.com/neoclide/coc.nvim
 
 " if hidden is not set, TextEdit might fail.
