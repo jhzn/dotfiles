@@ -9,6 +9,8 @@ Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/tiagofumo/vim-nerdtree-syntax-highlight'
 
+Plug 'https://github.com/scrooloose/nerdcommenter'
+
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/tpope/vim-fugitive'
