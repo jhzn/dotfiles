@@ -24,7 +24,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 " Nerdtree
-map <F2> :NERDTreeToggle<CR>
+nmap ,m :NERDTreeToggle<CR>
 nmap ,n :NERDTreeFind<CR>
 let NERDTreeShowHidden=1 "Show hidden files(starting with a .)
 " When exiting vim if nerdtree is the last window open close it automatically
@@ -140,7 +140,13 @@ let g:go_fmt_command = "goimports" "Auto import packages
 " sets up command to run prettier automatically
 command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 
+" Remap for rename current word
+nmap <F2> <Plug>(coc-rename)
+
 let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rls']
+"
+"
+"
 " COPY PASTA FROM https://github.com/neoclide/coc.nvim
 
 " if hidden is not set, TextEdit might fail.
