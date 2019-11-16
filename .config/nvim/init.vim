@@ -5,6 +5,10 @@ Plug 'https://github.com/joshdick/onedark.vim'
 
 " Nice to have
 Plug 'https://github.com/scrooloose/nerdtree.git'
+Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin'
+Plug 'https://github.com/ryanoasis/vim-devicons'
+Plug 'https://github.com/tiagofumo/vim-nerdtree-syntax-highlight'
+
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/tpope/vim-fugitive'
@@ -46,13 +50,23 @@ hi InactiveWindow ctermbg=darkgray ctermfg=gray guibg=#282c34
 set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
 " Theme end
 
+
+
+
+let mapleader = ","
+
+hi ActiveWindow ctermbg=None ctermfg=None guibg=#21242b
+hi InactiveWindow ctermbg=darkgray ctermfg=gray guibg=#282c34
+set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
+
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
 set splitbelow splitright
 
 "Make VIM and X11 share the came clipboard
 set clipboard=unnamedplus
 
-set completeopt=longest,menuone
+set completeopt+=preview
+"set completeopt=longest,menuone
 
 filetype on "detect files bases on type
 filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
@@ -116,7 +130,10 @@ let g:go_fmt_command = "goimports" "Auto import packages
 
 "Coc Conf
 
-let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver', 'coc-vetur', 'coc-eslint']
+" sets up command to run prettier automatically
+command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
+
+let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier']
 " COPY PASTA FROM https://github.com/neoclide/coc.nvim
 
 " if hidden is not set, TextEdit might fail.

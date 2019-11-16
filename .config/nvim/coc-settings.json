@@ -1,5 +1,14 @@
 {
-"diagnostic.virtualText": true,
+  "coc.preferences.hoverTarget": "float",
+  "suggest.noselect": false,
+  "diagnostic.virtualText": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "typescript",
+    "json",
+    "css",
+    "markdown"
+  ],
   "languageserver": {
     "golang": {
       "command": "gopls",
@@ -12,4 +21,4 @@
       "args": ["--stdio"]
     }
   }
- }
+}
