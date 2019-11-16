@@ -34,6 +34,14 @@ let NERDTreeDirArrows = 1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
+"FZF
+" Tell FZF to use RG - so we can skip .gitignore files even if not using
+" :GitFiles search
+"let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+" If you want gitignored files:
+let $FZF_DEFAULT_COMMAND = 'rg --files --ignore-vcs --hidden'
+nmap <C-p> :Files<CR>
+
 " Theme begin
 
 let g:airline_theme='onedark'
