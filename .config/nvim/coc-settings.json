@@ -20,6 +20,14 @@
 			"command": "docker-langserver",
 			"filetypes": ["dockerfile"],
 			"args": ["--stdio"]
+		},
+		"intelephense": {
+			"command": "intelephense",
+			"args": ["--stdio"],
+			"filetypes": ["php", "ctp"],
+			"initializationOptions": {
+				"storagePath": "/tmp/intelephense"
+			}
 		}
 	}
 }
