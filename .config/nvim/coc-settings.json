@@ -3,12 +3,13 @@
 	"suggest.noselect": false,
 	"diagnostic.virtualText": true,
 	"coc.preferences.formatOnSaveFiletypes": [
-		"javascript",
+//		"javascript",
 		"typescript",
 		"json",
 		"css",
 		"markdown",
-		"rust"
+		"rust",
+		"yaml"
 	],
 	"languageserver": {
 		"golang": {

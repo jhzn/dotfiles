@@ -10,6 +10,7 @@ Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'https://github.com/scrooloose/nerdcommenter'
+Plug 'https://github.com/SirVer/ultisnips'
 
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/tpope/vim-surround'
@@ -43,6 +44,10 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " If you want gitignored files:
 let $FZF_DEFAULT_COMMAND = 'rg --files --ignore-vcs --hidden'
 nmap <C-p> :Files<CR>
+"ultisnips
+let g:UltiSnipsExpandTrigger = "<C-l>"
+let g:UltiSnipsJumpForwardTrigger = "<C-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
 
 " Theme begin
 
@@ -79,6 +84,7 @@ filetype on "detect files bases on type
 filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
 filetype indent on "maintain indentation
 
+set nowrap "dont wrap lines visually
 set number relativenumber "Relative linenumber and absolut linenumber where the cursor currently is
 set list	" Shows whitespace as a character
 set listchars=eol:¬,tab:>\ ,space:·
@@ -97,8 +103,18 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
+" delete without yanking
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+
+ "replace currently selected text with default register
+ "without yanking it
+"vnoremap <leader>p _dP
+" replace with Register 0
+map <leader>rr ciw<C-r>0<Esc>
+
 " Custom keybinding of native features
-:nnoremap <F1> :buffers<CR>:buffer<Space>
+:nnoremap <F1> :Buffers<CR><Space>
 
 " Automatically deletes all trailing whitespace on save.
 autocmd BufWritePre * %s/\s\+$//e
