@@ -126,6 +126,21 @@ cmap w!! w !sudo tee > /dev/null %
 set wildignore+=**/node_modules/**
 set wildignore+=**/vendor/**
 
+" Zoom / Restore window.
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+command! ZoomToggle call s:ZoomToggle()
+nnoremap <silent> <C-W>o :ZoomToggle<CR>
+
 " vim-go conf
 " disable vim-go :GoDef short cut (gd)
 " this is handled by LanguageClient [LC]
