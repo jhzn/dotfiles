@@ -10,7 +10,6 @@ bind -m vi-insert "\C-l":clear-screen
 
 source ~/bin/scripts/helpers.sh
 source ~/.config/dotfiles/ps1.sh
-source ~/.config/dotfiles/git.sh
 source ~/.config/dotfiles/bash_aliases.sh
 
 PATH=~/bin:$PATH
