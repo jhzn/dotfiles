@@ -4,7 +4,7 @@ alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 
-alias xc="xclip" #Copy to clipboard
+alias xc="xclip -i -selection primary -f | xclip -i -selection clipboard" #Copy to clipboard, also to VIM's "+ and "* register
 alias xp="xclip -o" #Output from clipboard
 
 alias dc="docker-compose"
