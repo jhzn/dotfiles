@@ -2,14 +2,17 @@
 	"coc.preferences.hoverTarget": "float",
 	"suggest.noselect": false,
 	"diagnostic.virtualText": true,
+	"prettier.printWidth": 0,
+	"prettier.tabWidth": 4,
+	"prettier.useTabs": true,
 	"coc.preferences.formatOnSaveFiletypes": [
+		"json",
 //		"javascript",
-		"typescript",
+//		"typescript",
 		"json",
 		"css",
 		"markdown",
-		"rust",
-		"yaml"
+		"rust"
 	],
 	"languageserver": {
 		"golang": {

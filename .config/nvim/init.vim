@@ -7,7 +7,7 @@ Plug 'https://github.com/joshdick/onedark.vim'
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin'
 Plug 'https://github.com/ryanoasis/vim-devicons'
-Plug 'https://github.com/tiagofumo/vim-nerdtree-syntax-highlight'
+"Plug 'https://github.com/tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'https://github.com/scrooloose/nerdcommenter'
 Plug 'https://github.com/SirVer/ultisnips'
@@ -84,6 +84,8 @@ filetype on "detect files bases on type
 filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
 filetype indent on "maintain indentation
 
+set tabstop=4      " To match the sample file
+set noexpandtab    " Use tabs, not spaces
 set nowrap "dont wrap lines visually
 set number relativenumber "Relative linenumber and absolut linenumber where the cursor currently is
 set list	" Shows whitespace as a character
@@ -114,7 +116,16 @@ vnoremap <leader>d "_d
 map <leader>rr ciw<C-r>0<Esc>
 
 " Custom keybinding of native features
-:nnoremap <F1> :Buffers<CR><Space>
+nnoremap <F1> :Buffers<CR><Space>
+
+"Clears highlighted
+nnoremap <CR> :noh<CR>
+
+"Keybinding to toggle syncronization of window scrolling
+map <leader>s :windo set scb!<CR>
+
+"Keybinding to refresh vim config
+nnoremap <F12> :source ~/.config/nvim/init.vim <CR>
 
 " Automatically deletes all trailing whitespace on save.
 autocmd BufWritePre * %s/\s\+$//e
