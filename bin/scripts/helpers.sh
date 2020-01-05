@@ -1,4 +1,5 @@
-#!/bin/bash
+#A collection of small functions which do not deserve being placed in a separate file
+#These are sourced by the shell process
 
 #Useful when you've cd'ed into a symlink to get the real path
 function fix_cwd { cd $(pwd -P); }
