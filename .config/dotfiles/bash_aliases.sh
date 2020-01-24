@@ -10,4 +10,5 @@ alias xp="xclip -o" #Output from clipboard
 alias dc="docker-compose"
 alias lad="lazydocker"
 alias v="vim"
+alias vim="nvim"
 

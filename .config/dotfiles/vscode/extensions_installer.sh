@@ -6,7 +6,9 @@ code --install-extension coolbear.systemd-unit-file
 code --install-extension dbaeumer.vscode-eslint
 code --install-extension eamodio.gitlens
 code --install-extension emmanuelbeziat.vscode-great-icons
+code --install-extension Equinusocio.vsc-community-material-theme
 code --install-extension Equinusocio.vsc-material-theme
+code --install-extension equinusocio.vsc-material-theme-icons
 code --install-extension felixfbecker.php-debug
 code --install-extension jakebathman.mysql-syntax
 code --install-extension jolaleye.horizon-theme-vscode
@@ -23,5 +25,6 @@ code --install-extension rust-lang.rust
 code --install-extension tomoki1207.selectline-statusbar
 code --install-extension vadimcn.vscode-lldb
 code --install-extension vscode-icons-team.vscode-icons
-code --install-extension zhuangtongfa.Material-theme
+code --install-extension vscodevim.vim
+code --install-extension zhuangtongfa.material-theme
 code --install-extension zxh404.vscode-proto3

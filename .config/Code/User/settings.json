@@ -4,7 +4,7 @@
 	"typescript.check.npmIsInstalled": false,
 	"window.zoomLevel": 0,
 	"editor.insertSpaces": false,
-	"window.titleBarStyle":"custom",
+	"window.titleBarStyle": "custom",
 	"workbench.startupEditor": "newUntitledFile",
 	"terminal.integrated.fontSize": 15,
 	"terminal.integrated.shellArgs.linux": [
@@ -18,7 +18,7 @@
 	"terminal.integrated.cursorStyle": "block",
 	"terminal.integrated.copyOnSelection": true,
 	"terminal.integrated.cursorBlinking": true,
-	"[php]":{
+	"[php]": {
 		"editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?"
 	},
 	"files.autoGuessEncoding": false,
@@ -28,7 +28,7 @@
 	"editor.mouseWheelZoom": true,
 	"files.trimTrailingWhitespace": true,
 	"explorer.autoReveal": false,
-   	"diffEditor.ignoreTrimWhitespace": true,
+	"diffEditor.ignoreTrimWhitespace": true,
 	"editor.autoClosingBrackets": "beforeWhitespace",
 	"go.testFlags": [
 		"-count=1",
@@ -36,7 +36,7 @@
 	],
 	"go.lintTool": "gometalinter",
 	"go.lintFlags": [
-			"--disable-all",
+		"--disable-all",
 		"--enable=golint",
 		"--config=~/.gometalinter"
 	],
@@ -55,7 +55,6 @@
 	"workbench.panel.defaultLocation": "right",
 	"workbench.iconTheme": "simple-icons",
 	"workbench.colorCustomizations": {},
-	"workbench.colorTheme": "One Dark Pro Vivid",
 	"editor.renderWhitespace": "boundary",
 	"sftp.debug": true,
 	"editor.minimap.enabled": false,
@@ -66,5 +65,7 @@
 	"editor.largeFileOptimizations": false,
 	"workbench.settings.enableNaturalLanguageSearch": false,
 	"code-runner.enableAppInsights": false,
-	"latex-workshop.view.pdf.viewer": "tab"
+	"workbench.colorTheme": "One Dark Pro",
+	"go.formatTool": "goimports"
+	//	"go.useLanguageServer": true
 }
