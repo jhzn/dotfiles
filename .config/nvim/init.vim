@@ -23,7 +23,7 @@ Plug 'https://github.com/fatih/vim-go'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
-
+"
 " Nerdtree
 nmap ,m :NERDTreeToggle<CR>
 nmap ,n :NERDTreeFind<CR>
@@ -98,6 +98,8 @@ set showmatch           " highlight matching [{()}]
 set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
 set path+=** "Enables recusive :find for example
+set ignorecase
+
 
 " Shortcutting split navigation, saving a keypress:
 map <C-h> <C-w>h
@@ -109,11 +111,14 @@ map <C-l> <C-w>l
 nnoremap <leader>d "_d
 vnoremap <leader>d "_d
 
- "replace currently selected text with default register
- "without yanking it
+"replace currently selected text with default register
+"without yanking it
 "vnoremap <leader>p _dP
-" replace with Register 0
+"replace with Register 0
 map <leader>rr ciw<C-r>0<Esc>
+
+" quicker access
+map <space> :
 
 " Custom keybinding of native features
 nnoremap <F1> :Buffers<CR><Space>
@@ -126,6 +131,13 @@ map <leader>s :windo set scb!<CR>
 
 "Keybinding to refresh vim config
 nnoremap <F12> :source ~/.config/nvim/init.vim <CR>
+
+" visual shifting and keep visual selection
+vnoremap < <gv
+vnoremap > >gv
+
+"make Y behave like D and C
+nnoremap Y y$
 
 " Automatically deletes all trailing whitespace on save.
 autocmd BufWritePre * %s/\s\+$//e
