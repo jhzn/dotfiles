@@ -1,28 +1,28 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-	echo "Missing 1st argument as search term. Use --help for more info"
+	echo "This is a program to find emojis and select them to the clipboard"
+	echo "Try inputing 'banana' as 1st argument"
+	echo "Or use the flag --print-all to output the document which searches as applied to"
 	exit 1
-fi
-
-if [ "$1" == '--help' ]; then
-	printf "This is a program to find emojis and select to clipboard.\n\nTry inputing 'banana' as 1st argument\n"
-	exit 0
 fi
 
 SCRIPT=`realpath -s $0`
 SCRIPTPATH=`dirname $SCRIPT`
 
-# get matches
-emoji_matches=(`cat $SCRIPTPATH/emojis.txt | grep -i "$1" | awk '{print $1}'`)
+if [ "$1" == "--print-all" ]; then
+	cat "$SCRIPTPATH/emojis.txt"
+	exit 0
+fi
 
+# get matches
+emoji_matches=($(grep -i "$1" "$SCRIPTPATH/emojis.txt" | awk '{print $1}'))
 if [ ${#emoji_matches[@]} == 0 ]; then
 	echo "No matches were found"
 	exit 0
 fi
 
 PS3='Please enter your choice: '
-
 # give user selection prompt of matches
 select answer in "${emoji_matches[@]}"; do
 	for item in "${emoji_matches[@]}"; do
