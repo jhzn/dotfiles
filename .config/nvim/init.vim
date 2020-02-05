@@ -1,22 +1,25 @@
 call plug#begin('~/.config/nvim/plugins')
 
-" Themes
+" Themes/look and feel
 Plug 'https://github.com/joshdick/onedark.vim'
+Plug 'https://github.com/vim-airline/vim-airline'
 
-" Nice to have
+"Nerdtree
 Plug 'https://github.com/scrooloose/nerdtree.git'
 Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 "Plug 'https://github.com/tiagofumo/vim-nerdtree-syntax-highlight'
-
+"
+" Nice to have
 Plug 'https://github.com/scrooloose/nerdcommenter'
 Plug 'https://github.com/SirVer/ultisnips'
-
-Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/tpope/vim-surround'
+"Git integration
 Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf'
+"Search/replace
+Plug 'https://github.com/junegunn/fzf.vim'
+Plug 'https://github.com/junegunn/fzf'
+Plug 'https://github.com/brooth/far.vim'
 
 " Language stuff
 Plug 'https://github.com/fatih/vim-go'
