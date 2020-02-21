@@ -52,6 +52,9 @@ let g:UltiSnipsExpandTrigger = "<C-l>"
 let g:UltiSnipsJumpForwardTrigger = "<C-j>"
 let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
 
+"Far
+let g:far#source = "rgnvim"
+
 " Theme begin
 
 let g:airline_theme='onedark'
@@ -208,7 +211,7 @@ command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 " Remap for rename current word
 nmap <F2> <Plug>(coc-rename)
 
-let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rls']
+let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-yaml', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rls']
 "
 "
 "
