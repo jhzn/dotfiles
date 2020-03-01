@@ -89,7 +89,7 @@ set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
 set splitbelow splitright
 
 "Make VIM and X11 share the came clipboard
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 
 set completeopt+=preview
 "set completeopt=longest,menuone
