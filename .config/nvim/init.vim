@@ -21,8 +21,12 @@ Plug 'https://github.com/junegunn/fzf.vim'
 Plug 'https://github.com/junegunn/fzf'
 Plug 'https://github.com/brooth/far.vim'
 
-" Language stuff
+"Language stuff
+"
+"Golang
 Plug 'https://github.com/fatih/vim-go'
+Plug 'https://github.com/buoto/gotests-vim'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
@@ -178,6 +182,9 @@ endfunction
 command! ZoomToggle call s:ZoomToggle()
 nnoremap <silent> <C-W>o :ZoomToggle<CR>
 
+
+
+
 " vim-go conf
 " disable vim-go :GoDef short cut (gd)
 " this is handled by LanguageClient [LC]
@@ -213,6 +220,9 @@ nmap <F2> <Plug>(coc-rename)
 
 let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-yaml', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rls']
 "
+" Set the filetype based on the file's extension, overriding any
+" 'filetype' that has already been set
+au BufRead,BufNewFile *.tmpl set filetype=html
 "
 "
 " COPY PASTA FROM https://github.com/neoclide/coc.nvim
