@@ -5,13 +5,16 @@
 	"prettier.printWidth": 0,
 	"prettier.tabWidth": 4,
 	"prettier.useTabs": true,
-	"diagnostic.locationlist": false,
+	//	"diagnostic.locationlist": false,
 	"yaml.validate": false,
 	"html.format.enable": true,
-	"html.filetypes": ["html","tmpl"],
+	"html.filetypes": [
+		"html",
+		"tmpl"
+	],
 	"coc.preferences.formatOnSaveFiletypes": [
-//		"javascript",
-//		"typescript",
+		//		"javascript",
+		//		"typescript",
 		"json",
 		"css",
 		"markdown",
@@ -20,19 +23,37 @@
 	"languageserver": {
 		"golang": {
 			"command": "gopls",
-			"rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
-			"filetypes": ["go"],
-			"env": {"GOFLAGS":"-tags=integration"}
+			"rootPatterns": [
+				"go.mod",
+				".vim/",
+				".git/",
+				".hg/"
+			],
+			"filetypes": [
+				"go"
+			],
+			"env": {
+				"GOFLAGS": "-tags=integration"
+			}
 		},
 		"dockerfile": {
 			"command": "docker-langserver",
-			"filetypes": ["dockerfile"],
-			"args": ["--stdio"]
+			"filetypes": [
+				"dockerfile"
+			],
+			"args": [
+				"--stdio"
+			]
 		},
 		"intelephense": {
 			"command": "intelephense",
-			"args": ["--stdio"],
-			"filetypes": ["php", "ctp"],
+			"args": [
+				"--stdio"
+			],
+			"filetypes": [
+				"php",
+				"ctp"
+			],
 			"initializationOptions": {
 				"storagePath": "/tmp/intelephense"
 			}

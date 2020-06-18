@@ -28,7 +28,6 @@ Plug 'https://github.com/fatih/vim-go'
 Plug 'https://github.com/buoto/gotests-vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 call plug#end()
 "
 " Nerdtree
@@ -49,7 +48,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " :GitFiles search
 "let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
 " If you want gitignored files:
-let $FZF_DEFAULT_COMMAND = 'rg --files --ignore-vcs --hidden'
+let $FZF_DEFAULT_COMMAND = 'rg --files --ignore-vcs --hidden -F'
 nmap <C-p> :Files<CR>
 "ultisnips
 let g:UltiSnipsExpandTrigger = "<C-l>"
@@ -183,7 +182,10 @@ command! ZoomToggle call s:ZoomToggle()
 nnoremap <silent> <C-W>o :ZoomToggle<CR>
 
 
-
+" Some sweet macros!
+" PHP
+"replace PHP array() to []
+let @p='/\<array\>(dema%r]``ar['
 
 " vim-go conf
 " disable vim-go :GoDef short cut (gd)
