@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# This installs my dotfiles in the current users home dir
+# This is only supposed to be run once. It's supposed to be fetched with curl, for example. The executable flag is therefor turned off.
+# Then remove the "exit 1" to use it
+
+exit 1
+
+#How it works...
+#All we care about is the .git folder which is placed in ~/.dotfiles and then a git reset --hard is used to place the contents of the repo in the HOME dir.
+#git reponds with error if you try to clone a repos content directly into a directory which already has content. This circumvents that.
+
+cd ~ && \
+git clone --separate-git-dir=$HOME/.dotfiles https://github.com/jhzn/dotfiles $HOME/dotfiles-tmp && \
+rm -rf dotfiles-tmp
+
+#make aliases work in scripts
+shopt -s expand_aliases
+#We define the alias "config" here
+source ~/.bash_aliases
+
+#places base files in their correct position
+config reset --hard
+
+#Fetch submodules
+config update && \
+echo "Successfully setup dotfiles! Open a new shell to finalize!"

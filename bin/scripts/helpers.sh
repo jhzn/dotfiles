@@ -5,8 +5,18 @@
 function fix_cwd { cd $(pwd -P); }
 
 #Generate a password
-function gen_pass { head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo ''; }
+function gen_pass {
+	head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '';
+}
 
-function base64_encoded_to_png { echo $1 | sed -e 's#data:image/png;base64,##' | base64 --decode > out.png && echo "Created file named out.png"; }
+function base64_encoded_to_png {
+	[ -z "$1" ] && echo "No input received" && return
 
-function json_pretty { xclip -o | jq; }
+	echo $1 | sed -e 's#data:image/png;base64,##' | \
+	base64 --decode > out.png && \
+	echo "Created file named out.png";
+}
+
+function json_pretty {
+	xclip -o | jq;
+}
