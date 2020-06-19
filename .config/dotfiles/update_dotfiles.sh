@@ -2,7 +2,7 @@
 
 #used to get "config" alias
 shopt -s expand_aliases
-source ~/.config/dotfiles/bash_aliases.sh
+source ~/.bash_aliases
 
 config submodule init && \
 config submodule update && \
