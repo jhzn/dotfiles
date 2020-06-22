@@ -59,8 +59,8 @@ font-1 = JoyPixels:pixelsize=16:style=Regular:scale=10;2
 ;font-1 = "Noto Color Emoji:pixelsize=16:style=Regular:scale=10;2"
 ;font-3 = Font Awesome 5 Free Regular:size=10;4
 
-modules-left = bspwm xwindow
-modules-center = date
+modules-left = date
+modules-center = bspwm xwindow
 modules-right = backlight-acpi pulseaudio filesystem memory cpu-usage battery temperature wlan eth
 
 tray-position = right
@@ -111,8 +111,8 @@ font-1 = JoyPixels:pixelsize=16:style=Regular:scale=10;2
 ;font-1 = "Noto Color Emoji:pixelsize=16:style=Regular:scale=10;2"
 ;font-3 = Font Awesome 5 Free Regular:size=10;4
 
-modules-left = bspwm xwindow
-modules-center = date
+modules-center = bspwm
+;modules-center = date
 ;modules-right = backlight-acpi pulseaudio filesystem memory cpu-usage battery temperature wlan eth
 
 ;tray-position = right

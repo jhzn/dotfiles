@@ -26,9 +26,10 @@ udiskie --tray &
 lxpolkit &
 #homemade cron
 ~/bin/scripts/cron.sh &
-#start ssh agent with X session
-#https://wiki.archlinux.org/index.php/SSH_keys#SSH_agents
-eval $(ssh-agent)
+#start keyring daemon
+#https://wiki.archlinux.org/index.php/GNOME/Keyring
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+export SSH_AUTH_SOCK
 
 #personal settings
 setxkbmap se
