@@ -8,7 +8,7 @@ super + Return
 
 # program launcher
 super + @space
-	rofi -combi-modi drun,ssh -font "JetBrainsMono Nerd Font Mono 12" -show combi -display-drun "" -icon-theme "Papirus" -show-icons
+	rofi -combi-modi drun,ssh -font "JetBrainsMono Nerd Font Mono 12" -show combi -display-drun "" -icon-theme "Papirus" -show-icons -monitor primary
 
 	#dmenu_run
 	#
@@ -139,18 +139,11 @@ super + alt + shift + {h,j,k,l}
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
+XF86Audio{Next,Prev,Play,Stop}
+	playerctl {next,previous,play-pause,stop}
 
-XF86AudioRaiseVolume
-	pulsemixer --change-volume +5
+XF86Audio{LowerVolume,RaiseVolume,Mute}
+    pulsemixer {--change-volume -5,--change-volume +5,--toggle-mute}
 
-XF86AudioLowerVolume
-	pulsemixer --change-volume -5
-
-XF86AudioMute
-	pulsemixer --toggle-mute
-
-XF86MonBrightnessDown
-	xbacklight -dec 5%
-
-XF86MonBrightnessUp
-	xbacklight -inc 5%
+XF86MonBrightness{Up,Down}
+	xbacklight {-inc,-dec} 5%
