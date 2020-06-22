@@ -58,7 +58,7 @@ modules-left = backlight-acpi pulseaudio
 modules-center = xwindow bspwm
 modules-right = filesystem memory cpu-usage battery temperature wlan eth date
 
-tray-position = right
+tray-position = left
 tray-padding = 2
 ;tray-background = #0063ff
 
