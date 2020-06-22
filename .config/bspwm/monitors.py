@@ -7,9 +7,12 @@ desktops = [1,2,3,4,5,6,7,8,9,0]
 
 import subprocess
 monitors = subprocess.run(["bspc", "query", "-M", "--names"], capture_output=True).stdout.decode("ascii").split()
-print(monitors)
-# exit()
-#monitors = [ 'DP1', 'eDP1', 'HDM1-1']
+print("Connected monitors are: " + " ".join(monitors))
+
+if len(monitors) == 1:
+    #Do we need more desktops?
+    #Testing to see if this can work
+    del desktops[5:]
 
 #Reorders the list so that the primary monitor gets the first chunk of the desktops
 if len(monitors) > 1:
@@ -23,37 +26,32 @@ if len(monitors) > 1:
         for disconnected in disconncted_monitors:
             if monitor == disconnected:
                 args = " ".join(["bspc", "monitor", monitor, "--remove"])
-                print(args)
+                print("Running: " + args)
                 print(subprocess.run(["sh", "-c", args ]))
-                # monitors.remove(disconncted_monitors)
 
-print(monitors)
+print("Monitor order is: " + " ".join(monitors))
 
 import math
 chunk_size = math.floor(len(desktops) / len(monitors))
-print("chunk_size")
-print(chunk_size)
+print("Each monitor gets " + str(chunk_size) + " amount of desktops")
 
 monitor_desktop_chunks = list(divide_chunks(desktops, chunk_size))
 
-print("monitor_desktop_chunks")
-print(len(monitor_desktop_chunks))
+print("There are " + str(len(monitor_desktop_chunks)) + " monitor desktops chunks")
 
 #if we dont get an evenly sized chunks, take the leftover and add it to the last monitor
 if (len(desktops) % len(monitors)) != 0:
     last_index = len(monitor_desktop_chunks)-1
     overflow = monitor_desktop_chunks[len(monitor_desktop_chunks)-1]
     last_index = len(monitor_desktop_chunks)-2
-    print(overflow)
+    print("There chunks are not evenly sized. Addding " + overflow + " desktops to the last monitor")
     monitor_desktop_chunks[last_index] = monitor_desktop_chunks[last_index] + overflow
 
 chunk_used_counter = 0
 for monitor_name in monitors:
     monitor_assigned_chunk = ' '.join(str(e) for e in monitor_desktop_chunks[chunk_used_counter])
     args = " ".join(["bspc", "monitor", monitor_name, "-d", monitor_assigned_chunk])
-    print(args)
+    print("Running: " + args)
     print(subprocess.run(["sh", "-c", args ]))
-    # print(subprocess.run(args,shell=True))
-
     chunk_used_counter = chunk_used_counter + 1
 

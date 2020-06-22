@@ -51,17 +51,12 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-;font-0 = unifont:fontformat=truetype:size=12:antialias=false;0
-font-0 = Noto Sans Mono:size=10;1
+font-0 = JetBrainsMono:size=10;1
 font-1 = JoyPixels:pixelsize=16:style=Regular:scale=10;2
-;font-2 = Font Awesome 5 Free Regular:pixelsize=10;
-;font-0 = Noto Sans Mono:size=10;1
-;font-1 = "Noto Color Emoji:pixelsize=16:style=Regular:scale=10;2"
-;font-3 = Font Awesome 5 Free Regular:size=10;4
 
-modules-left = date
-modules-center = bspwm xwindow
-modules-right = backlight-acpi pulseaudio filesystem memory cpu-usage battery temperature wlan eth
+modules-left = backlight-acpi pulseaudio
+modules-center = xwindow bspwm
+modules-right = filesystem memory cpu-usage battery temperature wlan eth date
 
 tray-position = right
 tray-padding = 2
@@ -103,28 +98,10 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-;font-0 = unifont:fontformat=truetype:size=12:antialias=false;0
-font-0 = Noto Sans Mono:size=10;1
+font-0 = JetBrainsMono:size=10;1
 font-1 = JoyPixels:pixelsize=16:style=Regular:scale=10;2
-;font-2 = Font Awesome 5 Free Regular:pixelsize=10;
-;font-0 = Noto Sans Mono:size=10;1
-;font-1 = "Noto Color Emoji:pixelsize=16:style=Regular:scale=10;2"
-;font-3 = Font Awesome 5 Free Regular:size=10;4
 
 modules-center = bspwm
-;modules-center = date
-;modules-right = backlight-acpi pulseaudio filesystem memory cpu-usage battery temperature wlan eth
-
-;tray-position = right
-;tray-padding = 2
-;tray-background = #0063ff
-
-
-;override-redirect = true
-
-;scroll-up = bspwm-desknext
-;scroll-down = bspwm-deskprev
-
 
 cursor-click = pointer
 cursor-scroll = ns-resize
