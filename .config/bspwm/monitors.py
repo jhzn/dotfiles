@@ -44,7 +44,7 @@ if (len(desktops) % len(monitors)) != 0:
     last_index = len(monitor_desktop_chunks)-1
     overflow = monitor_desktop_chunks[len(monitor_desktop_chunks)-1]
     last_index = len(monitor_desktop_chunks)-2
-    print("There chunks are not evenly sized. Addding " + overflow + " desktops to the last monitor")
+    print("There chunks are not evenly sized. Addding " + str(overflow) + " desktops to the last monitor")
     monitor_desktop_chunks[last_index] = monitor_desktop_chunks[last_index] + overflow
 
 chunk_used_counter = 0
