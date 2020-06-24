@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Taken from https://wiki.archlinux.org/index.php/Xinit
+
+exec /usr/bin/Xorg -nolisten tcp -nolisten local "$@" vt$XDG_VTNR
