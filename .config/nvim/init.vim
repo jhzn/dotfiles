@@ -64,7 +64,16 @@ let g:airline_theme='onedark'
 syntax on
 colorscheme onedark
 
-" Fix colors when using tmux
+"Practial
+"Dim unfocuses window
+"hi ActiveWindow ctermbg=None ctermfg=None guibg=#21242b
+"hi InactiveWindow ctermbg=darkgray ctermfg=gray guibg=#282c34
+"set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
+
+"Flashy transparency :) make sure you terminal follows along
+hi Normal guibg=NONE ctermbg=NONE
+
+"Fix colors when using tmux
 if (has("termguicolors"))
   set termguicolors
 endif
@@ -83,10 +92,6 @@ imap <left> <nop>
 imap <right> <nop>
 
 let mapleader = ","
-
-hi ActiveWindow ctermbg=None ctermfg=None guibg=#21242b
-hi InactiveWindow ctermbg=darkgray ctermfg=gray guibg=#282c34
-set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
 
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
 set splitbelow splitright
