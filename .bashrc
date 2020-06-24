@@ -21,6 +21,10 @@ set -o vi
 #Add back shortcut of clearing the screen with CTRL + l
 bind -m vi-insert "\C-l":clear-screen
 
+# FZF enable cool features
+[ -f /usr/share/fzf/key-bindings.bash ] && . /usr/share/fzf/key-bindings.bash
+[ -f /usr/share/fzf/completion.bash ] && . /usr/share/fzf/completion.bash
+
 source ~/.bash_aliases
 source ~/bin/scripts/helpers.sh
 source ~/.config/dotfiles/ps1.sh
@@ -34,7 +38,5 @@ PATH=~/bin/scripts/vimv:$PATH
 
 export GOPATH=~/go
 PATH=~/go/bin:$PATH
+PATH=~/.yarn/bin:$PATH
 
-# FZF enable cool features
-[ -f /usr/share/fzf/key-bindings.bash ] && . /usr/share/fzf/key-bindings.bash
-[ -f /usr/share/fzf/completion.bash ] && . /usr/share/fzf/completion.bash

@@ -1,6 +1,16 @@
 #Use bash instead of sh so we can use bashisms
 if [[ x"$BASH" != x"/bin/bash" ]]; then
-  exec /bin/bash "$HOME/.xinitrc"
+	exec /bin/bash "$HOME/.xinitrc"
+fi
+
+# Recommended by https://wiki.archlinux.org/index.php/Xinit#Configuration
+# Taken from /etc/X11/xinit/xinitrc
+# start some nice programs
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+	 for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+		[ -x "$f" ] && . "$f"
+	 done
+	 unset f
 fi
 
 #Setup daemons
@@ -26,6 +36,7 @@ udiskie --tray &
 lxpolkit &
 #homemade cron
 ~/bin/scripts/cron.sh &
+
 #start keyring daemon
 #https://wiki.archlinux.org/index.php/GNOME/Keyring
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)

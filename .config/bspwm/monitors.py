@@ -1,3 +1,6 @@
+# TODO figure out how to run shell commands prettier
+
+
 def divide_chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
@@ -8,11 +11,6 @@ desktops = [1,2,3,4,5,6,7,8,9,0]
 import subprocess
 monitors = subprocess.run(["bspc", "query", "-M", "--names"], capture_output=True).stdout.decode("ascii").split()
 print("Connected monitors are: " + " ".join(monitors))
-
-if len(monitors) == 1:
-    #Do we need more desktops?
-    #Testing to see if this can work
-    del desktops[5:]
 
 #Reorders the list so that the primary monitor gets the first chunk of the desktops
 if len(monitors) > 1:
@@ -30,6 +28,13 @@ if len(monitors) > 1:
                 print(subprocess.run(["sh", "-c", args ]))
 
 print("Monitor order is: " + " ".join(monitors))
+
+
+#Useful when we change our monitor setup.
+#I.e When we disconnect a monitor we need to take all of the windows from that monitor's workspaces to our currently connected monitors
+args = "bspc wm --adopt-orphans"
+print("Running: " + args)
+print(subprocess.run(["sh", "-c", args ]))
 
 import math
 chunk_size = math.floor(len(desktops) / len(monitors))
