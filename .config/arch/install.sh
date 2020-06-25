@@ -29,15 +29,18 @@ pacman -S --needed python-pynvim
 pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme lxappearance
 #intel
 pacman -S --needed xf86-video-intel intel-ucode
-#utils
-pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq
+#misc
+pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot
 #files
 pacman -S --needed unzip zip nemo pcmanfm
 #disks
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
+
 #laptop
-pacman -S --needed powertop tlp tlp-rdw
-systemctl enable tlp && systemctl start tlp
+if [ -e /sys/class/power_supply/BAT0/capacity ]; then
+	pacman -S --needed powertop tlp tlp-rdw
+	systemctl enable tlp && systemctl start tlp
+fi
 
 
 ###########################
