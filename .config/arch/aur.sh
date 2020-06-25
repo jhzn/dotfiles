@@ -6,4 +6,4 @@
 #cd yay
 #makepkg -si
 
-yay -S polybar ytop tealdeer-git lf-git vscodium-bin nerd-fonts-jetbrains-mono shutter perl-goo-canvas
+yay -S --needed polybar ytop tealdeer-git lf vscodium-bin nerd-fonts-jetbrains-mono zeal
