@@ -7,19 +7,18 @@
 pacman -S --needed xorg bspwm sxhkd dmenu rofi dunst xscreensaver \
 	xdg-utils lxsession xorg-setxkbmap xorg-xinit xf86-input-libinput \
 	gnome-keyring libsecret \
-	alacritty firefox network-manager-applet  \
+	alacritty firefox network-manager-applet \
 	xclip redshift picom tmux transmission-gtk unclutter feh
 
+#networking
+pacman -S --needed iptables-nft
 #audio
 pacman -S --needed pulseaudio pulsemixer pavucontrol playerctl
 #bluetooth
 pacman -S --needed bluez bluez-utils pulseaudio-bluetooth
 systemctl enable bluetooth && systemctl start bluetooth
 #dev machine
-pacman -S --needed python2 python3 go nodejs yarn rustup gnu-netcat openssh docker docker-compose
-#Install rust toolchain
-rustup install stable
-rustup default stable
+pacman -S --needed python2 python3 go nodejs yarn rust gnu-netcat openssh docker docker-compose
 
 
 #setup vim

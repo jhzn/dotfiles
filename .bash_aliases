@@ -26,3 +26,4 @@ alias sudo="sudo -E"
 alias tmux="tmux -f ~/.config/tmux/.tmux.conf"
 #Easier to remember/type
 alias open="xdg-open"
+alias screenshot="deepin-screenshot --save-path ~/Pictures/screenshots"

@@ -1,11 +1,15 @@
 #!/bin/bash
 
+#personal settings
+setxkbmap se
+#rebind CAPS to an addition escape key
+setxkbmap -option caps:escape
+
 #set background
 feh -F --bg-fill --randomize ~/Pictures/wallpapers/ || echo "No wallpapers configured"
 
 primary=$(xrandr --query | grep " primary" | cut -d" " -f1)
 
-#run | lemonbar -p &
 for monitor in $(xrandr --query | grep " connected" | cut -d" " -f1); do
 	echo "$monitor|$primary" >> ~/error.log
 	if [ "$monitor" == "$primary" ]; then
