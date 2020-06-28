@@ -26,4 +26,7 @@ alias sudo="sudo -E"
 alias tmux="tmux -f ~/.config/tmux/.tmux.conf"
 #Easier to remember/type
 alias open="xdg-open"
-alias screenshot="deepin-screenshot --save-path ~/Pictures/screenshots"
+#more generic
+alias screenshot="deepin-screenshot"
+#shorter
+alias bctl="bluetoothctl"
