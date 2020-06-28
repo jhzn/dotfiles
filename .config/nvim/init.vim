@@ -155,7 +155,7 @@ map <leader>s :windo set scb!<CR>
 nnoremap <F12> :source ~/.config/nvim/init.vim <CR>
 
 "Sweet way of previewing markdown
-map <leader>ö :!sh -xc 'pandoc --from=gfm % \| firefox --new-window "data:text/html;base64,$(base64)" ' <enter>
+map <leader>ö :!pandoc --from=gfm % \| firefox --new-window "data:text/html;base64,$(base64)" <enter>
 
 " visual shifting and keep visual selection
 vnoremap < <gv
