@@ -29,7 +29,7 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #intel
 pacman -S --needed xf86-video-intel intel-ucode
 #misc
-pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot
+pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc
 #files
 pacman -S --needed unzip zip nemo pcmanfm
 #disks
