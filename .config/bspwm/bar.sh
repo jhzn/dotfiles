@@ -20,17 +20,24 @@ function set_touch_pad_options {
 	set_touch_pad_options 'DLL07BE:01 06CB:7A13 Touchpad'
 
 #set background
-feh -F --bg-fill --randomize ~/Pictures/wallpapers/ || echo "No wallpapers configured"
+feh -F --bg-fill --randomize ~/Pictures/wallpapers/ || echo "Wallpapers configuration error!"
 
 primary=$(xrandr --query | grep " primary" | cut -d" " -f1)
 
-for monitor in $(xrandr --query | grep " connected" | cut -d" " -f1); do
-	echo "$monitor|$primary" >> ~/error.log
-	if [ "$monitor" == "$primary" ]; then
-		echo "primary">> ~/error.log
+xrandr_output=$(xrandr --query)
+for monitor in $(echo "$xrandr_output" | grep " connected" | cut -d" " -f1); do
+
+	#Primitive, but seems to work atleast
+	#this checks if more than 1 display occupy the same x,y coordinates
+	#if so assume they're mirrored
+	if [ $(echo "$xrandr_output" | grep "+0+0" | wc -l) -gt 1 ]; then
+		echo "Monitor: $monitor is mirrored... setting appropriate polybar"
+		MONITOR="$monitor" polybar -c ~/.config/polybar/config bar_prim &
+	elif [ "$monitor" == "$primary" ]; then
+		echo "Monitor: $monitor is primary... setting appropriate polybar"
 		MONITOR="$monitor" polybar -c ~/.config/polybar/config bar_prim &
 	else
-		echo "ext">> ~/error.log
+		echo "Monitor: $monitor is extended... setting appropriate polybar"
 		MONITOR="$monitor" polybar -c ~/.config/polybar/config bar_ext &
 	fi
 done
