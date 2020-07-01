@@ -228,7 +228,7 @@ command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 " Remap for rename current word
 nmap <F2> <Plug>(coc-rename)
 
-let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-yaml', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rls']
+let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-yaml', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rust-analyzer']
 "
 " Set the filetype based on the file's extension, overriding any
 " 'filetype' that has already been set
