@@ -139,6 +139,10 @@ super + alt + shift + {h,j,k,l}
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
+
+super + e
+	rofi -modi "clipboard:greenclip print" -monitor primary -show clipboard -run-command '{cmd}'
+
 XF86Audio{Next,Prev,Play,Stop}
 	playerctl {next,previous,play-pause,stop}
 
