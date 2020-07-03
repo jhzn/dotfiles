@@ -33,6 +33,7 @@ PATH=~/bin/scripts/emoji_finder.sh:$PATH
 PATH=~/bin/scripts/vimv:$PATH
 
 export GOPATH=~/go
+export GOBIN=~/go/bin
 PATH=~/go/bin:$PATH
 PATH=~/.cargo/bin:$PATH
 PATH=~/.yarn/bin:$PATH

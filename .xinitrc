@@ -32,6 +32,8 @@ redshift-gtk &
 unclutter --timeout 3 &
 #automount block devcies
 udiskie --tray &
+#clipboard manager
+greenclip daemon &
 #polkit
 lxpolkit &
 #homemade cron

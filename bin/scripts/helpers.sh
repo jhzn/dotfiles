@@ -20,3 +20,11 @@ function base64_encoded_to_png {
 function json_pretty {
 	xclip -o | jq;
 }
+# restart services in docker-compose
+dc-restart(){
+	[ -z $@ ] && echo "No containers args given" && return 1
+	docker-compose stop $@
+	docker-compose rm -f -v $@
+	docker-compose create --force-recreate $@
+	docker-compose start $@
+}
