@@ -14,6 +14,9 @@ export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
 
+#By default Bash only tab-completes file names following a command. You can change it to complete command names using
+complete -c man which
+#complete command names and file names with
 complete -cf sudo
 
 #Activate vi mode in bash with ESC
@@ -44,4 +47,12 @@ PATH=~/.yarn/bin:$PATH
 
 # Add lfcd function which allows the shell to cd to the path you navigate to in lf
 source ~/.config/lf/lfcd.sh
-bind '"\C-o":"lfcd\C-m"'  # bash
+bind '"\C-o":"lfcd\C-m"'  # bash keybinding
+
+#Bash autocomplettions
+source /usr/share/bash-completion/bash_completion
+source /usr/share/bash-completion/completions/pass
+source /usr/share/bash-completion/completions/pacman
+
+run-help() { help "$READLINE_LINE" 2>/dev/null || man "$READLINE_LINE"; }
+bind -m vi-insert -x '"\eh": run-help'
