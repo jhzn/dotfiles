@@ -1,6 +1,7 @@
 #!/bin/sh -x
 
 #Use this script post arch-installation
+#--needed flags are used so that this script can be run multiple times without reinstalling everything and to achieve idempotence of packages across different machines
 
 
 #xorg / GUI
@@ -18,9 +19,13 @@ pacman -S --needed pulseaudio pulsemixer pavucontrol playerctl
 pacman -S --needed bluez bluez-utils pulseaudio-bluetooth
 systemctl enable bluetooth && systemctl start bluetooth
 #dev machine
-pacman -S --needed python2 python3 go nodejs yarn rust gnu-netcat openssh docker docker-compose
+pacman -S --needed python2 python3 go nodejs yarn rustup gnu-netcat openssh docker docker-compose
+if [ ! $(which cargo) ]; then
+	rustup default stable
+fi
 
-
+#shell
+pacman -S --needed bash-completion
 #setup vim
 #check /README.md
 pacman -S --needed python-pynvim
@@ -31,9 +36,11 @@ pacman -S --needed xf86-video-intel intel-ucode
 #misc
 pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc
 #files
-pacman -S --needed unzip zip nemo pcmanfm
+pacman -S --needed unzip zip nemo pcmanfm syncthing
 #disks
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
+#password manager
+pacman -S --needed pass
 
 #laptop
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
