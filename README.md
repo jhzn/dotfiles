@@ -1,10 +1,12 @@
 ### 1st time Setup
 
 ```bash
-curl https://raw.githubusercontent.com/jhzn/dotfiles/master/.config/dotfiles/bootstrap_dotfiles.sh > bootstrap.sh
-chmod +x bootstrap.sh
-#Open and modify file, because file is not usable per default
-./bootstrap.sh
+git clone https://github.com/jhzn/dotfiles
+chmod +x dotfiles/.config/dotfiles/bootstrap_dotfiles.sh
+#Open and modify file, because file is not usable by default for safety reasons
+vim ./dotfiles/.config/dotfiles/bootstrap_dotfiles.sh
+#then run
+./dotfiles/.config/dotfiles/bootstrap_dotfiles.sh
 ```
 
 ### Subsequent updating
