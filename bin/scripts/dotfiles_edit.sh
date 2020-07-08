@@ -8,4 +8,5 @@ nvim \
 	~/.config/bspwm/bar.sh \
 	~/.config/bspwm/monitors.py \
 	~/.config/polybar/config \
-	~/.config/nvim/init.vim
+	~/.config/nvim/init.vim \
+	~/.bashrc

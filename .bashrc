@@ -51,8 +51,8 @@ bind '"\C-o":"lfcd\C-m"'  # bash keybinding
 
 #Bash autocomplettions
 source /usr/share/bash-completion/bash_completion
-source /usr/share/bash-completion/completions/pass
-source /usr/share/bash-completion/completions/pacman
 
 run-help() { help "$READLINE_LINE" 2>/dev/null || man "$READLINE_LINE"; }
 bind -m vi-insert -x '"\eh": run-help'
+
+export $(gnome-keyring-daemon --start)

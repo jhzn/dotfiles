@@ -5,7 +5,7 @@ setxkbmap se
 #rebind CAPS to an addition escape key
 setxkbmap -option caps:escape
 
-#setup natural scrolling on touchpad
+#setup natural scrolling on touchpad and others
 #1st: run and find identifier of touchpad using xinput --list
 #check current value with: xinput --list-props
 #plug touchpad identifier below
@@ -20,11 +20,12 @@ function set_touch_pad_options {
 	set_touch_pad_options 'DLL07BE:01 06CB:7A13 Touchpad'
 
 #set background
+#this path can for example be a symlink so that we can easily switch our collection of wallpapers
 feh -F --bg-fill --randomize ~/Pictures/wallpapers/ || echo "Wallpapers configuration error!"
 
-primary=$(xrandr --query | grep " primary" | cut -d" " -f1)
-
+#Setup polybar
 xrandr_output=$(xrandr --query)
+primary=$(echo "$xrandr_output" | grep " primary" | cut -d" " -f1)
 for monitor in $(echo "$xrandr_output" | grep " connected" | cut -d" " -f1); do
 
 	#Primitive, but seems to work atleast
