@@ -1,18 +1,36 @@
 #!/bin/bash
-#
-# a simple dmenu session script
-#
-###
 
-#DMENU='dmenu -i -b -fn -xos4-terminus-medium-r-*--12-*-*-*-*-*-iso10646-1 -nb #000000 -nf #999999 -sb #000000 -sf #31658C'
-DMENU='dmenu'
-choice=$(echo -e "lock\nlogout\nshutdown\nreboot\nsuspend\nhibernate" | $DMENU)
+rofi_command="rofi -theme ~/.config/rofi/themes/powermenu.rasi"
+uptime=$(uptime -p | sed -e 's/up //g')
+# Options
+shutdown="Shutdown 襤"
+reboot="Reboot ﰇ"
+lock="Lock "
+suspend="Suspend 鈴"
+logout="Logout "
 
-case "$choice" in
-  lock) xscreensaver-command -lock & ;;
-  logout) bspc quit & ;;
-  shutdown) shutdown -h now & ;;
-  reboot) shutdown -r now & ;;
-  suspend) pm-suspend & ;;
-  hibernate) pm-hibernate & ;;
+# Variable passed to rofi
+options="$shutdown\n$reboot\n$lock\n$suspend\n$logout"
+
+chosen="$(echo -e "$options" | $rofi_command -p "UP - $uptime" -dmenu -selected-row 2)"
+
+case $chosen in
+	$shutdown)
+		systemctl poweroff
+		;;
+	$reboot)
+		systemctl reboot
+		;;
+	$lock)
+		xscreensaver-command -lock
+		;;
+	$suspend)
+		playerctl play-pause;
+		#pulsemixer --toggle-mute;
+		systemctl suspend;
+		;;
+	$logout)
+		bspc quit
+		;;
 esac
+
