@@ -22,11 +22,13 @@ case $chosen in
 		systemctl reboot
 		;;
 	$lock)
-		xscreensaver-command -lock
+		playerctl play-pause;
+		slock
 		;;
 	$suspend)
 		playerctl play-pause;
 		#pulsemixer --toggle-mute;
+		#because xss-lock daemon was running beforehand, the lock screen is automatically started when we run this
 		systemctl suspend;
 		;;
 	$logout)

@@ -1,15 +1,39 @@
-#!/bin/sh -x
+#!/bin/bash
 
 #Use this script post arch-installation
 #--needed flags are used so that this script can be run multiple times without reinstalling everything and to achieve idempotence of packages across different machines
 
+source ~/.config/dotfiles/bash_strict_mode.sh
+
+if [ "$USER" != "root" ]; then
+	#if we're not root, rerun as root and pass original user as argument to script
+	exec sudo -E "$0" "$USER"
+fi
+#We're root now
+
+#Validate some things
+OG_USER="$1"
+[ -z "$OG_USER" ] && echo "OG_USER is empty" && exit 1
+[ $HOME != "/home/$OG_USER" ] && echo "Invalid HOME env var set = $HOME" && exit 1
+
+
+#setup done, now we can do what we want to do
 
 #xorg / GUI
-pacman -S --needed xorg bspwm sxhkd dmenu rofi dunst xscreensaver \
+pacman -S --needed xorg bspwm sxhkd dmenu rofi dunst slock xss-lock \
 	xdg-utils lxsession xorg-setxkbmap xorg-xinit xf86-input-libinput \
 	gnome-keyring libsecret \
 	alacritty firefox network-manager-applet \
 	xclip redshift picom tmux transmission-gtk unclutter feh
+
+
+echo "Setting up custom X11 conf.."
+if [ ! ~/.config/arch/X11.sh ]; then
+	echo ".. It went bad"
+	exit 1
+else
+	echo ".. It went ok"
+fi
 
 #networking
 pacman -S --needed iptables-nft
@@ -46,6 +70,16 @@ pacman -S --needed pass
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
 	pacman -S --needed powertop tlp tlp-rdw
 	systemctl enable tlp && systemctl start tlp
+fi
+
+#install AUR packages
+echo "Installing AUR packages.."
+#Here we need to run yay as a non-root user because yay wants that
+if ! sudo -u "$OG_USER" ~/.config/arch/aur.sh; then
+	echo ".. It went bad"
+	exit 1
+else
+	echo ".. It went ok"
 fi
 
 

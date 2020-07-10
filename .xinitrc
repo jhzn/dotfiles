@@ -1,6 +1,6 @@
 #Truncate first
 >xinitrc.log
-#Then set stdout and stderr of remaining script to file
+#Then set stdout and stderr of remaining script to this file
 exec >> xinitrc.log
 exec 2>&1
 
@@ -22,8 +22,8 @@ fi
 
 #Setup daemons
 
-#auto lockscreen
-xscreensaver -no-splash &
+#lock screen when we for example close laptop lid or systemctl suspend
+xss-lock slock &
 #Start compositor
 picom &
 #notification daemon
@@ -48,6 +48,7 @@ lxpolkit &
 
 #start keyring daemon
 #https://wiki.archlinux.org/index.php/GNOME/Keyring
+# TODO is this optimal? We still need to run 'export $(gnome-keyring-daemon --start)' in our .bashrc
 eval $(/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 
