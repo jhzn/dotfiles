@@ -11,17 +11,20 @@ exit 1
 #git reponds with error if you try to clone a repos content directly into a directory which already has content. This circumvents that.
 
 cd ~ && \
-git clone --separate-git-dir=$HOME/.dotfiles https://github.com/jhzn/dotfiles $HOME/dotfiles-tmp && \
-rm -rf dotfiles-tmp
+git clone --separate-git-dir=$HOME/.dotfiles https://github.com/jhzn/dotfiles $HOME/dotfiles-tmp
 
 #make aliases work in scripts
 shopt -s expand_aliases
 #We define the alias "config" here
-source ~/.bash_aliases
+source $HOME/dotfiles-tmp/.bash_aliases
 
 #places base files in their correct position
 config reset --hard
 
+#clean up
+rm -rf $HOME/dotfiles-tmp
+
 #Fetch submodules
 config update && \
 echo "Successfully setup dotfiles! Open a new shell to finalize!"
+
