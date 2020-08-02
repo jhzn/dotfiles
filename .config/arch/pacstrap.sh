@@ -1,10 +1,10 @@
 #!/bin/sh
 
 #Absolute minimum
-pacstrap /mnt base linux linux-firmware base-devel grub neovim sudo man-db man-pages git networkmanager dhcpcd
+pacstrap /mnt base base-devel linux linux-firmware neovim sudo man-db man-pages git networkmanager dhcpcd
 
 #Disk crypto
-cryptsetup
+#cryptsetup
 
 #WIFI
-netctl dialog
+#netctl dialog
