@@ -62,7 +62,7 @@ pacman -S --needed python-pynvim
 #theme/fonts
 pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme lxappearance
 #intel
-pacman -S --needed xf86-video-intel intel-ucode
+#pacman -S --needed xf86-video-intel intel-ucode
 #misc
 pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc wmname youtube-dl units
 #files
@@ -70,7 +70,7 @@ pacman -S --needed unzip zip nemo pcmanfm syncthing
 #disks
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
-pacman -S --needed pass
+pacman -S --needed pass firefox-extension-passff
 
 #laptop
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
