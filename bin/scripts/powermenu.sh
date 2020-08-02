@@ -23,7 +23,7 @@ case $chosen in
 		;;
 	$lock)
 		playerctl play-pause;
-		slock
+		xsecurelock
 		;;
 	$suspend)
 		playerctl play-pause;

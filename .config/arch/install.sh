@@ -19,6 +19,12 @@ OG_USER="$1"
 
 #setup done, now we can do what we want to do
 
+
+
+
+
+
+
 #xorg / GUI
 pacman -S --needed xorg bspwm sxhkd dmenu rofi dunst slock xss-lock \
 	xdg-utils lxsession xorg-setxkbmap xorg-xinit xf86-input-libinput \
@@ -58,7 +64,7 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #intel
 pacman -S --needed xf86-video-intel intel-ucode
 #misc
-pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc wmname
+pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc wmname youtube-dl units
 #files
 pacman -S --needed unzip zip nemo pcmanfm syncthing
 #disks

@@ -23,9 +23,9 @@ fi
 #Setup daemons
 
 #lock screen when we for example close laptop lid or systemctl suspend
-xss-lock slock &
+xss-lock xsecurelock &
 #Start compositor
-picom &
+picom --backend glx &
 #notification daemon
 #Because dunst does not support env varibles we do this
 dunst -config <(envsubst < ~/.config/dunst/dunstrc) &
