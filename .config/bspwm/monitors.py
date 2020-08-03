@@ -17,8 +17,11 @@ print("Connected monitors are: " + " ".join(monitors))
 if len(monitors) > 1:
     primary_display = run('xrandr --query | grep " primary" | cut -d" " -f1').rstrip()
     print("Primary display is: " + primary_display)
-    monitors.remove(primary_display)
-    monitors.insert(0, primary_display)
+    try:
+        monitors.remove(primary_display)
+        monitors.insert(0, primary_display)
+    except:
+        print(f"Failed to remove primary display: {primary_display}")
 
     #remove disconnected display from bspwm
     disconncted_monitors = run('xrandr --query | grep " disconnected" | cut -d" " -f1').split()
