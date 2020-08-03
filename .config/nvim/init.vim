@@ -18,7 +18,6 @@ Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/tpope/vim-fugitive'
 "Search/replace
 Plug 'https://github.com/junegunn/fzf.vim'
-Plug 'https://github.com/junegunn/fzf'
 Plug 'https://github.com/brooth/far.vim'
 
 "Language stuff
@@ -93,7 +92,7 @@ imap <right> <nop>
 
 let mapleader = ","
 
-" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
+" Splits open at the bottom and right, which is non-retarded, unlike vim defaults :)
 set splitbelow splitright
 
 "Make VIM and X11 share the came clipboard
@@ -122,6 +121,11 @@ set hlsearch            " highlight matches
 set path+=** "Enables recusive :find for example
 set ignorecase
 
+set undodir=~/.cache/nvim_undo
+set undofile
+
+" Set custom settings based on file extension
+autocmd FileType dart setlocal shiftwidth=2 softtabstop=2 expandtab
 
 " Shortcutting split navigation, saving a keypress:
 map <C-h> <C-w>h
@@ -285,7 +289,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window
