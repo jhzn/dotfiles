@@ -25,7 +25,7 @@ OG_USER="$1"
 
 
 #xorg / GUI
-pacman -S --needed xorg bspwm sxhkd dmenu rofi dunst slock xss-lock \
+pacman -S --needed xorg bspwm sxhkd rofi dunst slock xss-lock \
 	xdg-utils lxsession xorg-setxkbmap xorg-xinit xf86-input-libinput \
 	gnome-keyring libsecret \
 	alacritty firefox network-manager-applet arandr \
