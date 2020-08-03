@@ -34,7 +34,7 @@ pacman -S --needed xorg bspwm sxhkd dmenu rofi dunst slock xss-lock \
 
 
 echo "Setting up custom X11 conf.."
-if [ ! ~/.config/arch/X11.sh ]; then
+if ! /home/$OG_USER/.config/arch/X11.sh ; then
 	echo ".. It went bad"
 	exit 1
 else
@@ -50,7 +50,7 @@ pacman -S --needed bluez bluez-utils pulseaudio-bluetooth
 systemctl enable bluetooth && systemctl start bluetooth
 #dev machine
 pacman -S --needed python2 python3 go nodejs yarn rustup gnu-netcat openssh docker docker-compose
-if [ ! $(which cargo) ]; then
+if [ ! $(which rustc) ]; then
 	rustup default stable
 fi
 

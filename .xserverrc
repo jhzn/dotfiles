@@ -2,4 +2,4 @@
 
 # Taken from https://wiki.archlinux.org/index.php/Xinit
 
-exec /usr/bin/Xorg -nolisten tcp -nolisten local "$@" vt$XDG_VTNR
+exec /usr/bin/Xorg -keeptty -nolisten tcp -nolisten local "$@" vt$XDG_VTNR &> ~/.xorg.log

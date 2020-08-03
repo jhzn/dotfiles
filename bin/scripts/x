@@ -1,4 +1,0 @@
-CHOICE=$(printf "cinnamon\nbspwm" | fzf)
-[ -z "$CHOICE" ] && echo "You chose no x environment... doing nothing" && exit 1
-
-startx "$CHOICE"
