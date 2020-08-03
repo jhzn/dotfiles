@@ -5,7 +5,6 @@ COLOR_OCHRE="\033[38;5;95m"
 COLOR_BLUE="\033[0;34m"
 COLOR_WHITE="\033[0;37m"
 COLOR_RESET="\033[0m"
-
 function git_color {
   local git_status="$(git status 2> /dev/null)"
 
@@ -74,12 +73,12 @@ function smile_prompt
 	if [ "$?" -eq "0" ]
 	then
 		#smiley
-		SC="${GREEN}:)"
-		#SC="🍀"
+		#SC="${GREEN}:)"
+		SC="🍀"
 	else
 		#frowney
-		SC="${RED}:("
-		#SC="🔥"
+		#SC="${RED}:("
+		SC="🔥"
 	fi
 	if [ $UID -eq 0 ]
 	then
@@ -96,7 +95,7 @@ function smile_prompt
 	#default color
 	DF='\[\e[0m\]'
 
-	PS1="${YELLOW}\t ${UC}\u ${RC}\w${DF} "
+	PS1="${YELLOW}\t ${UC}\u${WHITE}@${MAGENTA}\h ${RC}\w${DF} "
     PS1+="\[\$(git_color)\]"        # colors git status
 	PS1+="\$(git_branch)"           # prints current branch
 	PS1+=" ${SC}${DF}\\n${CYAN}>>${DF} "

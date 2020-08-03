@@ -15,9 +15,9 @@ alias lad="lazydocker"
 alias v="vim"
 alias vim="nvim"
 
-alias ls='ls --color=auto'
-alias ll="ls -la"
-alias l="ls -l"
+alias ls='exa --color=auto'
+alias ll="exa -la"
+alias l="exa -l"
 alias cp="cp -iv"
 #preserves the settings of the current user
 #nvim for example uses the current user's settings instead of the root users

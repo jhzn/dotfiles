@@ -4,7 +4,6 @@
 #--needed flags are used so that this script can be run multiple times without reinstalling everything and to achieve idempotence of packages across different machines
 
 source ~/.config/dotfiles/bash_strict_mode.sh
-
 if [ "$USER" != "root" ]; then
 	#if we're not root, rerun as root and pass original user as argument to script
 	exec sudo -E "$0" "$USER"
@@ -29,7 +28,7 @@ OG_USER="$1"
 pacman -S --needed xorg bspwm sxhkd dmenu rofi dunst slock xss-lock \
 	xdg-utils lxsession xorg-setxkbmap xorg-xinit xf86-input-libinput \
 	gnome-keyring libsecret \
-	alacritty firefox network-manager-applet \
+	alacritty firefox network-manager-applet arandr \
 	xclip redshift picom tmux transmission-gtk unclutter feh
 
 
@@ -64,9 +63,9 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #intel
 #pacman -S --needed xf86-video-intel intel-ucode
 #misc
-pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc wmname youtube-dl units
+pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc wmname youtube-dl units gnome-calculator
 #files
-pacman -S --needed unzip zip nemo pcmanfm syncthing
+pacman -S --needed unzip zip nemo pcmanfm syncthing exa
 #disks
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
