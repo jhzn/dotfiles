@@ -4,11 +4,6 @@
 exec >> xinitrc.log
 exec 2>&1
 
-#Use bash instead of sh so we can use bashisms
-if [[ x"$BASH" != x"/bin/bash" ]]; then
-	exec /bin/bash "$HOME/.xinitrc" $@
-fi
-
 # Recommended by https://wiki.archlinux.org/index.php/Xinit#Configuration
 # Taken from /etc/X11/xinit/xinitrc
 # start some nice programs
@@ -18,10 +13,9 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 	 done
 	 unset f
 fi
+echo "DE is $1"
 
-echo "Requested DE/WM is: $2"
-
-case "$2" in
+case "$1" in
 	cinnamon)
 	~/bin/scripts/x_settings.sh
 	exec cinnamon-session
@@ -35,7 +29,8 @@ case "$2" in
 	picom --backend glx &
 	#notification daemon
 	#Because dunst does not support env varibles we do this
-	dunst -config <(envsubst < ~/.config/dunst/dunstrc) &
+	envsubst < ~/.config/dunst/dunstrc > /tmp/dunstrc && \
+	dunst -config /tmp/dunstrc &
 	#Keyboard shortcuts daemon
 	sxhkd &
 	#Network configurability tray
