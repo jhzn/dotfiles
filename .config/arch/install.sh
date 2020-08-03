@@ -71,6 +71,8 @@ pacman -S --needed unzip zip nemo pcmanfm syncthing
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
 pacman -S --needed pass firefox-extension-passff
+#firefox
+pacman -S --needed firefox-dark-reader firefox-ublock-origin firefox-umatrix firefox-tridactyl
 
 #laptop
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
