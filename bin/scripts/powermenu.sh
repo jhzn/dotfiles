@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rofi_command="rofi -theme ~/.config/rofi/themes/powermenu.rasi"
+rofi_command="rofi -theme ~/.config/rofi/themes/powermenu.rasi -monitor primary"
 uptime=$(uptime -p | sed -e 's/up //g')
 # Options
 shutdown="Shutdown 襤"
