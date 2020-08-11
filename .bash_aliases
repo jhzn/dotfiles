@@ -30,3 +30,5 @@ alias open="xdg-open"
 alias screenshot="deepin-screenshot"
 #shorter
 alias bctl="bluetoothctl"
+#set a standard terminal
+alias ssh="TERM=screen-256color ssh"

@@ -51,8 +51,8 @@ case "$1" in
 	#start keyring daemon
 	#https://wiki.archlinux.org/index.php/GNOME/Keyring
 	# TODO is this optimal? We still need to run 'export $(gnome-keyring-daemon --start)' in our .bashrc
-	#eval $(/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh)
-	#export SSH_AUTH_SOCK
+	eval $(/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh)
+	export SSH_AUTH_SOCK
 
 	[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
