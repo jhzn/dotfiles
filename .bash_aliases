@@ -32,3 +32,4 @@ alias screenshot="deepin-screenshot"
 alias bctl="bluetoothctl"
 #set a standard terminal
 alias ssh="TERM=screen-256color ssh"
+alias diff="diff --color"
