@@ -28,3 +28,7 @@ dc-restart(){
 	docker-compose create --force-recreate $@
 	docker-compose start $@
 }
+
+function go_test_color {
+	awk '{sub("FAIL","\033[31mFAIL\033[0m", $0); sub("PASS","\033[32mPASS\033[0m", $0); print}'
+}
