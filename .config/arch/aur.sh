@@ -12,4 +12,4 @@ fi
 
 yay -S --needed polybar ytop tealdeer-git lf vscodium-bin \
 	nerd-fonts-jetbrains-mono zeal rofi-greenclip passff-host \
-	sirula-git
+	sirula-git clipman
