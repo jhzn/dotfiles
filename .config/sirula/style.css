@@ -1,0 +1,64 @@
+.app-row {
+	background-color: #282c34;
+	color: white;
+
+	transition: unset;
+	padding: 5px
+		0
+		5px
+		10px;
+}
+
+.app-label {
+	background-color: #282c34;
+	color: white;
+	margin-left: 10px;
+	font-family: Iosevka;
+	font-size: 16px;
+}
+
+#root-box {
+	background-color: #282c34;
+	color: white;
+}
+
+#search {
+	background-color: #282c34;
+	color: white;
+	font-size: 18px;
+	padding: 2px
+		8px;
+	margin: 5px;
+}
+
+#root-box,
+.background,
+#app-list,
+.overlay-indicator {
+	background: transparent;
+}
+.app-row:focus {
+	outline: unset;
+}
+
+.app-row:hover:selected {
+	border: 1px
+		solid
+		white;
+}
+
+.app-row:hover {
+	border: 1px
+		solid
+		white;
+}
+.app-row:selected {
+	border: 1px
+		solid
+		white;
+}
+selection {
+	border: 1px
+		solid
+		white;
+}
