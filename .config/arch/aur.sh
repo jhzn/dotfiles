@@ -10,4 +10,6 @@ if [ ! $(which yay) ]; then
 	echo "AUR helper, yay is now installed!"
 fi
 
-yay -S --needed polybar ytop tealdeer-git lf vscodium-bin nerd-fonts-jetbrains-mono zeal rofi-greenclip passff-host
+yay -S --needed polybar ytop tealdeer-git lf vscodium-bin \
+	nerd-fonts-jetbrains-mono zeal rofi-greenclip passff-host \
+	sirula-git clipman wdisplays

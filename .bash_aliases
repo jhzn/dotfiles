@@ -7,8 +7,15 @@ alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 
-alias xc="xclip -i -selection primary -f | xclip -i -selection clipboard" #Copy to clipboard, also to VIM's "+ and "* register
-alias xp="xclip -o" #Output from clipboard
+if [ -n "$WAYLAND_DISPLAY" ]; then
+	alias xc="wl-copy --trim-newline"
+	alias xp='wl-paste'
+else
+	#Copy to clipboard, also to VIM's "+ and "* register
+	alias xc='xclip -i -selection primary -f | xclip -i -selection clipboard'
+	#Output from clipboard
+	alias xp='xclip -o'
+fi
 
 alias dc="docker-compose"
 alias lad="lazydocker"
@@ -26,10 +33,11 @@ alias sudo="sudo -E"
 alias tmux="tmux -f ~/.config/tmux/.tmux.conf"
 #Easier to remember/type
 alias open="xdg-open"
-#more generic
-alias screenshot="deepin-screenshot"
+#screenshot in either x or sway
+alias screenshot='[ -n "$WAYLAND_DISPLAY" ] && /usr/share/sway/scripts/grimshot || deepin-screenshot'
 #shorter
 alias bctl="bluetoothctl"
 #set a standard terminal
 alias ssh="TERM=screen-256color ssh"
 alias diff="diff --color"
+#alias dwl="dwl -s ~/.config/sway/wayland_startup.sh"

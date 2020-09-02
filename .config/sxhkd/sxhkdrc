@@ -150,4 +150,4 @@ XF86Audio{LowerVolume,RaiseVolume,Mute}
     pulsemixer {--change-volume -5,--change-volume +5,--toggle-mute}
 
 XF86MonBrightness{Up,Down}
-	xbacklight {-inc,-dec} 5%
+	brightnessctl set {+5%,5%-}

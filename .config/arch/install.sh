@@ -21,16 +21,17 @@ OG_USER="$1"
 
 
 
+#desktop
+pacman -S --needed lxsession gnome-keyring libsecret alacritty tmux firefox transmission-gtk brightnessctl
 
-
-
-#xorg / GUI
+#xorg
 pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
-	xdg-utils lxsession xorg-setxkbmap xorg-xinit xf86-input-libinput \
-	gnome-keyring libsecret \
-	alacritty firefox network-manager-applet arandr \
-	xclip redshift picom tmux transmission-gtk unclutter feh
+	xdg-utils xorg-setxkbmap xorg-xinit xf86-input-libinput \
+	network-manager-applet arandr \
+	xclip redshift picom unclutter feh deepin-screenshot wmname
 
+# wayland
+pacman -S --needed sway swaylock xorg-server-xwayland waybar gammastep mako grim slurp wl-clipboard
 
 echo "Setting up custom X11 conf.."
 if ! /home/$OG_USER/.config/arch/X11.sh ; then
@@ -46,7 +47,7 @@ pacman -S --needed iptables-nft
 pacman -S --needed pulseaudio pulsemixer pavucontrol playerctl
 #bluetooth
 pacman -S --needed bluez bluez-utils pulseaudio-bluetooth
-systemctl enable bluetooth && systemctl start bluetooth
+#systemctl enable bluetooth && systemctl start bluetooth
 #dev machine
 pacman -S --needed python2 python3 go nodejs yarn rustup gnu-netcat openssh docker docker-compose
 if [ ! $(which rustc) ]; then
@@ -63,7 +64,8 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #intel
 #pacman -S --needed xf86-video-intel intel-ucode
 #misc
-pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq deepin-screenshot pandoc wmname youtube-dl units gnome-calculator
+pacman -S --needed sxiv gimp zathura zathura-pdf-poppler fzf ripgrep jq \
+	 pandoc youtube-dl units gnome-calculator newsboat
 #files
 pacman -S --needed unzip zip nemo pcmanfm syncthing exa
 #disks
@@ -76,7 +78,7 @@ pacman -S --needed firefox-dark-reader firefox-ublock-origin firefox-umatrix fir
 #laptop
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
 	pacman -S --needed powertop tlp tlp-rdw
-	systemctl enable tlp && systemctl start tlp
+	#systemctl enable tlp && systemctl start tlp
 fi
 
 #install AUR packages
