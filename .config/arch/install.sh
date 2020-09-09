@@ -92,17 +92,3 @@ else
 fi
 
 
-###########################
-#### configure network ####
-###########################
-
-#wired
-#systemctl start dhcpcd
-
-#wireless
-#use wifi-menu until x is stable
-#use nm-applet now in GUI environment to connect to WIFI
-#then
-#systemctl stop/disable netctl@$WIFIPROFILE
-#systemctl start/enable NetworkManager
-#use nm-applet now in GUI environment to connect to WIFI

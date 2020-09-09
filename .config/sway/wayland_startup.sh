@@ -16,3 +16,4 @@ exec wl-paste -t text --watch clipman store 1>> ~/error.log 2>&1 &
 #homemade cron
 ~/bin/scripts/cron.sh &
 
+~/.config/sway/wallpaper.sh &
