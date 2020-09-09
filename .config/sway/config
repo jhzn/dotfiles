@@ -26,12 +26,12 @@ set $menu sirula
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg "~/Pictures/nature2/92 - vlqKYiT.jpg" fill
+#~/.config/sway/wallpaper.sh does this
 #
 # Example configuration:
 #
-output eDPI resolution 1920x1080 position 0,0
-#output DPI resolution 1920x1080 position 0,1080
+# Outputs are configued separately to be computer agnostic
+#output eDPI resolution 1920x1080 position 0,0
 
 
 # Gaps
@@ -70,7 +70,7 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 #
 # Example configuration:
 #
-input "2:7:SynPS/2_Synaptics_TouchPad" {
+input "2:7:SynPS/2_Synaptics_TouchPad","DLL07BE:01 06CB:7A13 Touchpad" {
    dwt enabled
    tap enabled
    natural_scroll enabled

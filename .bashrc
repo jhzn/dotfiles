@@ -61,8 +61,8 @@ bind '"\C-o":"lfcd\C-m"'  # bash keybinding
 #Bash autocomplettions
 source /usr/share/bash-completion/bash_completion
 
-run-help() { help "$READLINE_LINE" 2>/dev/null || man "$READLINE_LINE"; }
-bind -m vi-insert -x '"\eh": run-help'
+#run-help() { help "$READLINE_LINE" 2>/dev/null || man "$READLINE_LINE"; }
+#bind -m vi-insert -x '"\eh": run-help'
 
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
