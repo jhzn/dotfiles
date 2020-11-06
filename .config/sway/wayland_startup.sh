@@ -6,6 +6,7 @@
 eval $(/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 
+mako --default-timeout 10000 &
 waybar &
 gammastep &
 nm-applet --indicator &

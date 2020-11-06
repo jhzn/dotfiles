@@ -69,8 +69,9 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 ### Input configuration
 #
 # Example configuration:
-#
-input "2:7:SynPS/2_Synaptics_TouchPad","DLL07BE:01 06CB:7A13 Touchpad" {
+
+#, "DLL07BE:01 06CB:7A13 Touchpad"
+input "2:7:SynPS/2_Synaptics_TouchPad" {
    dwt enabled
    tap enabled
    natural_scroll enabled

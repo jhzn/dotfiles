@@ -10,6 +10,7 @@ alias egrep="egrep --color=auto"
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	alias xc="wl-copy --trim-newline"
 	alias xp='wl-paste'
+	export MOZ_ENABLE_WAYLAND=1
 else
 	#Copy to clipboard, also to VIM's "+ and "* register
 	alias xc='xclip -i -selection primary -f | xclip -i -selection clipboard'
