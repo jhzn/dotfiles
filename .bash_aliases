@@ -10,12 +10,14 @@ alias egrep="egrep --color=auto"
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	alias xc="wl-copy --trim-newline"
 	alias xp='wl-paste'
-	export MOZ_ENABLE_WAYLAND=1
+	alias screenshot='/usr/share/sway/scripts/grimshot'
 else
 	#Copy to clipboard, also to VIM's "+ and "* register
 	alias xc='xclip -i -selection primary -f | xclip -i -selection clipboard'
 	#Output from clipboard
 	alias xp='xclip -o'
+	#screenshot in either x or sway
+	alias screenshot='deepin-screenshot'
 fi
 
 alias dc="docker-compose"
@@ -34,8 +36,6 @@ alias sudo="sudo -E"
 alias tmux="tmux -f ~/.config/tmux/.tmux.conf"
 #Easier to remember/type
 alias open="xdg-open"
-#screenshot in either x or sway
-alias screenshot='[ -n "$WAYLAND_DISPLAY" ] && /usr/share/sway/scripts/grimshot || deepin-screenshot'
 #shorter
 alias bctl="bluetoothctl"
 #set a standard terminal
