@@ -1,8 +1,13 @@
 #!/bin/sh
 
-CHOICE=$(ls $HOME/.screenlayout | fzf)
+DIR="$HOME/.screenlayout"
+if [ -n "$WAYLAND_DISPLAY" ]; then
+	DIR="$HOME/bin/swaylayout"
+fi
+
+CHOICE=$(ls "$DIR"  | fzf)
 [ -z "$CHOICE" ] && echo "You chose nothing... doing nothing" && exit 1
 
-sh "$HOME/.screenlayout/$CHOICE"
+sh "$DIR/$CHOICE"
 notify-send "You chose screenlayout: $CHOICE"
 
