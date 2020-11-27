@@ -12,8 +12,8 @@
 						"pulseaudio",
 						"network",
 						"cpu",
-						"memory",
 						"temperature",
+						"memory",
 						"backlight",
 						"battery",
 						//"battery#bat2",
@@ -59,7 +59,7 @@
         "tooltip": false
     },
     "memory": {
-        "format": "{}% M"
+        "format": "{}% MEM"
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -71,8 +71,9 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", ""]
+        "format": "{percent}% BL",
+        //"format": "{percent}% {icon}",
+        //"format-icons": ["", ""]
     },
     "battery": {
         "states": {
