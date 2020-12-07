@@ -39,7 +39,6 @@ for_window [class="^.*"] border pixel 2
 gaps inner 5
 gaps outer 5
 
-
 #show no border around any window
 default_border none
 default_floating_border none
@@ -110,6 +109,8 @@ input * {
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+	bindsym ctrl+alt+l exec ~/bin/scripts/powermenu.sh
 #
 # Moving around:
 #
