@@ -31,7 +31,7 @@ pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
 	xclip redshift picom unclutter feh deepin-screenshot wmname
 
 # wayland
-pacman -S --needed sway swaylock xorg-server-xwayland waybar gammastep mako grim slurp wl-clipboard
+pacman -S --needed sway swaylock xorg-server-xwayland waybar gammastep mako grim slurp wl-clipboard wofi
 
 echo "Setting up custom X11 conf.."
 if ! /home/$OG_USER/.config/arch/X11.sh ; then
