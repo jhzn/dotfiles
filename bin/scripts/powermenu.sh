@@ -38,7 +38,7 @@ case $chosen in
 		lockscreen
 		;;
 	$suspend)
-		playerctl play-pause;
+		playerctl pause;
 		#for X, because xss-lock daemon was running beforehand, the lock screen is automatically started when we run this
 		systemctl suspend;
 		;;
