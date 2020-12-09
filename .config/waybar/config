@@ -14,6 +14,7 @@
 						"cpu",
 						"temperature",
 						"memory",
+						"disk",
 						"backlight",
 						"battery",
 						//"battery#bat2",
@@ -61,6 +62,11 @@
     "memory": {
         "format": "{}% MEM"
     },
+	"disk": {
+		"interval": 120,
+		"format": "🖴 {percentage_free}%/{free} free",
+		"path": "/"
+	},
     "temperature": {
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
