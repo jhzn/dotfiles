@@ -3,7 +3,7 @@
 
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	#I dont have a custom theme for the powermenu yet
-	rofi_command="wofi --dmenu --columns=5 --height=50"
+	rofi_command="wofi --dmenu --columns=5 --height=50 --sort-order=default --cache-file=/dev/null"
 	function logout { swaymsg exit; }
 	function lockscreen { ~/bin/scripts/blurry_swaylock.sh; }
 else
@@ -22,7 +22,7 @@ suspend="Suspend 鈴"
 logout="Logout "
 
 # Variable passed to rofi
-options="$shutdown\n$reboot\n$lock\n$suspend\n$logout"
+options="$lock\n$logout\n$suspend\n$shutdown\n$reboot\n"
 
 chosen="$(echo -e "$options" | $rofi_command -p "UP - $uptime" )"
 
