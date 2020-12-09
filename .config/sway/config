@@ -55,10 +55,10 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 # Example configuration:
 #
 
-#A note on the first timeout command below: it's a neat way to block the screen from locking when we're watching video
+#A note on the timeout commands below: it's a neat way to block the screen from locking or turning the monitors off, when we're watching video
  exec swayidle -d -w \
 		timeout 300 'playerctl status | grep Playing || ~/bin/scripts/blurry_swaylock.sh' \
-		timeout 600 'swaymsg "output * dpms off"' \
+		timeout 600 'playerctl status | grep Playing || swaymsg "output * dpms off"' \
 		resume 'swaymsg "output * dpms on"' \
 		before-sleep '~/bin/scripts/blurry_swaylock.sh' \
 		lock '~/bin/scripts/blurry_swaylock.sh'

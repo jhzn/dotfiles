@@ -1,7 +1,11 @@
 #!/bin/bash
 
+#inspiration from https://gitlab.com/rigopoui/dotfiles-and-themes/-/raw/master/laptop/.local/bin/lock
+#this creates a blurry screenshot and uses that image when locking the screen as the lockscreen wallpaper
+
 TMPBG=/tmp/screen.png
-grim -o $(swaymsg -p -t get_outputs | rg focused | awk '{print $2}') /tmp/screen.png
+#subshell gets the focused monitor, this is used so that we dont have to hardcode any monitors here
+grim -o $(swaymsg -p -t get_outputs | grep focused | awk '{print $2}') /tmp/screen.png
 
 convert $TMPBG -scale 10% -scale 1000% $TMPBG
 convert $TMPBG -gravity south -pointsize 55 \
