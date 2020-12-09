@@ -102,6 +102,7 @@ window#waybar.chromium {
 #battery,
 #cpu,
 #memory,
+#disk,
 #temperature,
 #backlight,
 #network,
@@ -172,7 +173,7 @@ label:focus {
 }
 
 #pulseaudio.muted {
-	background-color: #90b1b1;
+	background-color: #f53c3c;
 	color: #2a5c45;
 }
 
