@@ -9,7 +9,7 @@ alias egrep="egrep --color=auto"
 
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	alias xc="wl-copy --trim-newline"
-	alias xp='wl-paste'
+	alias xp='wl-paste --type text'
 	alias screenshot='/usr/share/sway/scripts/grimshot'
 else
 	#Copy to clipboard, also to VIM's "+ and "* register

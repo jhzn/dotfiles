@@ -54,11 +54,14 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 #
 # Example configuration:
 #
- exec swayidle -w \
-		timeout 300 'swaylock -f -c 000000' \
-		timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-		before-sleep 'swaylock -f -c 000000' \
-		lock 'swaylock'
+
+#A note on the first timeout command below: it's a neat way to block the screen from locking when we're watching video
+ exec swayidle -d -w \
+		timeout 300 'playerctl status | grep Playing || ~/bin/scripts/blurry_swaylock.sh' \
+		timeout 600 'swaymsg "output * dpms off"' \
+		resume 'swaymsg "output * dpms on"' \
+		before-sleep '~/bin/scripts/blurry_swaylock.sh' \
+		lock '~/bin/scripts/blurry_swaylock.sh'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -75,6 +78,8 @@ input "2:7:SynPS/2_Synaptics_TouchPad" {
    natural_scroll enabled
    middle_emulation enabled
 }
+#hide cursor after a certain time
+seat * hide_cursor 8000
 
 input * {
     xkb_layout "se"

@@ -1,3 +1,6 @@
+import math
+import subprocess
+
 def divide_chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
@@ -9,7 +12,6 @@ def run(args):
 desktops = [1,2,3,4,5,6,7,8,9,0]
 # desktops = ['I', 'II', 'III', "IV", "V", "VI", "VII", "VIII", "IX", "X"]
 
-import subprocess
 monitors = run("bspc query -M --names").split()
 print("Connected monitors are: " + " ".join(monitors))
 
@@ -36,7 +38,6 @@ print("Monitor order is: " + " ".join(monitors))
 #I.e When we disconnect a monitor we need to take all of the windows from that monitor's workspaces to our currently connected monitors
 run("bspc wm --adopt-orphans")
 
-import math
 chunk_size = math.floor(len(desktops) / len(monitors))
 print("Each monitor gets " + str(chunk_size) + " amount of desktops")
 
