@@ -5,7 +5,7 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 	#I dont have a custom theme for the powermenu yet
 	rofi_command="wofi --dmenu --columns=5 --height=50"
 	function logout { swaymsg exit; }
-	function lockscreen { swaylock; }
+	function lockscreen { ~/bin/scripts/blurry_swaylock.sh; }
 else
 	rofi_command="rofi -theme ~/.config/rofi/themes/powermenu.rasi -monitor primary -dmenu -selected-row 2"
 	function logout { bspc quit; }

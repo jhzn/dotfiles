@@ -116,14 +116,14 @@ window#waybar.chromium {
 	margin: 0
 		4px;
 	color: #000000;
+	background-color: #61afef;
+	opacity: 0.6;
 }
 
 #clock {
-	background-color: #61afef;
 }
 
 #battery {
-	background-color: #61afef;
 }
 
 #battery.charging {
@@ -153,19 +153,15 @@ label:focus {
 }
 
 #cpu {
-	background-color: #61afef;
 }
 
 #memory {
-	background-color: #61afef;
 }
 
 #backlight {
-	background-color: #61afef;
 }
 
 #network {
-	background-color: #61afef;
 }
 
 #network.disconnected {
@@ -173,7 +169,6 @@ label:focus {
 }
 
 #pulseaudio {
-	background-color: #61afef;
 }
 
 #pulseaudio.muted {
@@ -182,21 +177,17 @@ label:focus {
 }
 
 #custom-media {
-	background-color: #61afef;
 	color: #2a5c45;
 	min-width: 100px;
 }
 
 #custom-media.custom-spotify {
-	background-color: #61afef;
 }
 
 #custom-media.custom-vlc {
-	background-color: #61afef;
 }
 
 #temperature {
-	background-color: #61afef;
 }
 
 #temperature.critical {
@@ -204,11 +195,9 @@ label:focus {
 }
 
 #tray {
-	background-color: #61afef;
 }
 
 #idle_inhibitor {
-	background-color: #61afef;
 }
 
 #idle_inhibitor.activated {
@@ -217,7 +206,6 @@ label:focus {
 }
 
 #mpd {
-	background-color: #61afef;
 	color: #2a5c45;
 }
 
