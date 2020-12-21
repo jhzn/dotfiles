@@ -65,7 +65,7 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #pacman -S --needed xf86-video-intel intel-ucode
 #misc
 pacman -S --needed imv gimp zathura zathura-pdf-poppler fzf ripgrep jq \
-	 pandoc youtube-dl units gnome-calculator newsboat
+	 pandoc youtube-dl units gnome-calculator newsboat imagemagick
 #files
 pacman -S --needed unzip zip nemo pcmanfm syncthing exa
 #disks
