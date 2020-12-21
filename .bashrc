@@ -64,13 +64,5 @@ source /usr/share/bash-completion/bash_completion
 #run-help() { help "$READLINE_LINE" 2>/dev/null || man "$READLINE_LINE"; }
 #bind -m vi-insert -x '"\eh": run-help'
 
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh 2> /dev/null)
 export SSH_AUTH_SOCK
-
-if [ -n "$WAYLAND_DISPLAY" ]; then
-	export MOZ_ENABLE_WAYLAND=1
-	export VDPAU_DRIVER=va_gl
-	export LIBVA_DRIVER_NAME=i965
-	unset DISPLAY
-fi
-

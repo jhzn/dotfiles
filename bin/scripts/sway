@@ -1,0 +1,15 @@
+#!/bin/sh
+
+export MOZ_ENABLE_WAYLAND=1
+export MOZ_USE_XINPUT2=1
+
+#needed by waybar otherwise it complains
+export XDG_CURRENT_DESKTOP=Unity
+
+export VDPAU_DRIVER=va_gl
+export LIBVA_DRIVER_NAME=i965
+
+#X11 thing
+unset DISPLAY
+
+exec /usr/bin/sway
