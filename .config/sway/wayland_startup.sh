@@ -10,7 +10,7 @@ mako --default-timeout 10000 &
 waybar &
 gammastep &
 nm-applet --indicator &
-udiskie --tray &
+udiskie --tray --appindicator &
 lxpolkit &
 #clipboard manager
 exec wl-paste -t text --watch clipman store 1>> ~/error.log 2>&1 &
