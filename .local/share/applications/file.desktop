@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=File Browser
-Exec=alacritty -e lf %u
+Exec=alacritty --working-directory %u
