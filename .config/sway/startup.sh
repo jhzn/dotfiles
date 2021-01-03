@@ -6,15 +6,17 @@
 eval $(/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 
-mako --default-timeout 10000 &
+mako &
 waybar &
 gammastep &
 nm-applet --indicator &
 udiskie --tray --appindicator &
 lxpolkit &
 #clipboard manager
-exec wl-paste -t text --watch clipman store 1>> ~/error.log 2>&1 &
+wl-paste -t text --watch clipman store 1>> ~/error.log 2>&1 &
 #homemade cron
 ~/bin/scripts/cron.sh &
+
+autotiling-rs &
 
 ~/.config/sway/wallpaper.sh &
