@@ -280,4 +280,4 @@ exec_always {
 #exec bash ~/.profile
 include /etc/sway/config.d/*
 
-exec ~/.config/sway/wayland_startup.sh
+exec ~/.config/sway/startup.sh
