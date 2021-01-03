@@ -3,9 +3,11 @@
 #Also defines a git alias which can be used to update my dotfiles to the latest version
 alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME -c status.showUntrackedFiles=no -c submodule.recurse=true -c alias.update="'"!bash '"$HOME"'/.config/dotfiles/update_dotfiles.sh"'
 
-alias grep="grep --color=auto"
+
+
+alias grep='grep --colour=auto'
+alias egrep='egrep --colour=auto'
 alias fgrep="fgrep --color=auto"
-alias egrep="egrep --color=auto"
 
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	alias xc="wl-copy --trim-newline"
@@ -25,10 +27,10 @@ alias lad="lazydocker"
 alias v="vim"
 alias vim="nvim"
 
-alias ls='exa --color=auto'
-alias ll="exa -la"
-alias l="exa -l"
-alias cp="cp -iv"
+alias ls='exa'
+alias l='ls --color=auto --group-directories-first --classify'
+alias ll='ls --color=auto --group-directories-first --classify -l'
+alias lla='ls --color=auto --group-directories-first --classify -la'
 #preserves the settings of the current user
 #nvim for example uses the current user's settings instead of the root users
 alias sudo="sudo -E"
@@ -42,3 +44,14 @@ alias bctl="bluetoothctl"
 alias ssh="TERM=screen-256color ssh"
 alias diff="diff --color"
 #alias dwl="dwl -s ~/.config/sway/wayland_startup.sh"
+
+alias cp='cp -iv'
+alias rcp='rsync -v --progress'
+alias rmv='rsync -v --progress --remove-source-files'
+alias mv='mv -iv'
+alias rm='rm -iv'
+alias rmdir='rmdir -v'
+alias ln='ln -v'
+alias chmod="chmod -c"
+alias chown="chown -c"
+alias mkdir="mkdir -v"
