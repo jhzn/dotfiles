@@ -33,9 +33,9 @@ set $menu sirula
 
 
 # Gaps
+for_window [class="^.*"] border pixel 2
 for_window [class=".*"] border pixel 2
 for_window [app_id="^.*"] border pixel 2
-for_window [class="^.*"] border pixel 2
 gaps inner 5
 gaps outer 5
 
@@ -237,15 +237,15 @@ bindsym $mod+r mode "resize"
 #special keys
 #
 	#Audio
-	bindsym XF86AudioRaiseVolume exec pulsemixer --change-volume +5
-	bindsym XF86AudioLowerVolume exec pulsemixer --change-volume -5
-	bindsym XF86AudioMute exec pulsemixer --toggle
+	bindsym XF86AudioRaiseVolume exec audio.sh up
+	bindsym XF86AudioLowerVolume exec audio.sh down
+	bindsym XF86AudioMute exec audio.sh mute-toggle
 	#bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 	#audio playback
-	bindsym XF86AudioPlay exec playerctl play-pause
-	bindsym XF86AudioNext exec jlayerctl next
-	bindsym XF86AudioPrev exec playerctl previous
+	bindsym XF86AudioPlay exec audio.sh play-pause
+	bindsym XF86AudioNext exec audio.sh next
+	bindsym XF86AudioPrev exec audio.sh previous
 
 	#backlight
 	bindsym XF86MonBrightnessDown exec brightnessctl set 5%-

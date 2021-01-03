@@ -18,8 +18,8 @@ OG_USER="$1"
 
 #setup done, now we can do what we want to do
 
-
-
+mkdir -p /etc/pacman.d/hooks/
+cp ~/.config/arch/*.hook /etc/pacman.d/hooks/
 
 #desktop
 pacman -S --needed lxsession gnome-keyring libsecret alacritty tmux firefox transmission-gtk brightnessctl
@@ -31,7 +31,7 @@ pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
 	xclip redshift picom unclutter feh deepin-screenshot wmname
 
 # wayland
-pacman -S --needed sway swaylock swayidle xorg-server-xwayland waybar gammastep mako grim slurp wl-clipboard wofi wdisplays
+pacman -S --needed sway swaylock swayidle xorg-server-xwayland waybar gammastep mako grim slurp wl-clipboard wofi
 
 echo "Setting up custom X11 conf.."
 if ! /home/$OG_USER/.config/arch/X11.sh ; then
@@ -55,7 +55,7 @@ if [ ! $(which rustc) ]; then
 fi
 
 #shell
-pacman -S --needed bash-completion
+pacman -S --needed bash-completion zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting
 #setup vim
 #check /README.md
 pacman -S --needed python-pynvim
@@ -66,6 +66,15 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #misc
 pacman -S --needed imv gimp zathura zathura-pdf-poppler fzf ripgrep jq \
 	 pandoc youtube-dl units gnome-calculator newsboat imagemagick
+#security
+pacman -S --needed firejail
+#if this holds true assume it's a fresh install of arch
+if [ ! $(which yay) ]; then
+	echo "Configuring firejail to be used by default!"
+	#To use Firejail by default for all applications for which it has profiles, run the firecfg tool as root.
+	#https://wiki.archlinux.org/index.php/Firejail#Using_Firejail_by_default
+	firecfg
+fi
 #files
 pacman -S --needed unzip zip nemo pcmanfm syncthing exa
 #disks
@@ -88,7 +97,7 @@ if ! sudo -u "$OG_USER" ~/.config/arch/aur.sh; then
 	echo ".. It went bad"
 	exit 1
 else
-	echo ".. It went ok"
+	echo "... AUR install went ok"
 fi
 
 

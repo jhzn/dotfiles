@@ -39,17 +39,6 @@ source ~/.config/dotfiles/ps1.sh
 #Make sure to never add this file to git!
 source ~/.host_specific_settings.sh
 
-PATH=~/bin:$PATH
-PATH=~/bin/scripts:$PATH
-PATH=~/bin/scripts/emoji_finder.sh:$PATH
-PATH=~/bin/scripts/vimv:$PATH
-
-export GOPATH=~/go
-export GOBIN=~/go/bin
-PATH=~/go/bin:$PATH
-PATH=~/.cargo/bin:$PATH
-PATH=~/.yarn/bin:$PATH
-
 # FZF enable cool features
 [ -f /usr/share/fzf/key-bindings.bash ] && . /usr/share/fzf/key-bindings.bash
 [ -f /usr/share/fzf/completion.bash ] && . /usr/share/fzf/completion.bash
