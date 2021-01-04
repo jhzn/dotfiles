@@ -1,5 +1,17 @@
 #!/bin/sh
 
+#truncate before launch of sway
+#>~/sway.log
+
+# Open STDOUT as $LOG_FILE file for write.
+exec 1>~/sway.log
+# Redirect STDERR to STDOUT
+exec 2>&1
+
+#nice way to separate launches
+printf "Launching sway at: "
+date --rfc-3339=s
+
 export MOZ_ENABLE_WAYLAND=1
 export MOZ_USE_XINPUT2=1
 

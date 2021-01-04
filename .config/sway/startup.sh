@@ -8,15 +8,16 @@ export SSH_AUTH_SOCK
 
 mako &
 waybar &
-gammastep &
+gammastep-indicator &
 nm-applet --indicator &
 udiskie --tray --appindicator &
 lxpolkit &
 #clipboard manager
-wl-paste -t text --watch clipman store 1>> ~/error.log 2>&1 &
+wl-paste -t text --watch clipman store &
 #homemade cron
 ~/bin/scripts/cron.sh &
 
 autotiling-rs &
+
 
 ~/.config/sway/wallpaper.sh &
