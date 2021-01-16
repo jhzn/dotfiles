@@ -34,7 +34,7 @@ set -o vi
 bind -m vi-insert "\C-l":clear-screen
 
 source ~/.bash_aliases
-source ~/bin/scripts/helpers.sh
+source ~/bin/scripts/functions.sh
 source ~/.config/dotfiles/ps1.sh
 #Make sure to never add this file to git!
 source ~/.host_specific_settings.sh

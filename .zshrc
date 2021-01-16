@@ -101,12 +101,13 @@ done
 
 
 source ~/.bash_aliases
-source ~/bin/scripts/helpers.sh
+source ~/bin/scripts/functions.sh
 #Make sure to never add this file to git!
 source ~/.host_specific_settings.sh
 
 
-# FZF enable cool features
+# begin FZF config
+
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 #overwrite exinting function to change "fc" to include timestampt as well.
 #TODO make pull request to FZF github repo
@@ -126,8 +127,14 @@ fzf-history-widget() {
   zle reset-prompt
   return $ret
 }
-
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+# To apply the command to CTRL-T as well
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+
+# end of FZF config
+
 
 
 

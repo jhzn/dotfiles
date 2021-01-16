@@ -76,7 +76,7 @@ if [ ! $(which yay) ]; then
 	firecfg
 fi
 #files
-pacman -S --needed unzip zip nemo pcmanfm syncthing exa
+pacman -S --needed unzip zip nemo pcmanfm syncthing exa mlocate plocate
 #disks
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
