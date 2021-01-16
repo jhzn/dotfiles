@@ -29,6 +29,12 @@ dc-restart(){
 	docker-compose start $@
 }
 
+#colorize "go test" output to make it easier to parse for the eyes
+#Example "go test | go_test_color"
 function go_test_color {
 	awk '{sub("FAIL","\033[31mFAIL\033[0m", $0); sub("PASS","\033[32mPASS\033[0m", $0); print}'
+}
+
+show_colour() {
+    perl -e 'foreach $a(@ARGV){print "\e[48:2::".join(":",unpack("C*",pack("H*",$a)))."m \e[49m "};print "\n"' "$@"
 }

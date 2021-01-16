@@ -1,18 +1,31 @@
 # If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+#[[ $- != *i* ]] && return
 unset PS1
 
 source ~/.profile
 
-# History in cache directory:
+#begin history config
+
+HISTFILE=~/.zsh_history
 HISTFILESIZE=1000000000
 SAVEHIST=1000000000
-HISTFILE=~/.zsh_history
-HISTTIMEFORMAT="[%F %T] "
+HISTSIZE=10000000
 #Immediate append Setting the inc_append_history option ensures that commands are added to the history immediately (otherwise, this would happen only when the shell exits, and you could lose history upon unexpected/unclean termination of the shell).
 setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 setopt HIST_FIND_NO_DUPS
+setopt SHAREHISTORY
+#make history behave like bash's
+alias history='history 1'
+
+# Prevent record in history entry if preceding them with at least one space
+setopt hist_ignore_space
+zstyle ':completion::complete:*' gain-privileges 1
+
+#end of history config
+
+
+
 
 # Basic auto/tab complete:
 autoload -U compinit
@@ -26,6 +39,8 @@ compinit
 _comp_options+=(globdots)		# Include hidden files.
 
 
+
+#begin vi config
 
 # vi mode
 bindkey -v
@@ -67,15 +82,12 @@ for m in visual viopp; do
   done
 done
 
+# end of vi config
 
 
 
 
 
-
-# Prevent record in history entry if preceding them with at least one space
-setopt hist_ignore_space
-zstyle ':completion::complete:*' gain-privileges 1
 
 #autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 #zle -N up-line-or-beginning-search
@@ -93,9 +105,31 @@ source ~/bin/scripts/helpers.sh
 #Make sure to never add this file to git!
 source ~/.host_specific_settings.sh
 
+
 # FZF enable cool features
-[ -f /usr/share/fzf/key-bindings.zsh ] && . /usr/share/fzf/key-bindings.zsh
-[ -f /usr/share/fzf/completion.zsh ] && . /usr/share/fzf/completion.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+#overwrite exinting function to change "fc" to include timestampt as well.
+#TODO make pull request to FZF github repo
+# CTRL-R - Paste the selected command from history into the command line
+fzf-history-widget() {
+  local selected num
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  selected=( $(fc -ril 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle reset-prompt
+  return $ret
+}
+
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+
+
 
 # Add lfcd function which allows the shell to cd to the path you navigate to in lf
 source ~/.config/lf/lfcd.sh
@@ -111,13 +145,7 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 #ZSH_AUTOSUGGEST_COMPLETION_IGNORE="git *"
 bindkey '^ ' autosuggest-accept
 
-#source /usr/local/share/zsh/site-functions/prompt_spaceship_setup
-#autoload -U promptinit; promptinit
-#prompt spaceship
-
-
-
-#prompt config
+#begin prompt config
 function zle-line-init zle-keymap-select {
   PROMPT=`purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}"`
   zle reset-prompt
@@ -131,4 +159,5 @@ function _prompt_purs_precmd() {
   purs precmd --git-detailed
 }
 add-zsh-hook precmd _prompt_purs_precmd
-#prompt config end
+
+# end of prompt config

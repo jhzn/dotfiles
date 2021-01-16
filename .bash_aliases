@@ -24,9 +24,10 @@ fi
 
 alias dc="docker-compose"
 alias lad="lazydocker"
-alias v="vim"
+alias v="nvim"
 alias vim="nvim"
 
+#replace ls with exa
 alias ls='exa'
 alias l='ls --color=auto --group-directories-first --classify'
 alias ll='ls --color=auto --group-directories-first --classify -l'
@@ -43,8 +44,8 @@ alias bctl="bluetoothctl"
 #set a standard terminal
 alias ssh="TERM=screen-256color ssh"
 alias diff="diff --color"
-#alias dwl="dwl -s ~/.config/sway/wayland_startup.sh"
 
+#More verbose output of common commands
 alias cp='cp -iv'
 alias rcp='rsync -v --progress'
 alias rmv='rsync -v --progress --remove-source-files'
