@@ -1,5 +1,6 @@
 # If not running interactively, don't do anything
-#[[ $- != *i* ]] && return
+[[ $- != *i* ]] && return
+
 unset PS1
 
 source ~/.profile
