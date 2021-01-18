@@ -21,21 +21,8 @@ set $term alacritty
 set $menu sirula
 #set $menu rofi -combi-modi drun,ssh -font "JetBrainsMono Nerd Font Mono 12" -show combi -display-drun "" -icon-theme "Papirus" -show-icons -monitor primary
 
-### Output configuration
-#
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-#~/.config/sway/wallpaper.sh does this
-#
-# Example configuration:
-#
-# Outputs are configued separately to be computer agnostic
-#output eDPI resolution 1920x1080 position 0,0
-
-
 # Gaps
-for_window [class="^.*"] border pixel 2
-for_window [class=".*"] border pixel 2
-for_window [app_id="^.*"] border pixel 2
+for_window [app_id=".*"] border pixel 2
 gaps inner 5
 gaps outer 5
 
@@ -47,8 +34,9 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 #client.unfocused            #575b61 #575b61 #d8d8d8 #575b61 #575b61
 #client.focused_inactive     #575b61 #575b61 #d8d8d8 #575b61 #575b61
 
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
+for_window [app_id=".*"] title_format "[%shell] %title"
+
+#You can get the names of your outputs by running: swaymsg -t get_outputs
 
 ### Idle configuration
 #
@@ -182,7 +170,7 @@ input * {
 
     # Switch the current container between different layout styles
     #bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
+    #bindsym $mod+w layout tabbed
     #bindsym $mod+e layout toggle split
 
     # Make the current focus fullscreen
@@ -203,11 +191,11 @@ input * {
     # You can send windows there and get them back later.
 
     # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
+    #bindsym $mod+Shift+minus move scratchpad
 
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+minus scratchpad show
+    #bindsym $mod+minus scratchpad show
 #
 # Resizing containers:
 #

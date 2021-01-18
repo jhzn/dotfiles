@@ -1,15 +1,19 @@
 anchor=bottom-right
 layer=overlay
-background-color=#a626a4
+#background-color=#a626a4
+background-color=#282c34
+border-color=#a626a4
+text-color=#a626a4
 default-timeout=10000
-border-color=#61AFEF
 font='JetBrainsMono Nerd Font 12'
 padding=10
 border-size=3
 
 
 [summary="Audio change"]
-background-color=#e5c07b
-text-color=#000000
+text-color=#e5c07b
+background-color=#282c34
+border-color=#e5c07b
+#text-color=#000000
 default-timeout=3000
 
