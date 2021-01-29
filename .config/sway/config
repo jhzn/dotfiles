@@ -27,7 +27,7 @@ gaps inner 10
 gaps top 5
 gaps right 5
 gaps left 5
-gaps bottom -5
+gaps bottom -10
 
 #show no border around any window
 default_border none
