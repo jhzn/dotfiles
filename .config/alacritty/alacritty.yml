@@ -102,7 +102,6 @@
 font:
   normal:
     family: JetBrainsMono Nerd Font
-    style: Regular
 
 
 # Font configuration
@@ -470,6 +469,9 @@ background_opacity: 0.95
 
 # Key bindings
 #
+key_bindings:
+  - { key: Return,   mods: Control|Shift, action: SpawnNewInstance }
+
 # Key bindings are specified as a list of objects. For example, this is the
 # default paste binding:
 #
