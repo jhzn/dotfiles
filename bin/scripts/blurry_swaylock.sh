@@ -7,9 +7,10 @@ TMPBG=/tmp/screen.png
 #subshell gets the focused monitor, this is used so that we dont have to hardcode any monitors here
 grim -o $(swaymsg -p -t get_outputs | grep focused | awk '{print $2}') /tmp/screen.png
 
-convert $TMPBG -scale 10% -scale 1000% $TMPBG
-convert $TMPBG -gravity south -pointsize 55 \
-    -fill '#ffffff' -stroke None -annotate +0+200 "" $TMPBG
+convert $TMPBG -scale 10% -scale 1000% "$TMPBG"
+convert $TMPBG -gravity south \
+	-font '/usr/share/fonts/TTF/JetBrains Mono Regular Nerd Font Complete Mono.ttf' \
+	-pointsize 100 -fill white -draw 'text 0,200 ""' "$TMPBG"
 
 PARAM=(-e -K --inside-color=262626ff --ring-color=f0f0f0ff --line-uses-inside \
 	--key-hl-color=ff6e67ff --bs-hl-color=ff6e67ff --separator-color=00000000 \
