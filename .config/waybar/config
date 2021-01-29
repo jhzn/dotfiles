@@ -59,7 +59,7 @@
         "format": "{}% MEM"
     },
 	"disk": {
-		"interval": 120,
+		"interval": 30,
 		"format": "🖴 {percentage_free}%/{free} free",
 		"path": "/"
 	},
