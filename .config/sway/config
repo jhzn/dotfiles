@@ -23,8 +23,11 @@ set $menu sirula
 
 # Gaps
 for_window [app_id=".*"] border pixel 2
-gaps inner 5
-gaps outer 5
+gaps inner 10
+gaps top 5
+gaps right 5
+gaps left 5
+gaps bottom -5
 
 #show no border around any window
 default_border none
@@ -248,17 +251,6 @@ bindsym $mod+r mode "resize"
 # Read `man 5 sway-bar` for more information about this section.
 bar {
 	swaybar_command waybar
-    #position bottom
-
-    ## When the status_command prints a new line to stdout, swaybar updates.
-    ## The default just shows the current date and time.
-    ##status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
-
-    #colors {
-        #statusline #ffffff
-        #background #323232
-        #inactive_workspace #32323200 #32323200 #5c5c5c
-    #}
 }
 
 set $gnome-schema org.gnome.desktop.interface
@@ -268,7 +260,7 @@ exec_always {
     gsettings set $gnome-schema icon-theme 'Papirus-Dark'
     gsettings set $gnome-schema cursor-theme 'Layan-white-cursors'
 }
-#exec bash ~/.profile
+
 include /etc/sway/config.d/*
 
 exec ~/.config/sway/startup.sh
