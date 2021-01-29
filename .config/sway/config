@@ -29,6 +29,9 @@ gaps outer 5
 #show no border around any window
 default_border none
 default_floating_border none
+# Hide borders if there is only one child in a workspace or container
+smart_gaps on
+smart_borders no_gaps
 
 client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 #client.unfocused            #575b61 #575b61 #d8d8d8 #575b61 #575b61
@@ -243,8 +246,8 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-#bar {
-	#status_command waybar
+bar {
+	swaybar_command waybar
     #position bottom
 
     ## When the status_command prints a new line to stdout, swaybar updates.
@@ -256,7 +259,7 @@ bindsym $mod+r mode "resize"
         #background #323232
         #inactive_workspace #32323200 #32323200 #5c5c5c
     #}
-#}
+}
 
 set $gnome-schema org.gnome.desktop.interface
 

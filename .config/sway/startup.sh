@@ -7,7 +7,6 @@ eval $(/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh
 export SSH_AUTH_SOCK
 
 mako &
-waybar &
 gammastep-indicator &
 nm-applet --indicator &
 udiskie --tray --appindicator &
