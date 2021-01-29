@@ -5,18 +5,18 @@
 	"margin-top": 10,
     // "width": 1280, // Waybar width
     // Choose the order of the modules
-    "modules-left": [ "clock", "network", "pulseaudio", "idle_inhibitor", "custom/media"],
+    "modules-right": [ "idle_inhibitor", "network", "pulseaudio", "custom/media", "clock", "tray" ],
     "modules-center": [ "sway/window", "sway/workspaces", "sway/mode" ],
-    "modules-right": [
+    "modules-left": [
 						//"mpd",
 						"cpu",
 						"temperature",
 						"memory",
 						"disk",
 						"backlight",
-						"battery",
-						//"battery#bat2",
-						"tray"],
+						"battery"
+						//"battery#bat2"
+						],
     // Modules configuration
     // "sway/workspaces": {
     //     "disable-scroll": true,
