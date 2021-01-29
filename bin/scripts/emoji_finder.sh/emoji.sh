@@ -32,7 +32,12 @@ select answer in "${emoji_matches[@]}"; do
 	done
 done
 
+copy_command="xclip -sel clip"
+if [ -n "$WAYLAND_DISPLAY" ]; then
+	copy_command="wl-copy --trim-newline"
+fi
+
 # copy user chosen emoji to clipboard
 echo "Copied emoji($answer) to clipboard!"
-printf "$answer" | xclip -sel clip
+printf "$answer" | eval "$copy_command"
 exit 0
