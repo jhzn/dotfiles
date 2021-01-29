@@ -18,9 +18,6 @@ OG_USER="$1"
 
 #setup done, now we can do what we want to do
 
-mkdir -p /etc/pacman.d/hooks/
-cp ~/.config/arch/*.hook /etc/pacman.d/hooks/
-
 #desktop
 pacman -S --needed lxsession gnome-keyring libsecret alacritty tmux firefox transmission-gtk brightnessctl
 
@@ -69,7 +66,7 @@ pacman -S --needed imv gimp zathura zathura-pdf-poppler fzf ripgrep jq \
 #security
 pacman -S --needed firejail
 #if this holds true assume it's a fresh install of arch
-if [ ! $(which yay) ]; then
+if [ ! $(which firejail) ]; then
 	echo "Configuring firejail to be used by default!"
 	#To use Firejail by default for all applications for which it has profiles, run the firecfg tool as root.
 	#https://wiki.archlinux.org/index.php/Firejail#Using_Firejail_by_default
@@ -89,6 +86,9 @@ if [ -e /sys/class/power_supply/BAT0/capacity ]; then
 	pacman -S --needed powertop tlp tlp-rdw
 	#systemctl enable tlp && systemctl start tlp
 fi
+
+mkdir -p /etc/pacman.d/hooks/
+cp ~/.config/arch/*.hook /etc/pacman.d/hooks/
 
 #install AUR packages
 echo "Installing AUR packages.."
