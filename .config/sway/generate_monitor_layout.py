@@ -1,36 +1,69 @@
-
 # This script outputs the current display layout to a script which for example,
 # enables the user to quickly switch between layouts using scripts
 # You can for example use the "wdisplays" program to configure your layout and then use this script to save the layout to a script
 
 import subprocess
+from argparse import ArgumentParser
+import json
 
 def run(args):
     #print("Running: " + args)
     return subprocess.run(args, shell=True, capture_output=True).stdout.decode("ascii")
 
-outputs = run("swaymsg --raw -t get_outputs")
+#globals, ugly, but w/e, good enough
+sway_outputs_json = run("swaymsg --raw -t get_outputs")
+sway_outputs = json.loads(sway_outputs_json)
 
-import json
-parsed = json.loads(outputs)
-monitor_commands = []
-for monitor in parsed:
-
-    if monitor["active"] == False:
-        monitor_commands.insert(0, "sway output {} disable".format(monitor["name"]))
-    else:
-        command = [
-            "sway output {}".format(monitor["name"]),
-            "res {}x{}".format(monitor["current_mode"]["width"], monitor["current_mode"]["height"]),
-            "scale {}".format(monitor["scale"]),
-            "pos {} {}".format(monitor["rect"]["x"], monitor["rect"]["y"]),
-            "enable"
-        ]
-        monitor_commands.insert(0, " ".join(command))
+def get_monitor_names():
+    monitor_names = []
+    for monitor in sway_outputs:
+        monitor_names.insert(0, monitor["name"])
+    return monitor_names
 
 
-print("#!/bin/sh\n")
-for command in monitor_commands:
-    print(command)
+def list():
+    print("Use the number of your desired primary monitor as argumnt to the --generate command\n")
+    monitor_names = get_monitor_names()
+    counter = 1
+    for monitor in monitor_names:
+        print("{}: {}".format(counter, monitor))
+        counter+=1
 
+def generate(primary_monitor_number):
+    monitor_names = get_monitor_names()
+    primary_monitor = monitor_names[primary_monitor_number-1]
+
+    monitor_commands = []
+    for monitor in sway_outputs:
+        if monitor["active"] == False:
+            monitor_commands.insert(0, "swaymsg output {} disable".format(monitor["name"]))
+        else:
+            monitor_names.insert(0, monitor["name"])
+
+            command = [
+                "swaymsg output {}".format(monitor["name"]),
+                "res {}x{}".format(monitor["current_mode"]["width"], monitor["current_mode"]["height"]),
+                "scale {}".format(monitor["scale"]),
+                "pos {} {}".format(monitor["rect"]["x"], monitor["rect"]["y"]),
+                "enable"
+            ]
+            monitor_commands.insert(0, " ".join(command))
+
+    print("#!/bin/sh\n")
+    for command in monitor_commands:
+        print(command)
+
+    print("\n#this ensures that workspace 1 is placed on our monitor of choice")
+    print('swaymsg \'move workspace to output {}\''.format(primary_monitor))
+
+
+parser = ArgumentParser()
+parser.add_argument('--list', action='store_true', help="List monitors to pick as primary monitor")
+parser.add_argument("--generate", dest="generate", type=int, help="pick primary monitor")
+
+args = parser.parse_args()
+if args.list == True:
+    list()
+if args.generate != None:
+    generate(args.generate)
 
