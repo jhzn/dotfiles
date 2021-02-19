@@ -18,5 +18,8 @@ wl-paste -t text --watch clipman store &
 
 autotiling-rs &
 
-
 ~/.config/sway/wallpaper.sh &
+
+#set previously used monitor layout
+#lay.sh populates this file
+sh $(cat /tmp/monitorlayout)
