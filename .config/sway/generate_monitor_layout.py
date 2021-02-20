@@ -20,7 +20,6 @@ def get_monitor_names():
         monitor_names.insert(0, monitor["name"])
     return monitor_names
 
-
 def list():
     print("Use the number of your desired primary monitor as argumnt to the --generate command\n")
     monitor_names = get_monitor_names()
@@ -58,12 +57,16 @@ def generate(primary_monitor_number):
 
 
 parser = ArgumentParser()
-parser.add_argument('--list', action='store_true', help="List monitors to pick as primary monitor")
-parser.add_argument("--generate", dest="generate", type=int, help="pick primary monitor")
+parser.add_argument("-l", "--list", action="store_true", help="List monitors to pick as primary monitor")
+parser.add_argument("-g", "--generate", metavar="monitor number", dest="generate", type=int, help="Pick primary monitor and the layout will be generated")
 
 args = parser.parse_args()
 if args.list == True:
     list()
+    exit(0)
 if args.generate != None:
     generate(args.generate)
+    exit(0)
 
+#no option was chosen, print helpful info
+parser.print_help()

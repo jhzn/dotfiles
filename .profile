@@ -1,5 +1,4 @@
-#this files is used by both bash and zsh
-
+#this file is used by both bash and zsh
 export EDITOR="nvim"
 export READER="zathura"
 export VISUAL="nvim"
