@@ -13,7 +13,7 @@ fi
 #Validate some things
 OG_USER="$1"
 [ -z "$OG_USER" ] && echo "OG_USER is empty" && exit 1
-[ $HOME != "/home/$OG_USER" ] && echo "Invalid HOME env var set = $HOME" && exit 1
+[ "$HOME" != "/home/$OG_USER" ] && echo "Invalid HOME env var set = $HOME" && exit 1
 
 
 #setup done, now we can do what we want to do
@@ -31,7 +31,7 @@ pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
 pacman -S --needed sway swaylock swayidle xorg-server-xwayland waybar gammastep mako grim slurp wl-clipboard wofi
 
 echo "Setting up custom X11 conf.."
-if ! /home/$OG_USER/.config/arch/X11.sh ; then
+if ! "/home/$OG_USER/.config/arch/X11.sh" ; then
 	echo ".. It went bad"
 	exit 1
 else
@@ -47,7 +47,7 @@ pacman -S --needed bluez bluez-utils pulseaudio-bluetooth
 #systemctl enable bluetooth && systemctl start bluetooth
 #dev machine
 pacman -S --needed python2 python3 go nodejs yarn rustup gnu-netcat openssh docker docker-compose
-if [ ! $(which rustc) ]; then
+if [ ! "$(which rustc)" ]; then
 	rustup default stable
 fi
 
@@ -62,11 +62,11 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #pacman -S --needed xf86-video-intel intel-ucode
 #misc
 pacman -S --needed imv gimp zathura zathura-pdf-poppler fzf ripgrep jq \
-	 pandoc youtube-dl units gnome-calculator newsboat imagemagick
+	 pandoc youtube-dl units gnome-calculator newsboat imagemagick speedtest-cli
 #security
 pacman -S --needed firejail
 #if this holds true assume it's a fresh install of arch
-if [ ! $(which firejail) ]; then
+if [ ! "$(which firejail)" ]; then
 	echo "Configuring firejail to be used by default!"
 	#To use Firejail by default for all applications for which it has profiles, run the firecfg tool as root.
 	#https://wiki.archlinux.org/index.php/Firejail#Using_Firejail_by_default
