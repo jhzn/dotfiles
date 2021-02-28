@@ -29,7 +29,7 @@ notifiy () {
 }
 
 current_volume () {
-	echo $(pulsemixer --get-volume | awk '{ print $1 }')
+	echo "$(pulsemixer --get-volume | awk '{ print $1 }')"
 }
 
 case $1 in
@@ -38,7 +38,7 @@ case $1 in
 	down ) pulsemixer --change-volume -5 && notifiy "Audio change" "Volume: $(current_volume) %" "volume";;
 
 	mute-toggle ) pulsemixer --toggle
-		if [ $(pulsemixer --get-mute) -eq 0 ]; then
+		if [ "$(pulsemixer --get-mute)" -eq 0 ]; then
 			notifiy "Audio change" "Unmute" "mute"
 		else
 			notifiy "Audio change" "Mute" "mute"
