@@ -193,6 +193,9 @@ endfunction
 command! ZoomToggle call s:ZoomToggle()
 nnoremap <silent> <C-W>o :ZoomToggle<CR>
 
+"improve default gx command by opening the URL/filepath in the background instead. This way we dont lock the old window.
+nnoremap gx :execute
+            \ "!xdg-open" expand("<cfile>")" &"<cr>
 
 " Some sweet macros!
 " PHP
@@ -232,7 +235,19 @@ command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 " Remap for rename current word
 nmap <F2> <Plug>(coc-rename)
 
-let g:coc_global_extensions = ['coc-json', 'coc-css', 'coc-html', 'coc-yaml', 'coc-tsserver', 'coc-vetur', 'coc-eslint', 'coc-pairs', 'coc-prettier', 'coc-rust-analyzer']
+let g:coc_global_extensions = [
+			\'coc-json',
+			\'coc-css',
+			\'coc-html',
+			\'coc-yaml',
+			\'coc-tsserver',
+			\'coc-vetur',
+			\'coc-eslint',
+			\'coc-pairs',
+			\'coc-prettier',
+			\'coc-rust-analyzer',
+			\'coc-pyright'
+			\]
 "
 " Set the filetype based on the file's extension, overriding any
 " 'filetype' that has already been set
