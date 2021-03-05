@@ -189,12 +189,14 @@ input * {
 
     # Toggle the current focus between tiling and floating mode
     bindsym $mod+s floating toggle
+	#Quite neat for watching a video whilst doing other things :)
+    bindsym $mod+Shift+s floating toggle;sticky enable; resize set 700 px 393 px;exec sway_window_move.sh bottom-right
 
     # Swap focus between the tiling area and the floating area
     bindsym $mod+d focus mode_toggle
 
     # Move focus to the parent container
-    bindsym $mod+a focus parent
+    #bindsym $mod+a focus parent
 #
 # Scratchpad:
 #
@@ -247,8 +249,8 @@ bindsym $mod+r mode "resize"
 	bindsym XF86AudioPrev exec audio.sh previous
 
 	#backlight
-	bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-	bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+	bindsym XF86MonBrightnessUp exec brightness.sh up
+	bindsym XF86MonBrightnessDown exec brightness.sh down
 
 #
 # Status Bar:

@@ -21,6 +21,8 @@ export XDG_CURRENT_DESKTOP=Unity
 export VDPAU_DRIVER=va_gl
 export LIBVA_DRIVER_NAME=i965
 
+QT_QPA_PLATFORM=wayland
+
 #X11 thing
 unset DISPLAY
 
