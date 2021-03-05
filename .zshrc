@@ -141,7 +141,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Add lfcd function which allows the shell to cd to the path you navigate to in lf
 source ~/.config/lf/lfcd.sh
-bindkey -s "^o" "lfcd 1> /dev/null\n"  # bash keybinding
+bindkey -s "^o" "lfcd\n"  # bash keybinding
 
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK

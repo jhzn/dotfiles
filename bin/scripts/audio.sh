@@ -8,21 +8,26 @@
 
 #we have to do some additional work because mako does not support using "notify-send" with "hints" that is, with "-h" flag.
 #we therefore have to use notify-send.sh which adds support for outputting notification ID and replacing current notifications
+# $1 = Title of notification
+# $2 = Subject of notification
+# $3 = Context of notification. Replace notification which have the same context. This way we can have replacement of notifications instead of new ones.
+# Example, volume up and down replace the same notification.
+#TODO better naming of variables
 notifiy () {
-	subject="$3"
-	p=/tmp/audio_notification_"$subject"
+	notification_context="$3"
+	notification_cached_id=/tmp/audio_notification_"$notification_context"
 
 	#check if we have any currently active notfications which has the subject
-	current_notifications=$(makoctl list | jq '.data[]' | grep -i "$subject")
+	current_notifications=$(makoctl list | jq '.data[]' | grep -i "$notification_context")
 	if [ ! "$current_notifications" ]; then
 		#truncate file because the data is old
-		> "$p"
+		> "$notification_cached_id"
 	fi
 
-	prev_ID=$(<"$p")
+	prev_ID=$(<"$notification_cached_id")
 	if [ -z "$prev_ID" ]; then
 		ID=$(notify-send.sh --print-id "$1" "$2")
-		echo -n "$ID" > "$p"
+		echo -n "$ID" > "$notification_cached_id"
 	else
 		ID=$(notify-send.sh --replace="$prev_ID" "$1" "$2")
 	fi
