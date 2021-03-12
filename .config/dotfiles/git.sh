@@ -8,6 +8,7 @@ git config --global alias.cm "commit -m"
 git config --global alias.co "checkout"
 git config --global alias.br "branch"
 git config --global alias.wip "! git add . && git commit -m 'WIP' && git push"
+git config --global alias.authors "shortlog -s -n -e"
 
 git config --global core.editor "nvim"
 git config --global core.eol "lf"

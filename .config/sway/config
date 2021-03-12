@@ -114,6 +114,9 @@ input * {
 
 	#clipboard history
 	bindsym $mod+e exec clipman pick --tool=wofi
+
+	#password manager
+	bindsym $mod+w exec wofipass.sh
 #
 # Moving around:
 #
