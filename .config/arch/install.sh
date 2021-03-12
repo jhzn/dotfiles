@@ -73,11 +73,11 @@ if [ ! "$(which firejail)" ]; then
 	firecfg
 fi
 #files
-pacman -S --needed unzip zip nemo pcmanfm syncthing exa mlocate plocate
+pacman -S --needed unzip zip nemo pcmanfm syncthing exa plocate
 #disks
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
-pacman -S --needed pass firefox-extension-passff
+pacman -S --needed pass
 #firefox
 pacman -S --needed firefox-dark-reader firefox-ublock-origin firefox-umatrix firefox-tridactyl
 
