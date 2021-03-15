@@ -77,7 +77,12 @@ if (has("termguicolors"))
   set termguicolors
 endif
 
+"let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+"make cursor blink
+set guicursor=a:blinkon100
 " Theme end
+"
+set spelllang=en_gb,sv
 
 " Disable Arrow keys in Normal mode
 map <up> <nop>
