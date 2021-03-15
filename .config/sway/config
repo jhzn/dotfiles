@@ -255,6 +255,8 @@ bindsym $mod+r mode "resize"
 	bindsym XF86MonBrightnessUp exec brightness.sh up
 	bindsym XF86MonBrightnessDown exec brightness.sh down
 
+	bindsym Print exec screenshot-wl.sh
+
 #
 # Status Bar:
 #
