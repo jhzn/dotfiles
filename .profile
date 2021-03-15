@@ -11,6 +11,8 @@ export PAGER="less"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
+export PICTURES="$HOME/Pictures"
+export DOCUMENTS="$HOME/Documents"
 
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 --color=dark

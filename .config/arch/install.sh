@@ -28,7 +28,7 @@ pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
 	xclip redshift picom unclutter feh deepin-screenshot wmname
 
 # wayland
-pacman -S --needed sway swaylock swayidle xorg-server-xwayland waybar gammastep mako grim slurp wl-clipboard wofi
+pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wofi
 
 echo "Setting up custom X11 conf.."
 if ! "/home/$OG_USER/.config/arch/X11.sh" ; then
@@ -41,11 +41,11 @@ fi
 #networking
 pacman -S --needed iptables-nft
 #audio
-pacman -S --needed pulseaudio pulsemixer pavucontrol playerctl
+pacman -S --needed pipewire pipewire-pulse pulsemixer pavucontrol playerctl
 #bluetooth
-pacman -S --needed bluez bluez-utils pulseaudio-bluetooth
+pacman -S --needed bluez bluez-utils
 #systemctl enable bluetooth && systemctl start bluetooth
-#dev machine
+#development tools
 pacman -S --needed python2 python3 go nodejs yarn rustup gnu-netcat openssh docker docker-compose
 if [ ! "$(which rustc)" ]; then
 	rustup default stable
@@ -60,13 +60,17 @@ pacman -S --needed python-pynvim
 pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme lxappearance
 #intel
 #pacman -S --needed xf86-video-intel intel-ucode
+#images
+pacman -S --needed imv gimp pinta imagemagick
+#document handling/natural language
+pacman -S --needed zathura zathura-pdf-poppler pandoc sdcv
 #misc
-pacman -S --needed imv gimp zathura zathura-pdf-poppler fzf ripgrep jq \
-	 pandoc youtube-dl units gnome-calculator newsboat imagemagick speedtest-cli
+pacman -S --needed fzf ripgrep jq \
+	 youtube-dl units gnome-calculator newsboat speedtest-cli
 #security
 pacman -S --needed firejail
 #if this holds true assume it's a fresh install of arch
-if [ ! "$(which firejail)" ]; then
+if [ ! "$(which yay)" ]; then
 	echo "Configuring firejail to be used by default!"
 	#To use Firejail by default for all applications for which it has profiles, run the firecfg tool as root.
 	#https://wiki.archlinux.org/index.php/Firejail#Using_Firejail_by_default

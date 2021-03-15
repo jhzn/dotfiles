@@ -56,3 +56,6 @@ alias ln='ln -v'
 alias chmod="chmod -c"
 alias chown="chown -c"
 alias mkdir="mkdir -v"
+
+#natural language dictionary
+alias dic="sdcv"
