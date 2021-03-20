@@ -21,6 +21,9 @@ OG_USER="$1"
 #desktop
 pacman -S --needed lxsession gnome-keyring libsecret alacritty tmux firefox transmission-gtk brightnessctl
 
+#hardens firefox a bit
+cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json
+
 #xorg
 pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
 	xdg-utils xorg-setxkbmap xorg-xinit xf86-input-libinput \
