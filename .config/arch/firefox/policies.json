@@ -1,0 +1,18 @@
+{
+	"policies": {
+		"DisableAppUpdate": true,
+		"DisableFirefoxAccounts": true,
+		"DisableTelemetry": true,
+		"DNSOverHTTPS": {
+			"Enabled": false,
+			"Locked": true
+		},
+		"DontCheckDefaultBrowser": true,
+		"PromptForDownloadLocation": true,
+		"SearchEngines": {
+			"PreventInstalls": true
+		},
+		"SearchSuggestEnabled": false,
+		"NetworkPrediction": false
+	}
+}

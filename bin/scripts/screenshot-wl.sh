@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#sweet ergonomic wofi-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in krita
+#sweet ergonomic wofi-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in pinta
 
 #prompt user for a decision
 function prompt {
@@ -12,9 +12,11 @@ mkdir -p "$HOME/Pictures/screenshots"
 
 grimshot_cmd="/usr/share/sway/scripts/grimshot save"
 
-target=$(printf "Current monitor\nActive window\nAll monitors\nSelect area\nSelect window" | prompt "Which target?")
-save_option=$(printf "Clipboard\nFile" | prompt "Destination?")
+#using an && chain here so that we can close the wofi windows and just exit out of the script directly
+target=$(printf "Current monitor\nActive window\nAll monitors\nSelect area\nSelect window" | prompt "Which target?") && \
+save_option=$(printf "Clipboard\nFile" | prompt "Destination?") && \
 edit_option=$(printf "No\nYes" | prompt "Edit screenshot?")
+
 tmp_filename="$HOME/Pictures/screenshots/tmp-screenshot.png"
 
 case $target in
