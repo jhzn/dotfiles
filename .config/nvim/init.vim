@@ -95,7 +95,8 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
-let mapleader = ","
+nnoremap <SPACE> <Nop>
+let mapleader=" "
 
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults :)
 set splitbelow splitright
@@ -149,7 +150,7 @@ vnoremap <leader>d "_d
 map <leader>rr ciw<C-r>0<Esc>
 
 " quicker access
-map <space> :
+"map <space> :
 
 " Custom keybinding of native features
 nnoremap <F1> :Buffers<CR><Space>
@@ -201,6 +202,8 @@ nnoremap <silent> <C-W>o :ZoomToggle<CR>
 "improve default gx command by opening the URL/filepath in the background instead. This way we dont lock the old window.
 nnoremap gx :execute
             \ "!xdg-open" expand("<cfile>")" &"<cr>
+
+noremap <Leader>s :update<CR>
 
 " Some sweet macros!
 " PHP
@@ -382,7 +385,7 @@ nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document
 nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+"nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
