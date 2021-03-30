@@ -34,8 +34,8 @@
 			"filetypes": [
 				"go"
 			],
-			"env": {
-				"GOFLAGS": "-tags=integration"
+			"initializationOptions": {
+				"usePlaceholders": true
 			}
 		},
 		"dockerfile": {
