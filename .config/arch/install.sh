@@ -86,7 +86,7 @@ pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
 pacman -S --needed pass
 #firefox
-pacman -S --needed firefox-dark-reader firefox-ublock-origin firefox-umatrix firefox-tridactyl
+pacman -S --needed firefox-dark-reader firefox-ublock-origin firefox-tridactyl
 
 #laptop
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
