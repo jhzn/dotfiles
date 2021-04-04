@@ -275,5 +275,5 @@ exec_always {
 
 include /etc/sway/config.d/*
 
-exec ~/.config/sway/startup.sh
 exec_always ~/.config/sway/exec_always.sh
+exec ~/.config/sway/startup.sh
