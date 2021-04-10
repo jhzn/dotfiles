@@ -159,14 +159,14 @@ nnoremap <F1> :Buffers<CR><Space>
 nnoremap <CR> :noh<CR>
 
 "Keybinding to toggle syncronization of window scrolling
-map <leader>s :windo set scb!<CR>
+map <leader>S :windo set scb!<CR>
 
 "Keybinding to refresh vim config
 nnoremap <F12> :source ~/.config/nvim/init.vim <CR>
 
 "Sweet way of previewing markdown
-"map <leader>ö :!pandoc --from=gfm % \| firefox --new-window "data:text/html;base64,$(base64)" <enter>
-map <leader>ö :!mkdir -p $HOME/tmp && pandoc --from=gfm % -o $HOME/tmp/nvim-markdown.pdf && xdg-open $HOME/tmp/nvim-markdown.pdf <enter>
+map <leader>ö :execute
+			\ '!mkdir -p $HOME/tmp && pandoc --from=gfm % -o $HOME/tmp/nvim-markdown.pdf && (xdg-open $HOME/tmp/nvim-markdown.pdf ) 2> /dev/null & '<enter> | redraw!
 
 
 " visual shifting and keep visual selection
@@ -205,7 +205,7 @@ nnoremap <silent> <C-W>o :ZoomToggle<CR>
 nnoremap gx :execute
             \ "!xdg-open" expand("<cfile>")" &"<cr>
 
-noremap <Leader>s :update<CR>
+noremap <Leader><space> :update<CR>
 
 " Some sweet macros!
 " PHP
@@ -230,10 +230,9 @@ let g:go_highlight_operators = 1
 let g:go_highlight_trailing_whitespace_error = 1
 let g:go_highlight_format_strings = 1
 
-"let g:go_fmt_command = "goimports" "Auto import packages
+let g:go_fmt_command = "goimports" "Auto import packages
 
 
-autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
 
 
 
