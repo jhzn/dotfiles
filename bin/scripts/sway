@@ -15,13 +15,13 @@ date --rfc-3339=s
 export MOZ_ENABLE_WAYLAND=1
 export MOZ_USE_XINPUT2=1
 
-#needed by waybar otherwise it complains
-export XDG_CURRENT_DESKTOP=Unity
+export XDG_SESSION_TYPE=wayland
+export XDG_CURRENT_DESKTOP=sway
 
 export VDPAU_DRIVER=va_gl
 export LIBVA_DRIVER_NAME=i965
 
-QT_QPA_PLATFORM=wayland
+export QT_QPA_PLATFORM=wayland
 
 #X11 thing
 unset DISPLAY

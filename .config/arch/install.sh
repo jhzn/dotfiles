@@ -64,12 +64,12 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #intel
 #pacman -S --needed xf86-video-intel intel-ucode
 #images
-pacman -S --needed imv gimp pinta imagemagick
+pacman -S --needed imv gimp swappy imagemagick
 #document handling/natural language
 pacman -S --needed zathura zathura-pdf-poppler pandoc sdcv
 #misc
 pacman -S --needed fzf ripgrep jq \
-	 youtube-dl units gnome-calculator newsboat speedtest-cli
+	 youtube-dl units gnome-calculator newsboat speedtest-cli bat
 #security
 pacman -S --needed firejail
 #if this holds true assume it's a fresh install of arch

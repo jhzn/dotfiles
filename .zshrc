@@ -5,6 +5,9 @@ unset PS1
 
 source ~/.profile
 
+#CTRL+d no longer closes terminal
+set -o ignoreeof
+
 #begin history config
 
 HISTFILE=~/.zsh_history
