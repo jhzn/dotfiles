@@ -12,4 +12,4 @@ fi
 
 yay -S --needed polybar bottom-bin tealdeer-git lf vscodium-bin \
 	nerd-fonts-jetbrains-mono zeal rofi-greenclip passff-host \
-	sirula-git clipman wdisplays notify-send.sh autotiling-rs-git
+	sirula-git clipman wdisplays notify-send.sh autotiling-rs-git git-delta-bin

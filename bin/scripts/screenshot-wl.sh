@@ -10,7 +10,19 @@ function prompt {
 #where we save screenshots
 mkdir -p "$HOME/Pictures/screenshots"
 
-grimshot_cmd="/usr/share/sway/scripts/grimshot save"
+
+#check if required programs/scripts are available
+grimshot_cmd="/usr/share/sway/scripts/grimshot"
+if [ ! -x "$grimshot_cmd" ]; then
+	grimshot_cmd="/usr/share/sway-git/scripts/grimshot"
+	if [ ! -x "$grimshot_cmd" ];then
+		echo "grimshot script was not found at the expected paths" && exit 1
+	fi
+fi
+[ ! command -v swappy ] && echo "swappy was not found in \$PATH" && exit 2
+
+
+grimshot_cmd+=" save"
 
 #using an && chain here so that we can close the wofi windows and just exit out of the script directly
 target=$(printf "Current monitor\nActive window\nAll monitors\nSelect area\nSelect window" | prompt "Which target?") && \
@@ -25,7 +37,7 @@ case $target in
 	"All monitors") grimshot_cmd+=" output";;
 	"Select area") grimshot_cmd+=" area";;
 	"Select window") grimshot_cmd+=" window";;
-	*) echo "Invalid option" && exit 1;;
+	*) echo "Invalid option" && exit 3;;
 esac
 
 final_command="$grimshot_cmd $tmp_filename"
@@ -33,7 +45,7 @@ echo "Running command: $final_command"
 eval "$final_command"
 
 if [ "$edit_option" = "Yes" ]; then
-	pinta "$tmp_filename"
+	swappy --file "$tmp_filename" --output-file "$tmp_filename"
 fi
 
 case $save_option in
@@ -48,10 +60,10 @@ case $save_option in
 		case $file_option in
 			"Input filename") filename="$(prompt "File name?")";;
 			"Save to $HOME/Pictures/screenshots/") filename="$HOME/Pictures/screenshots/$(date --iso-8601=s).png";;
-			*) echo "Invalid option" && exit 3;;
+			*) echo "Invalid option" && exit 4;;
 		esac
 		mv "$tmp_filename" "$filename" && \
 		notify-send "Screenshot" "Saved screenshot to file: $filename!"
 		;;
-	*) echo "Invalid option" && exit 2;;
+	*) echo "Invalid option" && exit 5;;
 esac

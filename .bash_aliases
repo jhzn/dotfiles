@@ -26,6 +26,7 @@ alias dc="docker-compose"
 alias lad="lazydocker"
 alias v="nvim"
 alias vim="nvim"
+alias g="git"
 
 #replace ls with exa
 alias ls='exa'
@@ -59,3 +60,5 @@ alias mkdir="mkdir -v"
 
 #natural language dictionary
 alias dic="sdcv"
+
+alias cal="cal -3 --monday --week --color=always"
