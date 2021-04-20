@@ -1,0 +1,2 @@
+## Source https://github.com/netblue30/firejail/pull/3966/files
+whitelist ${RUNUSER}/pipewire-0
