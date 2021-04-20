@@ -19,7 +19,7 @@ OG_USER="$1"
 #setup done, now we can do what we want to do
 
 #desktop
-pacman -S --needed lxsession gnome-keyring libsecret alacritty tmux firefox transmission-gtk brightnessctl
+pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmux firefox transmission-gtk brightnessctl
 
 #hardens firefox a bit
 cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json

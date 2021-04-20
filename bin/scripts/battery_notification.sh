@@ -4,14 +4,14 @@
 [ ! -d /sys/class/power_supply/BAT0 ] && exit 0
 
 function notify() {
-	TIME="$1"
-	MSG="$2"
+	readonly TIME="$1"
+	readonly MSG="$2"
 	[ -z "$MSG" ] && MSG="Your battery is running low!"
 	notify-send --urgency=critical --expire-time="$TIME" "$MSG At $BAT_PROC%"
 }
 
-BAT_PROC=$(cat /sys/class/power_supply/BAT0/capacity)
-BAT_STATUS=$(cat /sys/class/power_supply/BAT0/status)
+readonly BAT_PROC=$(cat /sys/class/power_supply/BAT0/capacity)
+readonly BAT_STATUS=$(cat /sys/class/power_supply/BAT0/status)
 
 #if charging, we've solved the issue :)
 [ "$BAT_STATUS" == "Charging" ] && exit 0
