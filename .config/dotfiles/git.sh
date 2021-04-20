@@ -10,6 +10,7 @@ git config --global alias.br "branch"
 git config --global alias.d "diff"
 git config --global alias.wip "! git add . && git commit -m 'WIP' && git push"
 git config --global alias.authors "shortlog -s -n -e"
+git config --global alias.filehist "log -p"
 
 git config --global core.editor "nvim"
 git config --global core.eol "lf"

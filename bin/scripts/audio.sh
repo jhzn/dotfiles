@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # This script is used as a general audio handling script for volume/play-pause etc.
 # It uses existing notification support to display to the end user the status and therefore does not need any additional widget program.
@@ -14,11 +14,11 @@
 # Example, volume up and down replace the same notification.
 #TODO better naming of variables
 notifiy () {
-	notification_context="$3"
+	readonly notification_context="$3"
 	notification_cached_id=/tmp/audio_notification_"$notification_context"
 
 	#check if we have any currently active notfications which has the subject
-	current_notifications=$(makoctl list | jq '.data[]' | grep -i "$notification_context")
+	readonly current_notifications=$(makoctl list | jq '.data[]' | grep -i "$notification_context")
 	if [ ! "$current_notifications" ]; then
 		#truncate file because the data is old
 		> "$notification_cached_id"
