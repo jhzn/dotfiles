@@ -74,6 +74,8 @@ input "2:7:SynPS/2_Synaptics_TouchPad" {
 }
 #hide cursor after a certain time
 seat * hide_cursor 8000
+#or when typing
+seat * hide_cursor when-typing enable
 
 input * {
     xkb_layout "se"
