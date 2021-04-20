@@ -16,4 +16,8 @@ wl-paste -t text --watch clipman store &
 #homemade cron
 ~/bin/scripts/cron.sh &
 
+#inactive windows are more transparent than focuses on
+/usr/share/sway/scripts/inactive-windows-transparency.py &
+
+
 autotiling-rs &

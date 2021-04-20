@@ -117,19 +117,19 @@ source ~/.host_specific_settings.sh
 #TODO make pull request to FZF github repo
 # CTRL-R - Paste the selected command from history into the command line
 fzf-history-widget() {
-  local selected num
-  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -ril 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
-  local ret=$?
-  if [ -n "$selected" ]; then
-    num=$selected[1]
-    if [ -n "$num" ]; then
-      zle vi-fetch-history -n $num
-    fi
-  fi
-  zle reset-prompt
-  return $ret
+	local selected num
+	setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+	selected=( $(fc -ril 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\**\s+(.*)/, $1)}++' |
+	FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort,ctrl-z:ignore $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+	local ret=$?
+	if [ -n "$selected" ]; then
+		num=$selected[1]
+		if [ -n "$num" ]; then
+			zle vi-fetch-history -n $num
+		fi
+	fi
+	zle reset-prompt
+	return $ret
 }
 [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -156,10 +156,11 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 #ZSH_AUTOSUGGEST_COMPLETION_IGNORE="git *"
 bindkey '^ ' autosuggest-accept
 
+
 #begin prompt config
 function zle-line-init zle-keymap-select {
-  PROMPT=`purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}"`
-  zle reset-prompt
+	PROMPT=$(purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}" )
+	zle reset-prompt
 }
 zle -N zle-line-init
 zle -N zle-keymap-select
@@ -167,7 +168,7 @@ zle -N zle-keymap-select
 autoload -Uz add-zsh-hook
 
 function _prompt_purs_precmd() {
-  purs precmd --git-detailed
+	purs precmd --git-detailed
 }
 add-zsh-hook precmd _prompt_purs_precmd
 
