@@ -1,0 +1,11 @@
+whitelist ${HOME}/Downloads
+
+## Source https://github.com/netblue30/firejail/pull/3966/files
+# Uncomment or put in your firefox.local to allow screen sharing under wayland.
+whitelist ${RUNUSER}/pipewire-0
+dbus-user.talk org.freedesktop.portal.*
+# Also uncomment or put in your firefox.local if screen sharing sharing still
+# does not work with the above lines (might depend on the portal
+# implementation)
+#ignore noroot
+
