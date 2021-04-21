@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#sweet ergonomic wofi-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in pinta
+#sweet ergonomic wofi-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in swappy
 
 #prompt user for a decision
 function prompt {
