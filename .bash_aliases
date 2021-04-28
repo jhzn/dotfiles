@@ -1,14 +1,7 @@
-
 #Allows running "config" as a way to always refer to my dotfiles git instance globally
 #Also defines a git alias which can be used to update my dotfiles to the latest version
 alias config="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME -c status.showUntrackedFiles=no -c submodule.recurse=true -c alias.update="'"!bash '"$HOME"'/.config/dotfiles/update_dotfiles.sh"'
 alias cfg="config"
-
-
-
-alias grep='grep --colour=auto'
-alias egrep='egrep --colour=auto'
-alias fgrep="fgrep --color=auto"
 
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	alias xc="wl-copy --trim-newline"
@@ -28,6 +21,10 @@ alias lad="lazydocker"
 alias v="nvim"
 alias vim="nvim"
 alias g="git"
+
+alias grep='grep --colour=auto'
+alias egrep='egrep --colour=auto'
+alias fgrep="fgrep --color=auto"
 
 #replace ls with exa
 alias ls='exa'

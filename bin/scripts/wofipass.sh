@@ -51,9 +51,22 @@ password=$(printf '%s\n' "${password_files[@]}" | wofi -m -i -p "Password name" 
 
 [[ -n $password ]] || exit
 
-pass show "$password" | head -n1 | wl-copy $wl_copy_args
+password_cleartext=$(pass show "$password")
+
+echo "$password_cleartext" | head -n1 | wl-copy $wl_copy_args
 if [[ $? != 0 ]]; then
-	echo "Some error has occured"
+	notify-send "Clipboard manager" "Some error has occured"
 else
-	echo "Password copyied to clipboard"
+	notify-send "Clipboard manager" "Password\n$password\ncopied to clipboard"
+
+	#clear n seconds later the password from clipboard manager history
+	sleep 5
+
+	#Yeah this is hard to read
+	#TODO improve
+	bash_arg='bash -c '"'echo "'"'"$password_cleartext"'"'"'"
+
+	#this here allows us to clear 1 item from the history
+	clipman clear -t CUSTOM --tool-args "$bash_arg" \
+		&& notify-send "Clipboard manager" "Cleared password from password manager"
 fi
