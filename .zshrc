@@ -104,7 +104,7 @@ done
 
 
 
-source ~/.bash_aliases
+source ~/.zsh_aliases
 source ~/bin/scripts/functions.sh
 #Make sure to never add this file to git!
 source ~/.host_specific_settings.sh
