@@ -98,5 +98,5 @@ function smile_prompt
 	PS1="${YELLOW}\t ${UC}\u${WHITE}@${MAGENTA}\h ${RC}\w${DF} "
     PS1+="\[\$(git_color)\]"        # colors git status
 	PS1+="\$(git_branch)"           # prints current branch
-	PS1+=" ${SC}${DF}\\n${CYAN}>>${DF} "
+	PS1+=" ${SC}${DF}\\n${CYAN} ▶ ${DF} "
 }
