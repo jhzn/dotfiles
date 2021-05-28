@@ -1,3 +1,3 @@
 #!/bin/bash
 
-~/bin/scripts/$( ls ~/bin/scripts/ | fzf)
+~/bin/scripts/$( ls ~/bin/scripts/ | sort | fzf)
