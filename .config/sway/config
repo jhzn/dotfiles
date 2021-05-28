@@ -24,10 +24,10 @@ set $menu sirula
 # Gaps
 for_window [app_id=".*"] border pixel 2
 gaps inner 10
-gaps top 5
-gaps right 5
-gaps left 5
-gaps bottom -10
+
+gaps horizontal 5
+gaps vertical 5
+#gaps bottom -10
 
 #show no border around any window
 default_border none
@@ -42,14 +42,11 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 
 for_window [app_id=".*"] title_format "[%shell] %title"
 
-#You can get the names of your outputs by running: swaymsg -t get_outputs
-
 ### Idle configuration
-#
-# Example configuration:
-#
-
-#A note on the timeout commands below: it's a neat way to block the screen from locking or turning the monitors off, when we're watching video
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+# A note on the timeout commands below: it's a neat way to block the screen from locking or turning the monitors off, when we're watching video
  exec swayidle -d -w \
 		timeout 300 'playerctl status | grep Playing || ~/bin/scripts/blurry_swaylock.sh' \
 		timeout 600 'playerctl status | grep Playing || swaymsg "output * dpms off"' \
@@ -57,15 +54,8 @@ for_window [app_id=".*"] title_format "[%shell] %title"
 		before-sleep '~/bin/scripts/blurry_swaylock.sh' \
 		lock '~/bin/scripts/blurry_swaylock.sh'
 #
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
 
 ### Input configuration
-#
-# Example configuration:
-
-#, "DLL07BE:01 06CB:7A13 Touchpad"
 input "2:7:SynPS/2_Synaptics_TouchPad" {
    dwt enabled
    tap enabled
@@ -81,10 +71,7 @@ input * {
     xkb_layout "se"
     xkb_options "caps:escape"
 }
-#
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
+
 
 ### Key bindings
 #
@@ -108,6 +95,9 @@ input * {
 
     # Reload the configuration file
     bindsym $mod+shift+r reload
+
+	# Toggle visibility of waybar
+	bindsym $mod+n exec pkill -SIGUSR1 '^waybar$'
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -246,9 +236,6 @@ bindsym $mod+r mode "resize"
 	bindsym XF86AudioRaiseVolume exec audio.sh up
 	bindsym XF86AudioLowerVolume exec audio.sh down
 	bindsym XF86AudioMute exec audio.sh mute-toggle
-	#bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-
-	#audio playback
 	bindsym XF86AudioPlay exec audio.sh play-pause
 	bindsym XF86AudioNext exec audio.sh next
 	bindsym XF86AudioPrev exec audio.sh previous
@@ -257,8 +244,8 @@ bindsym $mod+r mode "resize"
 	bindsym XF86MonBrightnessUp exec brightness.sh up
 	bindsym XF86MonBrightnessDown exec brightness.sh down
 
+	#executes custom script to
 	bindsym Print exec screenshot-wl.sh
-
 	bindsym $mod+Shift+Space exec $term -e browse_scripts.sh
 
 #

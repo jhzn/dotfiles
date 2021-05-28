@@ -2,10 +2,15 @@
 
 
 if [ -n "$WAYLAND_DISPLAY" ]; then
-	#I dont have a custom theme for the powermenu yet
-	rofi_command="wofi --dmenu --columns=5 --height=50 --sort-order=default --cache-file=/dev/null"
-	function logout { swaymsg exit; }
-	function lockscreen { ~/bin/scripts/blurry_swaylock.sh; }
+	#using wofi
+
+	##I dont have a custom theme for the powermenu yet
+	#rofi_command="wofi --dmenu --columns=5 --height=50 --sort-order=default --cache-file=/dev/null"
+	#function logout { swaymsg exit; }
+	#function lockscreen { ~/bin/scripts/blurry_swaylock.sh; }
+
+	#or using wlogout
+	wlogout -p layer-shell
 else
 	rofi_command="rofi -theme ~/.config/rofi/themes/powermenu.rasi -monitor primary -dmenu -selected-row 2"
 	function logout { bspc quit; }

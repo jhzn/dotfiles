@@ -104,7 +104,7 @@ done
 
 
 
-source ~/.zsh_aliases
+source ~/.bash_aliases
 source ~/bin/scripts/functions.sh
 #Make sure to never add this file to git!
 source ~/.host_specific_settings.sh
@@ -138,9 +138,6 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 
 # end of FZF config
-
-
-
 
 # Add lfcd function which allows the shell to cd to the path you navigate to in lf
 source ~/.config/lf/lfcd.sh

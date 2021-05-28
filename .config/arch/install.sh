@@ -66,7 +66,7 @@ pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme 
 #images
 pacman -S --needed imv gimp swappy imagemagick
 #document handling/natural language
-pacman -S --needed zathura zathura-pdf-poppler pandoc sdcv
+pacman -S --needed zathura zathura-pdf-poppler sdcv
 #misc
 pacman -S --needed fzf ripgrep jq \
 	 youtube-dl units gnome-calculator newsboat speedtest-cli bat

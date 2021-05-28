@@ -7,6 +7,7 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 	alias xc="wl-copy --trim-newline"
 	alias xp='wl-paste --type text'
 	alias screenshot='/usr/share/sway/scripts/grimshot'
+	alias codium="codium --enable-features=UseOzonePlatform --ozone-platform=wayland"
 else
 	#Copy to clipboard, also to VIM's "+ and "* register
 	alias xc='xclip -i -selection primary -f | xclip -i -selection clipboard'
@@ -16,6 +17,7 @@ else
 	alias screenshot='deepin-screenshot'
 fi
 
+alias code="codium"
 alias dc="docker-compose"
 alias lad="lazydocker"
 alias v="nvim"
