@@ -21,6 +21,8 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 --color=info:#98c379,prompt:#61afef,pointer:#be5046,marker:#e5c07b,spinner:#61afef,header:#61afef
 '
 
+export MONITOR_LAYOUT_FILE="$HOME/.cache/monitorlayout"
+
 PATH=~/bin:$PATH
 PATH=~/bin/scripts:$PATH
 PATH=~/bin/scripts/emoji_finder.sh:$PATH

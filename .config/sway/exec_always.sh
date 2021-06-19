@@ -4,4 +4,4 @@
 
 #set previously used monitor layout
 #lay.sh populates this file
-[ -f /tmp/monitorlayout ] && sh $(cat /tmp/monitorlayout)
+[ -f "$MONITOR_LAYOUT_FILE" ] && sh $(cat "$MONITOR_LAYOUT_FILE")

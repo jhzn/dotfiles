@@ -12,5 +12,5 @@ sh "$DIR/$CHOICE"
 notify-send "You chose screenlayout: $CHOICE"
 
 #save layout so that it is started on next login
-echo "$DIR/$CHOICE" > /tmp/monitorlayout
+echo "$DIR/$CHOICE" > "$MONITOR_LAYOUT_FILE"
 
