@@ -1,8 +1,9 @@
 call plug#begin('~/.config/nvim/plugins')
 
 " Themes/look and feel
-Plug 'https://github.com/joshdick/onedark.vim'
+"Plug 'https://github.com/joshdick/onedark.vim'
 Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'https://github.com/rakr/vim-one'
 
 "Nerdtree
 Plug 'https://github.com/scrooloose/nerdtree.git'
@@ -26,7 +27,7 @@ Plug 'https://github.com/brooth/far.vim'
 Plug 'https://github.com/fatih/vim-go'
 Plug 'https://github.com/buoto/gotests-vim'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'https://github.com/neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 "
 " Nerdtree
@@ -58,10 +59,18 @@ let g:UltiSnipsJumpBackwardTrigger = "<C-k>"
 let g:far#source = "rgnvim"
 
 " Theme begin
+"set background=dark
+"colorscheme palenight
+"let g:palenight_terminal_italics=1
+"let g:airline_theme = "palenight"
 
-let g:airline_theme='onedark'
+colorscheme one
+let g:one_allow_italics = 1
+set background=dark
+"let g:airline_theme='onedark'
+"colorscheme onedark
+
 syntax on
-colorscheme onedark
 
 "Practial
 "Dim unfocuses window
@@ -83,6 +92,9 @@ set guicursor=a:blinkon100
 " Theme end
 "
 set spelllang=en_gb,sv
+
+"Disable Ex mode
+map Q <nop>
 
 " Disable Arrow keys in Normal mode
 map <up> <nop>
@@ -231,6 +243,17 @@ let g:go_highlight_trailing_whitespace_error = 1
 let g:go_highlight_format_strings = 1
 
 let g:go_fmt_command = "goimports" "Auto import packages
+
+"let g:go_gopls_enabled = 0
+"let g:go_code_completion_enabled = 0
+"let g:go_auto_sameids = 0
+"let g:go_fmt_autosave = 0
+"let g:go_def_mapping_enabled = 0
+"let g:go_diagnostics_enabled = 0
+"let g:go_echo_go_info = 0
+"let g:go_metalinter_enabled = 0
+
+
 
 
 
