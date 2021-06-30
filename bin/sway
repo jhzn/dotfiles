@@ -13,7 +13,9 @@ printf "Launching sway at: "
 date --rfc-3339=s
 
 export MOZ_ENABLE_WAYLAND=1
+export MOZ_WAYLAND_USE_VAAPI=1
 export MOZ_USE_XINPUT2=1
+export MOZ_DISABLE_RDD_SANDBOX=1
 
 export XDG_SESSION_TYPE=wayland
 export XDG_CURRENT_DESKTOP=sway

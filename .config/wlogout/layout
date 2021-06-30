@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "~/bin/scripts/blurry_swaylock.sh",
+    "action" : "~/.config/sway/blurry_swaylock.sh",
     "text" : "Lock",
     "keybind" : "l"
 }

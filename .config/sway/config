@@ -48,11 +48,11 @@ for_window [app_id=".*"] title_format "[%shell] %title"
 # resumed. It will also lock your screen before your computer goes to sleep.
 # A note on the timeout commands below: it's a neat way to block the screen from locking or turning the monitors off, when we're watching video
  exec swayidle -d -w \
-		timeout 300 'playerctl status | grep Playing || ~/bin/scripts/blurry_swaylock.sh' \
+		timeout 300 'playerctl status | grep Playing || ~/.config/sway/blurry_swaylock.sh' \
 		timeout 600 'playerctl status | grep Playing || swaymsg "output * dpms off"' \
 		resume 'swaymsg "output * dpms on"' \
-		before-sleep '~/bin/scripts/blurry_swaylock.sh' \
-		lock '~/bin/scripts/blurry_swaylock.sh'
+		before-sleep '~/.config/sway/blurry_swaylock.sh' \
+		lock '~/.config/sway/blurry_swaylock.sh'
 #
 
 ### Input configuration
@@ -102,13 +102,16 @@ input * {
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
-	bindsym ctrl+alt+l exec ~/bin/scripts/powermenu.sh
+	bindsym ctrl+alt+l exec ~/.config/sway/powermenu.sh
 
 	#clipboard history
 	bindsym $mod+e exec clipman pick --tool=wofi
 
 	#password manager
 	bindsym $mod+w exec wofipass.sh
+
+	bindsym $mod+tab exec swaymsg [con_id=$(swaymsg -t get_tree | ~/.config/sway/alttab t)] focus
+	bindsym $mod+shift+tab exec swaymsg [con_id=$(swaymsg -t get_tree | ~/.config/sway/alttab f)] focus
 #
 # Moving around:
 #
@@ -185,7 +188,7 @@ input * {
     # Toggle the current focus between tiling and floating mode
     bindsym $mod+s floating toggle
 	#Quite neat for watching a video whilst doing other things :)
-    bindsym $mod+Shift+s floating toggle;sticky enable; resize set 700 px 393 px;exec sway_window_move.sh bottom-right
+    bindsym $mod+Shift+s floating toggle;sticky enable; resize set 700 px 393 px;exec ~/.config/sway/sway_window_move.sh bottom-right
 
     # Swap focus between the tiling area and the floating area
     bindsym $mod+d focus mode_toggle
@@ -245,7 +248,7 @@ bindsym $mod+r mode "resize"
 	bindsym XF86MonBrightnessDown exec brightness.sh down
 
 	#executes custom script to
-	bindsym Print exec screenshot-wl.sh
+	bindsym Print exec ~/.config/sway/screenshot-wl.sh
 	bindsym $mod+Shift+Space exec $term -e browse_scripts.sh
 
 #
