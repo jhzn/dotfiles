@@ -110,8 +110,11 @@ input * {
 	#password manager
 	bindsym $mod+w exec wofipass.sh
 
-	bindsym $mod+tab exec swaymsg [con_id=$(swaymsg -t get_tree | ~/.config/sway/alttab t)] focus
-	bindsym $mod+shift+tab exec swaymsg [con_id=$(swaymsg -t get_tree | ~/.config/sway/alttab f)] focus
+	bindsym $mod+tab exec swaymsg -t get_tree | ~/.config/sway/alttab same-workspace next 1> /dev/null
+	bindsym $mod+shift+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab same-workspace prev 1> /dev/null
+
+	bindsym ctrl+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab monitor-workspaces next 1> /dev/null
+	bindsym ctrl+shift+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab monitor-workspaces prev 1> /dev/null
 #
 # Moving around:
 #
