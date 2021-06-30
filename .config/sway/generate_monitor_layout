@@ -1,3 +1,5 @@
+#!/bin/python3
+
 # This script outputs the current display layout to a script which for example,
 # enables the user to quickly switch between layouts using scripts
 # You can for example use the "wdisplays" program to configure your layout and then use this script to save the layout to a script

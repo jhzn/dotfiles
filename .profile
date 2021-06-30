@@ -22,6 +22,8 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 '
 
 export MONITOR_LAYOUT_FILE="$HOME/.cache/monitorlayout"
+#Enables hardware decoding and wayland as compositor
+export WAYLAND_CHROMIUM_FLAGS="--enable-features=VaapiVideoDecoder --enable-features=UseOzonePlatform --ozone-platform=wayland"
 
 PATH=~/bin:$PATH
 PATH=~/bin/scripts:$PATH

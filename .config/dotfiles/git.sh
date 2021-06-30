@@ -2,6 +2,11 @@
 
 #Run this script to apply git settings
 
+#this makes it so that I only use SSH for my own repos
+git config --global url."ssh://git@github.com/jhzn/".insteadOf "https://github.com/jhzn/"
+git config --global user.user "Johan Håkansson"
+git config --global user.name "Johan Håkansson"
+
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date-order"
 git config --global alias.st "status"
 git config --global alias.cm "commit -v"

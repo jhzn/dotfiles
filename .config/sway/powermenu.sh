@@ -11,6 +11,7 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 
 	#or using wlogout
 	wlogout -p layer-shell
+	exit $?
 else
 	rofi_command="rofi -theme ~/.config/rofi/themes/powermenu.rasi -monitor primary -dmenu -selected-row 2"
 	function logout { bspc quit; }
