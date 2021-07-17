@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	#using wofi
 
@@ -52,4 +51,3 @@ case $chosen in
 		logout
 		;;
 esac
-

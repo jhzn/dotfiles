@@ -24,6 +24,9 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 export MONITOR_LAYOUT_FILE="$HOME/.cache/monitorlayout"
 #Enables hardware decoding and wayland as compositor
 export WAYLAND_CHROMIUM_FLAGS="--enable-features=VaapiVideoDecoder --enable-features=UseOzonePlatform --ozone-platform=wayland"
+#export YT_DL_FORMAT="(bestvideo[height<=1080]+bestaudio)[ext=mp4]/bestvideo[height<=1080]+bestaudio/best[height<=1080]/bestvideo+bestaudio/best"
+export YT_DL_FORMAT="bestvideo[vcodec^=avc1]+bestaudio[ext=m4a]"
+export YTFZF_PREF="$YT_DL_FORMAT"
 
 PATH=~/bin:$PATH
 PATH=~/bin/scripts:$PATH

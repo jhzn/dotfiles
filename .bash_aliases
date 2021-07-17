@@ -17,6 +17,11 @@ else
 	alias screenshot='deepin-screenshot'
 fi
 
+#doas ftw
+alias sudo="doas"
+alias paru="paru --sudo=doas"
+alias paruu="paru --sudo=doas -Syu"
+
 alias code="codium"
 alias dc="docker-compose"
 alias lad="lazydocker"
@@ -33,9 +38,7 @@ alias ls='exa'
 alias l='ls --color=auto --group-directories-first --classify'
 alias ll='ls --color=auto --group-directories-first --classify -l'
 alias lla='ls --color=auto --group-directories-first --classify -la'
-#preserves the settings of the current user
-#nvim for example uses the current user's settings instead of the root users
-alias sudo="sudo -E"
+
 #Allows moving the config file
 alias tmux="tmux -f ~/.config/tmux/.tmux.conf"
 #Easier to remember/type
@@ -62,3 +65,4 @@ alias mkdir="mkdir -v"
 alias dic="sdcv"
 
 alias cal="cal -3 --monday --week --color=always"
+

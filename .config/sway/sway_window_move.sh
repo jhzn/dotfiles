@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Copyright (C) 2020-2021 Bob Hepple <bob.hepple@gmail.com>
 
@@ -42,20 +42,22 @@ top-left is also provided for completeness although sway supports that."
 }
 
 initialise "$@"
-dimensions=$( swaymsg -t get_outputs |
-    jq -r '.. | select(.focused?) | .current_mode | "\(.width)x\(.height)"' )
+dimensions=($(swaymsg -t get_outputs |
+	jq -r '.. | select(.focused?) | .current_mode.width, .current_mode.height, .scale'))
 
-monitor_width=${dimensions%x*}
-monitor_height=${dimensions#*x}
+monitor_width=${dimensions[0]}
+monitor_height=${dimensions[1]}
+monitor_scale=${dimensions[2]}
+#Adjust for the scaling of the monitor
+monitor_width=$(echo "$monitor_width / $monitor_scale" | bc)
+monitor_height=$(echo "$monitor_height / $monitor_scale" | bc)
 
-win_dim=( $( swaymsg -t get_tree |
-        jq '.. | select(.type?) | select(.type=="floating_con") | select(.focused?)|.rect.width, .rect.height, .deco_rect.height' ) )
+#Our desired window size is determined here
+win_height=$((monitor_height / 3))
+win_width=$((monitor_width / 3))
+deco_height=0
 
-win_width=${win_dim[0]}
-win_height=${win_dim[1]}
-deco_height=${win_dim[2]}
-
-#echo "$win_height $win_width $deco_height"
+swaymsg "resize set $win_width px $win_height px;"
 
 new_x=0
 new_y=0
@@ -66,7 +68,7 @@ case $command in
         ;;
 
     bottom-right)
-        new_x=$(( monitor_width -  win_width ))
+        new_x=$(( monitor_width - win_width ))
         new_y=$(( monitor_height - win_height - deco_height ))
         ;;
 
@@ -74,8 +76,5 @@ case $command in
         new_y=$(( monitor_height - win_height - deco_height ))
         ;;
 esac
-
-#new_x=$(( new_x - gap_size))
-#new_y=$(( new_y - $((gap_size - 30)) ))
 
 swaymsg "move position $new_x $new_y"

@@ -49,7 +49,7 @@ pacman -S --needed pipewire pipewire-pulse pulsemixer pavucontrol playerctl
 pacman -S --needed bluez bluez-utils
 #systemctl enable bluetooth && systemctl start bluetooth
 #development tools
-pacman -S --needed python2 python3 go nodejs yarn rustup gnu-netcat openssh docker docker-compose
+pacman -S --needed python2 python3 go nodejs npm yarn rustup gnu-netcat openssh docker docker-compose
 if [ ! "$(which rustc)" ]; then
 	rustup default stable
 fi
@@ -71,7 +71,7 @@ pacman -S --needed zathura zathura-pdf-poppler sdcv
 pacman -S --needed fzf ripgrep jq \
 	 youtube-dl units gnome-calculator newsboat speedtest-cli bat
 #security
-pacman -S --needed firejail
+pacman -S --needed firejail doas
 #if this holds true assume it's a fresh install of arch
 if [ ! "$(which yay)" ]; then
 	echo "Configuring firejail to be used by default!"
@@ -85,8 +85,9 @@ pacman -S --needed unzip zip nemo pcmanfm syncthing exa plocate
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
 pacman -S --needed pass
-#firefox
-pacman -S --needed firefox-dark-reader firefox-ublock-origin firefox-tridactyl
+#browser
+pacman -S --needed qutebrowser chromium \
+	firefox-dark-reader firefox-ublock-origin firefox-tridactyl
 
 #laptop
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
