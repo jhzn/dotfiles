@@ -49,7 +49,7 @@ pacman -S --needed pipewire pipewire-pulse pulsemixer pavucontrol playerctl
 pacman -S --needed bluez bluez-utils
 #systemctl enable bluetooth && systemctl start bluetooth
 #development tools
-pacman -S --needed python2 python3 go nodejs npm yarn rustup gnu-netcat openssh docker docker-compose
+pacman -S --needed python2 python3 go nodejs npm yarn rustup gnu-netcat openssh docker docker-compose git-delta
 if [ ! "$(which rustc)" ]; then
 	rustup default stable
 fi
@@ -69,7 +69,7 @@ pacman -S --needed imv gimp swappy imagemagick
 pacman -S --needed zathura zathura-pdf-poppler sdcv
 #misc
 pacman -S --needed fzf ripgrep jq \
-	 youtube-dl units gnome-calculator newsboat speedtest-cli bat
+	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui
 #security
 pacman -S --needed firejail doas
 #if this holds true assume it's a fresh install of arch
