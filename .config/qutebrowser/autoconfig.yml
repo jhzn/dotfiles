@@ -11,6 +11,8 @@ settings:
   bindings.commands:
     global:
       normal:
+        J: tab-prev
+        K: tab-next
         X: hint links spawn mpv {hint-url}
   content.autoplay:
     global: false

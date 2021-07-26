@@ -35,12 +35,17 @@ default_floating_border none
 # Hide borders if there is only one child in a workspace or container
 smart_gaps on
 smart_borders no_gaps
+hide_edge_borders --i3 smart_no_gaps
+focus_follows_mouse yes
+
+#these hide titlebar when in tabbed mode
+font pango:monospace 0
+titlebar_border_thickness 0
+titlebar_padding 0
 
 client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 #client.unfocused            #575b61 #575b61 #d8d8d8 #575b61 #575b61
 #client.focused_inactive     #575b61 #575b61 #d8d8d8 #575b61 #575b61
-
-for_window [app_id=".*"] title_format "[%shell] %title"
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -186,6 +191,7 @@ input * {
 
     # Toggle the current focus between tiling and floating mode
     bindsym $mod+s floating toggle
+	bindsym $mod+m layout tabbed
 	#Quite neat for watching a video whilst doing other things :)
     bindsym $mod+Shift+s floating toggle; sticky toggle; exec ~/.config/sway/sway_window_move.sh bottom-right
 
@@ -229,11 +235,14 @@ bindsym $mod+r mode "resize"
 	bindsym XF86MonBrightnessUp exec brightness.sh up
 	bindsym XF86MonBrightnessDown exec brightness.sh down
 
-
+	#Print button
 	bindsym Print exec ~/.config/sway/screenshot-wl.sh
+
+exec_always ~/.config/sway/exec_always.sh
 
 bar {
 	swaybar_command waybar
+	position bottom
 }
 
 set $gnome-schema org.gnome.desktop.interface
@@ -246,5 +255,4 @@ exec_always {
 
 include /etc/sway/config.d/*
 
-exec_always ~/.config/sway/exec_always.sh
 exec ~/.config/sway/startup.sh

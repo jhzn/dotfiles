@@ -69,7 +69,7 @@ pacman -S --needed imv gimp swappy imagemagick
 pacman -S --needed zathura zathura-pdf-poppler sdcv
 #misc
 pacman -S --needed fzf ripgrep jq \
-	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui
+	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui ttf-font-awesome
 #security
 pacman -S --needed firejail doas
 #if this holds true assume it's a fresh install of arch
@@ -86,7 +86,7 @@ pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
 pacman -S --needed pass
 #browser
-pacman -S --needed qutebrowser chromium \
+pacman -S --needed qutebrowser python-adblock chromium \
 	firefox-dark-reader firefox-ublock-origin firefox-tridactyl
 
 #laptop

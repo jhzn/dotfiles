@@ -19,5 +19,4 @@ wl-paste -t text --watch clipman store &
 #inactive windows are more transparent than focuses on
 /usr/share/sway/scripts/inactive-windows-transparency.py &
 
-
 autotiling-rs &
