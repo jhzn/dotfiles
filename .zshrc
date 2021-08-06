@@ -73,7 +73,7 @@ autoload -U select-quoted
 zle -N select-quoted
 for m in visual viopp; do
   for c in {a,i}{\',\",\`}; do
-    bindkey -M $m $c select-quoted
+	bindkey -M $m $c select-quoted
   done
 done
 
@@ -82,7 +82,7 @@ autoload -U select-bracketed
 zle -N select-bracketed
 for m in visual viopp; do
   for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
-    bindkey -M $m $c select-bracketed
+	bindkey -M $m $c select-bracketed
   done
 done
 
@@ -103,6 +103,16 @@ done
 
 
 
+# Enforce safe file editing Practice
+function sudo() {
+	if [[ "$1" == "$EDITOR" ]]; then
+		#Running your editor as root exposes you to the possible vulnerabilites in your editor
+		echo "Don't run your editor as root ya dumbwit! Use sudoedit instead!"
+	else
+		#Sudo is bloat :)
+		command /usr/bin/doas "$@"
+	fi
+}
 
 source ~/.bash_aliases
 source ~/bin/scripts/functions.sh

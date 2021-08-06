@@ -1,0 +1,6 @@
+## Source https://github.com/netblue30/firejail/pull/3966/files
+whitelist ${RUNUSER}/pipewire-0
+
+#because we symlink to this file
+whitelist ${HOME}/.config/chromium-flags.conf
+noblacklist ${HOME}/.config/chromium-flags.conf

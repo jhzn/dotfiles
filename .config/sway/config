@@ -1,30 +1,17 @@
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
-
 ### Variables
 #
-# Logo key. Use Mod1 for Alt.
 set $mod Mod4
 # Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
-# Your preferred terminal emulator
 set $term alacritty
-# Your preferred application launcher
-# Note: pass the final command to swaymsg so that the resulting window can be opened
-# on the original workspace that the command was run on.
-#set $menu dmenu_path | dmenu | xargs swaymsg exec --
-#set $menu dmenu_run | dmenu | xargs swaymsg exec --
 set $menu sirula
-#set $menu rofi -combi-modi drun,ssh -font "JetBrainsMono Nerd Font Mono 12" -show combi -display-drun "" -icon-theme "Papirus" -show-icons -monitor primary
 
 # Gaps
 for_window [app_id=".*"] border pixel 2
 gaps inner 10
-
 gaps horizontal 5
 gaps vertical 5
 #gaps bottom -10
@@ -44,8 +31,6 @@ titlebar_border_thickness 0
 titlebar_padding 0
 
 client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
-#client.unfocused            #575b61 #575b61 #d8d8d8 #575b61 #575b61
-#client.focused_inactive     #575b61 #575b61 #d8d8d8 #575b61 #575b61
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -53,19 +38,19 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 # resumed. It will also lock your screen before your computer goes to sleep.
 # A note on the timeout commands below: it's a neat way to block the screen from locking or turning the monitors off, when we're watching video
  exec swayidle -d -w \
-		timeout 300 'playerctl status | grep Playing || ~/.config/sway/blurry_swaylock.sh' \
-		timeout 600 'playerctl status | grep Playing || swaymsg "output * dpms off"' \
-		resume 'swaymsg "output * dpms on"' \
-		before-sleep '~/.config/sway/blurry_swaylock.sh' \
-		lock '~/.config/sway/blurry_swaylock.sh'
-#
+	timeout 300 'playerctl status | grep Playing || ~/.config/sway/blurry_swaylock.sh' \
+	timeout 600 'playerctl status | grep Playing || swaymsg "output * dpms off"' \
+	resume 'swaymsg "output * dpms on"' \
+	before-sleep '~/.config/sway/blurry_swaylock.sh' \
+	lock '~/.config/sway/blurry_swaylock.sh'
+
 
 ### Input configuration
 input "2:7:SynPS/2_Synaptics_TouchPad" {
-   dwt enabled
-   tap enabled
-   natural_scroll enabled
-   middle_emulation enabled
+	dwt enabled
+	tap enabled
+	natural_scroll enabled
+	middle_emulation enabled
 }
 #hide cursor after a certain time
 seat * hide_cursor 8000
@@ -73,8 +58,8 @@ seat * hide_cursor 8000
 seat * hide_cursor when-typing enable
 
 input * {
-    xkb_layout "se"
-    xkb_options "caps:escape"
+	xkb_layout "se"
+	xkb_options "caps:escape"
 }
 
 
@@ -82,32 +67,32 @@ input * {
 #
 # Basics:
 #
-    # Start a terminal
-    bindsym $mod+Return exec $term
+	# Start a terminal
+	bindsym $mod+Return exec $term
 	#escape hatch when I muck up zsh :P
-    bindsym $mod+ctrl+Return exec $term -e sh
+	bindsym $mod+ctrl+Return exec $term -e sh
 
-    # Kill focused window
-    bindsym $mod+q kill
+	# Kill focused window
+	bindsym $mod+q kill
 
-    # Start your launcher
-    bindsym $mod+space exec $menu
+	# Start your launcher
+	bindsym $mod+space exec $menu
 
-    # Drag floating windows by holding down $mod and left mouse button.
-    # Resize them with right mouse button + $mod.
-    # Despite the name, also works for non-floating windows.
-    # Change normal to inverse to use left mouse button for resizing and right
-    # mouse button for dragging.
-    floating_modifier $mod normal
+	# Drag floating windows by holding down $mod and left mouse button.
+	# Resize them with right mouse button + $mod.
+	# Despite the name, also works for non-floating windows.
+	# Change normal to inverse to use left mouse button for resizing and right
+	# mouse button for dragging.
+	floating_modifier $mod normal
 
-    # Reload the configuration file
-    bindsym $mod+shift+r reload
+	# Reload the configuration file
+	bindsym $mod+shift+r reload
 
 	# Toggle visibility of waybar
 	bindsym $mod+n exec pkill -SIGUSR1 '^waybar$'
 
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+	# Exit sway (logs you out of your Wayland session)
+	bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
 	bindsym ctrl+alt+l exec powermenu.sh
 
@@ -122,27 +107,27 @@ input * {
 #
 # Moving around:
 #
-    # Move your focus around
-    bindsym $mod+$left focus left
-    bindsym $mod+$down focus down
-    bindsym $mod+$up focus up
-    bindsym $mod+$right focus right
-    # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
+	# Move your focus around
+	bindsym $mod+$left focus left
+	bindsym $mod+$down focus down
+	bindsym $mod+$up focus up
+	bindsym $mod+$right focus right
+	# Or use $mod+[up|down|left|right]
+	bindsym $mod+Left focus left
+	bindsym $mod+Down focus down
+	bindsym $mod+Up focus up
+	bindsym $mod+Right focus right
 
-    # Move the focused window with the same, but add Shift
-    bindsym $mod+Shift+$left move left
-    bindsym $mod+Shift+$down move down
-    bindsym $mod+Shift+$up move up
-    bindsym $mod+Shift+$right move right
-    # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
+	# Move the focused window with the same, but add Shift
+	bindsym $mod+Shift+$left move left
+	bindsym $mod+Shift+$down move down
+	bindsym $mod+Shift+$up move up
+	bindsym $mod+Shift+$right move right
+	# Ditto, with arrow keys
+	bindsym $mod+Shift+Left move left
+	bindsym $mod+Shift+Down move down
+	bindsym $mod+Shift+Up move up
+	bindsym $mod+Shift+Right move right
 
 	#easy way to shift focus between windows on the same workspace
 	bindsym $mod+tab exec swaymsg -t get_tree | ~/.config/sway/alttab same-workspace next 1> /dev/null
@@ -154,30 +139,31 @@ input * {
 #
 # Workspaces:
 #
-    # Switch to workspace
-    bindsym $mod+1 workspace number 1
-    bindsym $mod+2 workspace number 2
-    bindsym $mod+3 workspace number 3
-    bindsym $mod+4 workspace number 4
-    bindsym $mod+5 workspace number 5
-    bindsym $mod+6 workspace number 6
-    bindsym $mod+7 workspace number 7
-    bindsym $mod+8 workspace number 8
-    bindsym $mod+9 workspace number 9
-    bindsym $mod+0 workspace number 10
-    # Move focused container to workspace, and follow with focus
-    bindsym $mod+Shift+1 move container to workspace number 1; workspace number 1
-    bindsym $mod+Shift+2 move container to workspace number 2; workspace number 2
-    bindsym $mod+Shift+3 move container to workspace number 3; workspace number 3
-    bindsym $mod+Shift+4 move container to workspace number 4; workspace number 4
-    bindsym $mod+Shift+5 move container to workspace number 5; workspace number 5
-    bindsym $mod+Shift+6 move container to workspace number 6; workspace number 6
-    bindsym $mod+Shift+7 move container to workspace number 7; workspace number 7
-    bindsym $mod+Shift+8 move container to workspace number 8; workspace number 8
-    bindsym $mod+Shift+9 move container to workspace number 9; workspace number 9
-    bindsym $mod+Shift+0 move container to workspace number 10; workspace number 10
-    # Note: workspaces can have any name you want, not just numbers.
-    # We just use 1-10 as the default.
+	# Switch to workspace
+	bindsym $mod+1 workspace number 1
+	bindsym $mod+2 workspace number 2
+	bindsym $mod+3 workspace number 3
+	bindsym $mod+4 workspace number 4
+	bindsym $mod+5 workspace number 5
+	bindsym $mod+6 workspace number 6
+	bindsym $mod+7 workspace number 7
+	bindsym $mod+8 workspace number 8
+	bindsym $mod+9 workspace number 9
+	bindsym $mod+0 workspace number 10
+	bindsym $mod+plus workspace number 11 #the workspace where the maximized windows live
+	# Move focused container to workspace, and follow with focus
+	bindsym $mod+Shift+1 move container to workspace number 1; workspace number 1
+	bindsym $mod+Shift+2 move container to workspace number 2; workspace number 2
+	bindsym $mod+Shift+3 move container to workspace number 3; workspace number 3
+	bindsym $mod+Shift+4 move container to workspace number 4; workspace number 4
+	bindsym $mod+Shift+5 move container to workspace number 5; workspace number 5
+	bindsym $mod+Shift+6 move container to workspace number 6; workspace number 6
+	bindsym $mod+Shift+7 move container to workspace number 7; workspace number 7
+	bindsym $mod+Shift+8 move container to workspace number 8; workspace number 8
+	bindsym $mod+Shift+9 move container to workspace number 9; workspace number 9
+	bindsym $mod+Shift+0 move container to workspace number 10; workspace number 10
+	# Note: workspaces can have any name you want, not just numbers.
+	# We just use 1-10 as the default.
 
 	bindsym $mod+Control+Shift+Right move workspace to output right
 	bindsym $mod+Control+Shift+Left move workspace to output left
@@ -186,37 +172,38 @@ input * {
 #
 # Layout stuff:
 #
-    # Make the current focus fullscreen
-    bindsym $mod+f fullscreen
+	# Make the current focus fullscreen
+	bindsym $mod+f fullscreen
 
-    # Toggle the current focus between tiling and floating mode
-    bindsym $mod+s floating toggle
-	bindsym $mod+m layout tabbed
+	# Toggle the current focus between tiling and floating mode
+	bindsym $mod+s floating toggle
+	# fullscreen like behavior with the statusbar also showing
+	bindsym $mod+m exec ~/.config/sway/maximize.sh
 	#Quite neat for watching a video whilst doing other things :)
-    bindsym $mod+Shift+s floating toggle; sticky toggle; exec ~/.config/sway/sway_window_move.sh bottom-right
+	bindsym $mod+Shift+s floating toggle; sticky toggle; exec ~/.config/sway/sway_window_move.sh bottom-right
 
 #
 # Resizing containers:
 #
 mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
+	# left will shrink the containers width
+	# right will grow the containers width
+	# up will shrink the containers height
+	# down will grow the containers height
+	bindsym $left resize shrink width 10px
+	bindsym $down resize grow height 10px
+	bindsym $up resize shrink height 10px
+	bindsym $right resize grow width 10px
 
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
+	# Ditto, with arrow keys
+	bindsym Left resize shrink width 10px
+	bindsym Down resize grow height 10px
+	bindsym Up resize shrink height 10px
+	bindsym Right resize grow width 10px
 
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+	# Return to default mode
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
@@ -238,6 +225,7 @@ bindsym $mod+r mode "resize"
 	#Print button
 	bindsym Print exec ~/.config/sway/screenshot-wl.sh
 
+
 exec_always ~/.config/sway/exec_always.sh
 
 bar {
@@ -248,9 +236,9 @@ bar {
 set $gnome-schema org.gnome.desktop.interface
 
 exec_always {
-    gsettings set $gnome-schema gtk-theme 'Adapta-Nokto'
-    gsettings set $gnome-schema icon-theme 'Papirus-Dark'
-    gsettings set $gnome-schema cursor-theme 'Layan-white-cursors'
+	gsettings set $gnome-schema gtk-theme 'Adapta-Nokto'
+	gsettings set $gnome-schema icon-theme 'Papirus-Dark'
+	gsettings set $gnome-schema cursor-theme 'Layan-white-cursors'
 }
 
 include /etc/sway/config.d/*

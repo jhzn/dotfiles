@@ -18,7 +18,8 @@ else
 fi
 
 #doas ftw
-alias sudo="doas"
+#alias sudo="doas" I have a function which override some behavior in addition to acting as an alias
+alias sudoedit="doasedit"
 alias paru="paru --sudo=doas"
 alias paruu="paru --sudo=doas -Syu"
 

@@ -60,7 +60,7 @@ pacman -S --needed bash-completion zsh zsh-autosuggestions zsh-completions zsh-s
 #check /README.md
 pacman -S --needed python-pynvim
 #theme/fonts
-pacman -S --needed noto-fonts ttf-joypixels adapta-gtk-theme papirus-icon-theme lxappearance
+pacman -S --needed noto-fonts ttf-joypixels ttf-font-awesome adapta-gtk-theme papirus-icon-theme lxappearance
 #intel
 #pacman -S --needed xf86-video-intel intel-ucode
 #images
@@ -69,7 +69,7 @@ pacman -S --needed imv gimp swappy imagemagick
 pacman -S --needed zathura zathura-pdf-poppler sdcv
 #misc
 pacman -S --needed fzf ripgrep jq \
-	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui ttf-font-awesome
+	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui
 #security
 pacman -S --needed firejail doas
 #if this holds true assume it's a fresh install of arch

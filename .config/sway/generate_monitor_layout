@@ -17,9 +17,8 @@ def divide_chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-#globals, ugly, but w/e, good enough
-sway_outputs_json = run("swaymsg --raw -t get_outputs")
-sway_outputs = json.loads(sway_outputs_json)
+#global, ugly, but w/e, good enough
+sway_outputs = json.loads(run("swaymsg --raw -t get_outputs"))
 
 def get_monitor_names():
     monitor_names = []
@@ -27,7 +26,7 @@ def get_monitor_names():
         monitor_names.insert(0, monitor["name"])
     return monitor_names
 
-def listMonitors():
+def list_monitors():
     print("Use the number of your desired primary monitor as argumnt to the --generate command\n")
     monitor_names = get_monitor_names()
     counter = 1
@@ -36,48 +35,50 @@ def listMonitors():
         counter+=1
 
 
-def getWorkspacesDividedPerMonitor(monitor_names):
+def get_workspaces_divided_per_monitor(monitor_names):
     workspaces = [1,2,3,4,5,6,7,8,9,10]
     chunk_size = math.floor(len(workspaces) / len(monitor_names))
-    isEvenlyDivisible = (len(workspaces) % len(monitor_names) == 0)
 
-    if isEvenlyDivisible:
+    #Check if our workspaces are evenly distributable on our monitors
+    if len(workspaces) % len(monitor_names) == 0:
         return list(divide_chunks(workspaces, chunk_size))
     else:
         monitor_desktop_chunks = []
         remains = len(workspaces) % len(monitor_names)
-        isFirstMonitorHandled = False
+        is_first_monitor_handled = False
         next = 0
         for i in range(0, chunk_size):
-            if isFirstMonitorHandled == False:
+            if is_first_monitor_handled == False:
                 next = chunk_size+remains
                 monitor_desktop_chunks.insert(i, workspaces[i:next])
-                isFirstMonitorHandled = True
+                is_first_monitor_handled = True
             else:
                 monitor_desktop_chunks.insert(i, workspaces[next:next+chunk_size])
                 next = next+chunk_size
 
         return monitor_desktop_chunks
 
-
 def generate(primary_monitor_number):
     monitor_names = get_monitor_names()
-    #primary_monitor = monitor_names[primary_monitor_number-1]
+    primary_monitor = monitor_names[primary_monitor_number - 1]
+    #Rearrange monitors in list so that our primary monitor get the first chunk of the workspaces
+    monitor_names.remove(primary_monitor)
+    monitor_names.insert(0, primary_monitor)
 
-    monitor_desktop_chunks = getWorkspacesDividedPerMonitor(monitor_names)
+    monitor_desktop_chunks = get_workspaces_divided_per_monitor(monitor_names)
 
     monitor_commands = []
-    chunk_used_counter = 0
-    bar_commands = []
+    waybar_monitor_config = []
+    current_chunk_counter = 0
     for monitor_name in monitor_names:
-        monitor_assigned_chunk =  monitor_desktop_chunks[chunk_used_counter]
+        monitor_assigned_chunk =  monitor_desktop_chunks[current_chunk_counter]
         for workspace in monitor_assigned_chunk:
             if workspace == " ":
                 continue
             monitor_commands.insert(0, f"swaymsg 'workspace {workspace} output {monitor_name}; workspace number {workspace}; move workspace to {monitor_name}'")
-            bar_commands.insert(0, '"{}": ["{}"],'.format(workspace, monitor_name))
+            waybar_monitor_config.insert(0, '"{}": ["{}"],'.format(workspace, monitor_name))
 
-        chunk_used_counter = chunk_used_counter + 1
+        current_chunk_counter = current_chunk_counter + 1
 
     monitor_commands.insert(0,"")
 
@@ -95,21 +96,21 @@ def generate(primary_monitor_number):
             ]
             monitor_commands.insert(0, " ".join(command))
 
-
-
     print("#!/bin/bash\n")
     for command in monitor_commands:
         print(command)
 
     print("")
     #generate persistent workspaces for waybar so that the assigned workspaces are shown in the bar of the individual monitors
-    print("persistent_workspaces=$(cat << EOF\n{")
-    for command in bar_commands:
+    print("waybar_persistent_workspaces=$(cat << EOF\n{")
+    for command in waybar_monitor_config:
         print(command)
     print("}\nEOF\n)")
-    print('jq \'."sway\/workspaces".persistent_workspaces = \'"$persistent_workspaces" ~/.config/waybar/config_base > ~/.config/waybar/config')
+    print('jq \'."sway\/workspaces".persistent_workspaces = \'"$waybar_persistent_workspaces" ~/.config/waybar/config_base > ~/.config/waybar/config')
 
-
+    #NOTE
+    #I'm keeping this around in case I switch to some other bar than Waybar
+    #
     # print("")
     # print("#Spawn a terminal on all the workspaces which are not the 1st workspace on a given monitor")
     # print("#This is to keep them visible on the statusbar because Sway destroys the workspaces if they're empty")
@@ -136,7 +137,7 @@ parser.add_argument("-g", "--generate", metavar="monitor number", dest="generate
 
 args = parser.parse_args()
 if args.list == True:
-    listMonitors()
+    list_monitors()
     exit(0)
 if args.generate != None:
     generate(args.generate)

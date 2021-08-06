@@ -60,15 +60,25 @@ window#waybar.chromium {
 
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 
-#workspaces
-	button.focused {
+/*Show orange if the workspace it non-empty*/
+#workspaces button.current_output {
+	color: @color3;
 	border-bottom: 3px
 		solid
-		@color6;
+		@color3;
 }
-
+/*show green if the workspace is focused*/
+#workspaces
+	button.focused {
+	color: @color2;
+	border-bottom: 3px
+		solid
+		@color2;
+}
+/*show purple if the workspace is hovered by the mouse*/
 #workspaces
 	button:hover {
+	color: @color5;
 	box-shadow: inherit;
 	border-bottom: 3px
 		solid
