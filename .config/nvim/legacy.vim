@@ -20,10 +20,10 @@ nnoremap ,n :NvimTreeRefresh<CR>
 nnoremap <leader>n :NvimTreeFindFile<CR>
 
 " Telescope
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>f <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <C-P> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 " LSP completion
 inoremap <silent><expr> <C-Space> compe#complete()
@@ -45,7 +45,6 @@ imap <up> <nop>
 imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
-
 
 filetype on "detect files bases on type
 filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
@@ -103,20 +102,8 @@ vnoremap K :m '<-2<CR>gv=gv
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
 
-" Zoom / Restore window.
-function! s:ZoomToggle() abort
-	if exists('t:zoomed') && t:zoomed
-		execute t:zoom_winrestcmd
-		let t:zoomed = 0
-	else
-		let t:zoom_winrestcmd = winrestcmd()
-		resize
-		vertical resize
-		let t:zoomed = 1
-	endif
-endfunction
-command! ZoomToggle call s:ZoomToggle()
-nnoremap <silent> <C-W>o :ZoomToggle<CR>
+" Maximize a window
+map <C-m> :tabedit %<CR>
 
 "improve default gx command by opening the URL/filepath in the background instead. This way we dont lock the old window.
 nnoremap gx :execute
