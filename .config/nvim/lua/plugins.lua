@@ -30,7 +30,23 @@ return require('packer').startup(function(use)
 
 	use {
 		'nvim-telescope/telescope.nvim',
-		requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+		requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
+		--config = function()
+			--local actions = require('telescope.actions')
+			--require('telescope').setup{
+				--defaults = {
+					--mappings = {
+					--i = {
+						--["<C-n>"] = false,
+						--["<C-p>"] = false,
+						--["<C-k>"] = actions.move_selection_previous,
+						--["<C-j>"] = actions.move_selection_next,
+					--},
+					--n = {},
+				--}
+			--}
+		--}
+		--end,
 	}
 
 	use {

@@ -17,14 +17,14 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
 	buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
 	buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-	buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+	-- buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 	buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 	buf_set_keymap('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 	buf_set_keymap('n', '<C-space>', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 	buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-	buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-	buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+	buf_set_keymap('n', '<space>j', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+	buf_set_keymap('n', '<space>k', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
 	buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 	buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
@@ -105,6 +105,7 @@ local function setup_servers()
 	local servers = require'lspinstall'.installed_servers()
 	table.insert(servers, "rust_analyzer")
 	table.insert(servers, "gopls")
+	table.insert(servers, "pylsp")
 
 	for _, server in pairs(servers) do
 	local config = make_config()
@@ -187,18 +188,18 @@ require'compe'.setup {
 ----------------------------------------------
 
 
-require'snippets'.use_suggested_mappings()
+--require'snippets'.use_suggested_mappings()
 
 -- This variant will set up the mappings only for the *CURRENT* buffer.
-require'snippets'.use_suggested_mappings(true)
+--require'snippets'.use_suggested_mappings(true)
 
 -- There are only two keybindings specified by the suggested keymappings, which is <C-k> and <C-j>
 -- They are exactly equivalent to:
 
 -- <c-k> will either expand the current snippet at the word or try to jump to
 -- the next position for the snippet.
-vim.cmd("inoremap <c-k> <cmd>lua return require'snippets'.expand_or_advance(1)<CR>")
+--vim.cmd("inoremap <c-k> <cmd>lua return require'snippets'.expand_or_advance(1)<CR>")
 
 -- <c-j> will jump backwards to the previous field.
 -- If you jump before the first field, it will cancel the snippet.
-vim.cmd("inoremap <c-j> <cmd>lua return require'snippets'.advance_snippet(-1)<CR>")
+--vim.cmd("inoremap <c-j> <cmd>lua return require'snippets'.advance_snippet(-1)<CR>")

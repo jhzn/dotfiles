@@ -21,7 +21,7 @@ nnoremap <leader>n :NvimTreeFindFile<CR>
 
 " Telescope
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <C-P> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
@@ -80,15 +80,28 @@ nnoremap <F12> :source ~/.config/nvim/init.lua <CR>
 map <leader>ö :execute
 			\ '!mkdir -p $HOME/tmp && pandoc --from=gfm % -o $HOME/tmp/nvim-markdown.pdf && (xdg-open $HOME/tmp/nvim-markdown.pdf ) 2> /dev/null & '<enter> | redraw!
 
+vnoremap <leader>p "_dP
 
 " visual shifting and keep visual selection
 vnoremap < <gv
 vnoremap > >gv
 
 "make Y behave like D and C
-nnoremap Y y$
-" Allow saving of files as sudo when I forgot to start vim using sudo.
-cmap w!! w !sudo tee > /dev/null %
+nnoremap Y yg_
+
+" center cursor
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
+nnoremap <C-j> :cnext<CR>zzzv
+
+" Move hightlighted text
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" :W sudo saves the file
+" (useful for handling the permission-denied error)
+command! W w !sudo tee % > /dev/null
 
 " Zoom / Restore window.
 function! s:ZoomToggle() abort
