@@ -4,7 +4,7 @@
 #>~/sway.log
 
 # Open STDOUT as $LOG_FILE file for write.
-exec 1>~/sway.log
+exec 1>>~/sway.log
 # Redirect STDERR to STDOUT
 exec 2>&1
 
@@ -20,8 +20,15 @@ export MOZ_DISABLE_RDD_SANDBOX=1
 export XDG_SESSION_TYPE=wayland
 export XDG_CURRENT_DESKTOP=sway
 
-export VDPAU_DRIVER=va_gl
-export LIBVA_DRIVER_NAME=i965
+if [ "$HOST" == "johan-laptop" ]; then
+	export VDPAU_DRIVER=va_gl
+	export LIBVA_DRIVER_NAME=i965
+fi
+if [ "$HOST" == "johan-desktop" ]; then
+	#open source drivers
+	export VDPAU_DRIVER=nouveau
+	export LIBVA_DRIVER_NAME=nouveau
+fi
 
 export QT_QPA_PLATFORM=wayland
 
