@@ -56,6 +56,7 @@ opt.shiftwidth = 4 -- Make tabbing 4 spaces wide
 opt.cursorline = true          -- highlight current line
 opt.showmatch = true           -- highlight matching [{()}]
 opt.incsearch = true           -- search as characters are entered
+opt.inccommand = "nosplit"  -- show substititions live
 opt.hlsearch = true            -- highlight matches
 opt.path:append { '**' } --Enables recusive :find for example
 opt.ignorecase = true

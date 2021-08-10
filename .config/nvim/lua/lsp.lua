@@ -46,18 +46,17 @@ local on_attach = function(client, bufnr)
 			]], false)
 	end
 
-	--vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+	vim.cmd'source ~/.config/nvim/quickfix.vim'
+
 		--vim.lsp.diagnostic.on_publish_diagnostics, {
+			--vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 			--virtual_text = false,
 			--underline = true,
 		--}
 	--)
-	--vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-		--vim.lsp.handlers.signature_help, {
-			--focusable = false,
-		--}
-	--)
-	vim.cmd [[autocmd CursorHoldI * silent! lua vim.lsp.buf.signature_help()]]
+	--
+	vim.cmd [[autocmd CursorHoldI * silent! lua vim.lsp.buf.signature_help({ focusable = false })]]
+
 	-- show a window with the LSP diagnostic when moving cursor on the same line
 	--vim.cmd [[ autocmd CursorMoved * lua vim.lsp.diagnostic.show_line_diagnostics() ]]
 end
