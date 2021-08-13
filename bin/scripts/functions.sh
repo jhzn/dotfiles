@@ -33,7 +33,13 @@ dc-restart(){
 #colorize "go test" output to make it easier to parse for the eyes
 #Example "go test | go_test_color"
 function go_test_color {
-	awk '{sub("FAIL","\033[31mFAIL\033[0m", $0); sub("PASS","\033[32mPASS\033[0m", $0); print}'
+	awk '{
+		sub("FAIL","\033[31mFAIL\033[0m", $0);
+		sub("ERROR","\033[31mERROR\033[0m", $0);
+		sub("WARN","\033[33mWARN\033[0m", $0);
+		sub("PASS","\033[32mPASS\033[0m", $0);
+		print
+	}'
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
