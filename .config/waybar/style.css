@@ -95,6 +95,7 @@ window#waybar.empty
 	/*this is needed so that this widget is hidden when on a workspace without any windows*/
 	background-color: unset;
 }
+#custom-openweather,
 #workspaces,
 #window,
 #clock,
@@ -133,6 +134,9 @@ window#waybar.empty
 	padding-right: 10px;
 }
 #clock {
+	color: @color2;
+}
+#custom-openweather {
 	color: @color2;
 }
 

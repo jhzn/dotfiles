@@ -2,16 +2,21 @@
 	"position": "bottom",
 	"height": 30,
 	"margin-top": 1,
-	"modules-right": [ "idle_inhibitor", "network", "pulseaudio", "custom/media", "clock", "tray" ],
+	"modules-right": [ "custom/openweather", "idle_inhibitor", "network", "pulseaudio", "custom/media", "clock", "tray" ],
 	"modules-center": [ "sway/window", "sway/workspaces", "sway/mode" ],
 	"modules-left": [
-						"cpu",
-						"temperature",
-						"memory",
-						"disk",
-						"backlight",
-						"battery"
-						],
+		"cpu",
+		"temperature",
+		"memory",
+		"disk",
+		"backlight",
+		"battery"
+	],
+	"custom/openweather": {
+		"exec": "~/bin/scripts/weather.py",
+		"on-click": "~/bin/scripts/weather.py open",
+		"interval": 1800
+	},
 	"sway/workspaces": {
 		"persistent_workspaces": {}
 	},
