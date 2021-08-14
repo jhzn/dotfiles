@@ -46,7 +46,7 @@ local on_attach = function(client, bufnr)
 			]], false)
 	end
 
-	vim.cmd'source ~/.config/nvim/quickfix.vim'
+	vim.cmd 'source ~/.config/nvim/quickfix.vim'
 
 		--vim.lsp.diagnostic.on_publish_diagnostics, {
 			--vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(

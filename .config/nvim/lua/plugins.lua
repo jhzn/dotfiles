@@ -60,7 +60,6 @@ return require('packer').startup(function(use)
 
 	-- LSP stuff
 	use 'neovim/nvim-lspconfig'
-	use 'kabouzeid/nvim-lspinstall'
 	use "hrsh7th/nvim-compe"
 	use {
 		"kosayoda/nvim-lightbulb",
@@ -73,6 +72,7 @@ return require('packer').startup(function(use)
 	-- GO stuff
 	-- use 'fatih/vim-go' -- not needed anymore?
 	use 'buoto/gotests-vim'
+
 	use 'scrooloose/nerdcommenter'
 	use 'tpope/vim-surround'
 	-- Git integration

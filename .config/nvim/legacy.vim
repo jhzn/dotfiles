@@ -7,12 +7,10 @@ autocmd BufWritePre * %s/\s\+$//e
 
 syntax on
 
-
 "Flashy transparency :) make sure you terminal follows along
 hi Normal guibg=NONE ctermbg=NONE
 let g:onedark_transparent_background = 1 " By default it is 0
 colorscheme onedark
-
 
 " Nvim-tree.lua
 nnoremap ,m :NvimTreeToggle<CR>
@@ -51,10 +49,10 @@ filetype plugin on "when a file is edited its plugin file is loaded(if there is 
 filetype indent on "maintain indentation
 
 " Shortcutting split navigation, saving a keypress:
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+"nnoremap <C-j> <C-w>j
+"nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " delete without yanking
 nnoremap <leader>d "_d
@@ -67,7 +65,9 @@ vnoremap <leader>d "_d
 map <leader>rr ciw<C-r>0<Esc>
 
 "Clears highlighted
-nnoremap <CR> :noh<CR>
+nnoremap <ESC> :noh<CR>
+nnoremap <CR> :
+vnoremap <CR> :
 
 "Keybinding to toggle syncronization of window scrolling
 map <leader>S :windo set scb!<CR>
@@ -78,8 +78,6 @@ nnoremap <F12> :source ~/.config/nvim/init.lua <CR>
 "Sweet way of previewing markdown
 map <leader>ö :execute
 			\ '!mkdir -p $HOME/tmp && pandoc --from=gfm % -o $HOME/tmp/nvim-markdown.pdf && (xdg-open $HOME/tmp/nvim-markdown.pdf ) 2> /dev/null & '<enter> | redraw!
-
-vnoremap <leader>p "_dP
 
 " visual shifting and keep visual selection
 vnoremap < <gv
@@ -103,7 +101,7 @@ vnoremap K :m '<-2<CR>gv=gv
 command! W w !sudo tee % > /dev/null
 
 " Maximize a window
-map <C-m> :tabedit %<CR>
+nnoremap <leader>m :tabedit %<CR>
 
 "improve default gx command by opening the URL/filepath in the background instead. This way we dont lock the old window.
 nnoremap gx :execute
@@ -126,13 +124,13 @@ let @p='/\<array\>(dema%r]``ar['
 " tabs to spaces if what = 1, or from spaces to tabs otherwise.
 " When converting to tabs, result has no redundant spaces.
 function! Indenting(indent, what, cols)
-  let spccol = repeat(' ', a:cols)
-  let result = substitute(a:indent, spccol, '\t', 'g')
-  let result = substitute(result, ' \+\ze\t', '', 'g')
-  if a:what == 1
-	let result = substitute(result, '\t', spccol, 'g')
-  endif
-  return result
+	let spccol = repeat(' ', a:cols)
+	let result = substitute(a:indent, spccol, '\t', 'g')
+	let result = substitute(result, ' \+\ze\t', '', 'g')
+	if a:what == 1
+		let result = substitute(result, '\t', spccol, 'g')
+	endif
+	return result
 endfunction
 
 " Convert whitespace used for indenting (before first non-whitespace).
@@ -141,11 +139,11 @@ endfunction
 " The cursor position is restored, but the cursor will be in a different
 " column when the number of characters in the indent of the line is changed.
 function! IndentConvert(line1, line2, what, cols)
-  let savepos = getpos('.')
-  let cols = empty(a:cols) ? &tabstop : a:cols
-  execute a:line1 . ',' . a:line2 . 's/^\s\+/\=Indenting(submatch(0), a:what, cols)/e'
-  call histdel('search', -1)
-  call setpos('.', savepos)
+	let savepos = getpos('.')
+	let cols = empty(a:cols) ? &tabstop : a:cols
+	execute a:line1 . ',' . a:line2 . 's/^\s\+/\=Indenting(submatch(0), a:what, cols)/e'
+	call histdel('search', -1)
+	call setpos('.', savepos)
 endfunction
 
 command! -nargs=? -range=% Space2Tab call IndentConvert(<line1>,<line2>,0,<q-args>)

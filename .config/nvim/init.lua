@@ -3,17 +3,17 @@ local execute = vim.api.nvim_command
 local fn = vim.fn
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-  fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
-  execute 'packadd packer.nvim'
+	fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
+	execute 'packadd packer.nvim'
 end
 
 require('plugins')
 
 vim.api.nvim_exec([[
   augroup Packer
-    autocmd!
-    autocmd BufWritePost init.lua PackerCompile
-    autocmd BufWritePost plugins.lua PackerSync
+	autocmd!
+	autocmd BufWritePost init.lua PackerCompile
+	autocmd BufWritePost plugins.lua PackerSync
   augroup end
 ]], false)
 
@@ -24,9 +24,9 @@ local HOME = vim.env.HOME
 
 -- easier to create mappings with this
 local function map(mode, lhs, rhs, opts)
-  local options = {noremap = true}
-  if opts then options = vim.tbl_extend('force', options, opts) end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+	local options = {noremap = true}
+	if opts then options = vim.tbl_extend('force', options, opts) end
+	vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
 g.mapleader = " "
@@ -35,14 +35,11 @@ g.mapleader = " "
 opt.clipboard:append { "unnamedplus" }
 vim.o.completeopt = "menuone,noselect"
 
--- make cursor blink
-opt.guicursor = 'a:blinkon100'
-opt.spelllang = { 'en_gb', 'sv' }
-
+opt.guicursor = 'a:blinkon100' -- make cursor blink
 -- Splits open at the bottom and right, which is non-retarded, unlike vim defaults :)
 opt.splitbelow = true
 opt.splitright = true
-
+opt.spelllang = { 'en_gb', 'sv' }
 opt.tabstop = 4      -- To match the sample file
 opt.expandtab = false    -- Use tabs, not spaces
 opt.wrap = false  --dont wrap lines visually
