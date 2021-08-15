@@ -23,8 +23,8 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<C-space>', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 	buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-	buf_set_keymap('n', '<space>j', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-	buf_set_keymap('n', '<space>k', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+	--buf_set_keymap('n', '<space>j', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+	--buf_set_keymap('n', '<space>k', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
 	buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 	buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
@@ -99,38 +99,26 @@ local function make_config()
 end
 
 local function setup_servers()
-	require'lspinstall'.setup() -- important
-
-	local servers = require'lspinstall'.installed_servers()
-	table.insert(servers, "rust_analyzer")
-	table.insert(servers, "gopls")
-	table.insert(servers, "pylsp")
-
+	local servers = { "rust_analyzer", "gopls", "pylsp" }
 	for _, server in pairs(servers) do
-	local config = make_config()
-	-- language specific config
-	if server == "lua" then
-		config.settings = lua_settings
-	end
-	if server == "gopls" then
-		-- Setup autoformatting on save
-		vim.api.nvim_exec([[
-			autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 1000)
-			autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 1000)
-			]], false)
-	end
+		local config = make_config()
+		-- language specific config
+		if server == "lua" then
+			config.settings = lua_settings
+		end
+		if server == "gopls" then
+			-- Setup autoformatting on save
+			vim.api.nvim_exec([[
+				autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 1000)
+				autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 1000)
+				]], false)
+		end
 
-	require'lspconfig'[server].setup(config)
+		require'lspconfig'[server].setup(config)
 	end
 end
 
 setup_servers()
-
--- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-require'lspinstall'.post_install_hook = function ()
-	setup_servers() -- reload installed servers
-	vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
-end
 
 
 
@@ -139,6 +127,10 @@ end
 ---------------------------------------------
 ------------------ Completion ---------------
 ---------------------------------------------
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menuone,noinsert'
+
 require'compe'.setup {
 	enabled = true;
 	autocomplete = true;
@@ -153,24 +145,24 @@ require'compe'.setup {
 	max_kind_width = 100;
 	max_menu_width = 100;
 	documentation = {
-	border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
-	winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
-	max_width = 120,
-	min_width = 60,
-	max_height = math.floor(vim.o.lines * 0.3),
-	min_height = 1,
-  };
+		border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+		winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+		max_width = 120,
+		min_width = 60,
+		max_height = math.floor(vim.o.lines * 0.3),
+		min_height = 1,
+	};
 
-  source = {
-	path = true;
-	buffer = true;
-	calc = true;
-	nvim_lsp = true;
-	nvim_lua = true;
-	vsnip = true;
-	ultisnips = true;
-	luasnip = true;
-  };
+	source = {
+		path = true;
+		buffer = true;
+		calc = true;
+		nvim_lsp = true;
+		nvim_lua = true;
+		vsnip = true;
+		ultisnips = true;
+		luasnip = true;
+	};
 }
 
 
@@ -187,18 +179,53 @@ require'compe'.setup {
 ----------------------------------------------
 
 
---require'snippets'.use_suggested_mappings()
+-- Utility functions for compe and luasnip
+local t = function(str)
+	return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
 
--- This variant will set up the mappings only for the *CURRENT* buffer.
---require'snippets'.use_suggested_mappings(true)
+local check_back_space = function()
+	local col = vim.fn.col '.' - 1
+	if col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' then
+		return true
+	else
+		return false
+	end
+end
 
--- There are only two keybindings specified by the suggested keymappings, which is <C-k> and <C-j>
--- They are exactly equivalent to:
+-- Use (s-)tab to:
+--- move to prev/next item in completion menu
+--- jump to prev/next snippet's placeholder
+local luasnip = require 'luasnip'
 
--- <c-k> will either expand the current snippet at the word or try to jump to
--- the next position for the snippet.
---vim.cmd("inoremap <c-k> <cmd>lua return require'snippets'.expand_or_advance(1)<CR>")
+_G.tab_complete = function()
+	if vim.fn.pumvisible() == 1 then
+		return t '<C-n>'
+	elseif luasnip.expand_or_jumpable() then
+		return t '<Plug>luasnip-expand-or-jump'
+	elseif check_back_space() then
+		return t '<Tab>'
+	else
+		return vim.fn['compe#complete']()
+	end
+end
 
--- <c-j> will jump backwards to the previous field.
--- If you jump before the first field, it will cancel the snippet.
---vim.cmd("inoremap <c-j> <cmd>lua return require'snippets'.advance_snippet(-1)<CR>")
+_G.s_tab_complete = function()
+	if vim.fn.pumvisible() == 1 then
+		return t '<C-p>'
+	elseif luasnip.jumpable(-1) then
+		return t '<Plug>luasnip-jump-prev'
+	else
+		return t '<S-Tab>'
+	end
+end
+
+-- Map tab to the above tab complete functions
+vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', { expr = true })
+vim.api.nvim_set_keymap('s', '<Tab>', 'v:lua.tab_complete()', { expr = true })
+vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
+vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
+
+-- Map compe confirm and complete functions
+vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })
+vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })

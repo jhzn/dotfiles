@@ -67,7 +67,7 @@ return require('packer').startup(function(use)
 			vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
 		end,
 	}
-	use "norcalli/snippets.nvim"
+	use "L3MON4D3/LuaSnip"
 
 	-- GO stuff
 	-- use 'fatih/vim-go' -- not needed anymore?

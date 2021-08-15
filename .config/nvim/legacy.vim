@@ -24,11 +24,11 @@ nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 " LSP completion
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+"inoremap <silent><expr> <C-Space> compe#complete()
+"inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+"inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+"inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+"inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
 "Disable Ex mode
 map Q <nop>
@@ -50,8 +50,8 @@ filetype indent on "maintain indentation
 
 " Shortcutting split navigation, saving a keypress:
 nnoremap <C-h> <C-w>h
-"nnoremap <C-j> <C-w>j
-"nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " delete without yanking
@@ -66,8 +66,8 @@ map <leader>rr ciw<C-r>0<Esc>
 
 "Clears highlighted
 nnoremap <ESC> :noh<CR>
-nnoremap <CR> :
-vnoremap <CR> :
+nnoremap <BS> :
+vnoremap <BS> :
 
 "Keybinding to toggle syncronization of window scrolling
 map <leader>S :windo set scb!<CR>
@@ -90,7 +90,6 @@ nnoremap Y yg_
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap J mzJ`z
-nnoremap <C-j> :cnext<CR>zzzv
 
 " Move hightlighted text
 vnoremap J :m '>+1<CR>gv=gv
