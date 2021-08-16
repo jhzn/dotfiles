@@ -134,8 +134,8 @@ input * {
 	bindsym $mod+shift+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab same-workspace prev 1> /dev/null
 
 	#easy way to shift focus between windows on the same monitor
-	bindsym ctrl+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab monitor-workspaces next 1> /dev/null
-	bindsym ctrl+shift+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab monitor-workspaces prev 1> /dev/null
+	bindsym alt+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab monitor-workspaces next 1> /dev/null
+	bindsym alt+shift+tab exec swaymsg swaymsg -t get_tree | ~/.config/sway/alttab monitor-workspaces prev 1> /dev/null
 #
 # Workspaces:
 #
