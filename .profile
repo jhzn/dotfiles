@@ -38,4 +38,5 @@ export GOBIN=~/go/bin
 PATH=~/go/bin:$PATH
 PATH=~/.cargo/bin:$PATH
 PATH=~/.yarn/bin:$PATH
+PATH=/usr/lib:$PATH
 
