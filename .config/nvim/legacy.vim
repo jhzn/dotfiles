@@ -18,10 +18,20 @@ nnoremap ,n :NvimTreeRefresh<CR>
 nnoremap <leader>n :NvimTreeFindFile<CR>
 
 " Telescope
-nnoremap <leader>f <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <C-F> <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <C-P> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+" Nerdcommenter
+" remove default mappings
+let g:NERDCreateDefaultMappings = 0
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+nnoremap <C-c> :call nerdcommenter#Comment("n", "Toggle")<CR>
+vnoremap <C-c> :call nerdcommenter#Comment("n", "Toggle")<CR>
 
 " LSP completion
 "inoremap <silent><expr> <C-Space> compe#complete()
@@ -106,7 +116,7 @@ nnoremap <leader>m :tabedit %<CR>
 nnoremap gx :execute
 			\ "!xdg-open" expand("<cfile>")" &"<cr>
 
-noremap <Leader><space> :update<CR>
+noremap <C-s> :update<CR>
 
 " Some sweet macros!
 " PHP

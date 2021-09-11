@@ -10,7 +10,7 @@ local on_attach = function(client, bufnr)
 	-- buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
 	-- Mappings.
-	local opts = { noremap=true, silent=true }
+	local opts = { noremap=true }
 
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
 	buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -25,8 +25,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
 	--buf_set_keymap('n', '<space>j', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 	--buf_set_keymap('n', '<space>k', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-	buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-	buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+	--buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
 
 	-- Set some keybinds conditional on server capabilities
@@ -34,6 +33,7 @@ local on_attach = function(client, bufnr)
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 	elseif client.resolved_capabilities.document_range_formatting then
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+		buf_set_keymap("v", "<C-m>", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", { silent=false })
 	end
 	-- Set autocommands conditional on server_capabilities
 	if client.resolved_capabilities.document_highlight then
@@ -59,26 +59,28 @@ local on_attach = function(client, bufnr)
 
 	-- show a window with the LSP diagnostic when moving cursor on the same line
 	--vim.cmd [[ autocmd CursorMoved * lua vim.lsp.diagnostic.show_line_diagnostics() ]]
+	--
+	print("Starting LSP server" .. bufnr)
 end
 
 -- Configure lua language server for neovim development
 local lua_settings = {
 	Lua = {
-	runtime = {
-	 -- LuaJIT in the case of Neovim
-	  version = 'LuaJIT',
-	  path = vim.split(package.path, ';'),
-	},
-	diagnostics = {
-	-- Get the language server to recognize the `vim` global
-	  globals = {'vim'},
-	},
-	workspace = {
-		-- Make the server aware of Neovim runtime files
-		library = {
-			[vim.fn.expand('$VIMRUNTIME/lua')] = true,
-			[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-			},
+			runtime = {
+			-- LuaJIT in the case of Neovim
+			version = 'LuaJIT',
+			path = vim.split(package.path, ';'),
+		},
+		diagnostics = {
+			-- Get the language server to recognize the `vim` global
+			globals = {'vim'},
+		},
+		workspace = {
+			-- Make the server aware of Neovim runtime files
+			library = {
+					[vim.fn.expand('$VIMRUNTIME/lua')] = true,
+					[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+				},
 		},
 	}
 }
@@ -99,7 +101,7 @@ local function make_config()
 end
 
 local function setup_servers()
-	local servers = { "rust_analyzer", "gopls", "pylsp" }
+	local servers = { "rust_analyzer", "gopls", "pylsp", "bashls" }
 	for _, server in pairs(servers) do
 		local config = make_config()
 		-- language specific config
@@ -109,11 +111,10 @@ local function setup_servers()
 		if server == "gopls" then
 			-- Setup autoformatting on save
 			vim.api.nvim_exec([[
-				autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 1000)
-				autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 1000)
+				autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 200)
+				autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 200)
 				]], false)
 		end
-
 		require'lspconfig'[server].setup(config)
 	end
 end

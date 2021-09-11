@@ -19,6 +19,14 @@ return require('packer').startup(function(use)
 			--require("statusline")
 		--end,
 	--}
+	--
+
+	use {
+		"windwp/nvim-spectre",
+		config = function()
+			require('spectre').setup()
+		end,
+	}
 
 	use {
 		"kyazdani42/nvim-tree.lua",
@@ -70,7 +78,7 @@ return require('packer').startup(function(use)
 	use "L3MON4D3/LuaSnip"
 
 	-- GO stuff
-	-- use 'fatih/vim-go' -- not needed anymore?
+	use 'fatih/vim-go' -- not needed anymore?
 	use 'buoto/gotests-vim'
 
 	use 'scrooloose/nerdcommenter'
