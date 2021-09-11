@@ -44,9 +44,8 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 	before-sleep '~/.config/sway/blurry_swaylock.sh' \
 	lock '~/.config/sway/blurry_swaylock.sh'
 
-
 ### Input configuration
-input "2:7:SynPS/2_Synaptics_TouchPad" {
+input type:touchpad {
 	dwt enabled
 	tap enabled
 	natural_scroll enabled
@@ -57,7 +56,7 @@ seat * hide_cursor 8000
 #or when typing
 seat * hide_cursor when-typing enable
 
-input * {
+input type:keyboard {
 	xkb_layout "se"
 	xkb_options "caps:escape"
 }

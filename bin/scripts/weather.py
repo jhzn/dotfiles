@@ -1,29 +1,16 @@
 #!/usr/bin/python3
 
-#Source: https://gist.github.com/kraftwerk28/b1639cd42d218e2b221980d855afe9c2
+# Source: https://gist.github.com/kraftwerk28/b1639cd42d218e2b221980d855afe9c2
 
 import requests
 import os
 import sys
 
-
-# def get_geo():
-    # url = "http://ip-api.com/json"
-    # resp = requests.get(url)
-    # json = resp.json()
-    # return json["lat"], json["lon"]
-
-
 def get_response(app_id, location=None):
     url = "https://api.openweathermap.org/data/2.5/weather"
     params = {"appid": app_id, "units": "metric"}
-    if location is None:
-        lat, lon = get_geo()
-        params.update({"lat": lat, "lon": lon})
-    else:
-        params["q"] = location
+    params["q"] = location
     return requests.get(url, params=params)
-
 
 def get_weather_string(app_id, location=None):
     resp = get_response(app_id, location)
@@ -46,7 +33,6 @@ def get_browser_url(app_id, location=None):
     json = get_response(app_id, location).json()
     id = json["id"]
     return f"https://openweathermap.org/city/{id}"
-
 
 if __name__ == "__main__":
     if (app_id := os.getenv("OPENWEATHER_APP_ID")) is None:

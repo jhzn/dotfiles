@@ -61,9 +61,11 @@ alias ln='ln -v'
 alias chmod="chmod -c"
 alias chown="chown -c"
 alias mkdir="mkdir -v"
+alias less="less --status-column"
 
 #natural language dictionary
 alias dic="sdcv"
 
 alias cal="cal -3 --monday --week --color=always"
-
+alias ne="nix-env"
+alias p="python3"

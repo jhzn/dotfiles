@@ -12,6 +12,7 @@ git config --global alias.st "status"
 git config --global alias.cm "commit -m"
 git config --global alias.c "commit -v"
 git config --global alias.co "checkout"
+git config --global alias.cob '! git checkout $(git branch | fzf)'
 git config --global alias.br "branch"
 git config --global alias.d "diff"
 git config --global alias.wip "! git add . && git commit -m 'WIP' && git push"
