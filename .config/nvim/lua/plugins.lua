@@ -12,15 +12,6 @@ return require('packer').startup(function(use)
 		end,
 	}
 
-	--use {
-		--'hoob3rt/lualine.nvim',
-		--requires = {'kyazdani42/nvim-web-devicons', opt = true},
-		--config = function()
-			--require("statusline")
-		--end,
-	--}
-	--
-
 	use {
 		"windwp/nvim-spectre",
 		config = function()
@@ -29,11 +20,9 @@ return require('packer').startup(function(use)
 	}
 
 	use {
-		"kyazdani42/nvim-tree.lua",
-		requires = {'kyazdani42/nvim-web-devicons', opt = true},
-		config = function()
-			require("file-explorer")
-		end,
+		"ms-jpq/chadtree",
+		branch = "chad",
+		run = ":CHADdeps",
 	}
 
 	use {
@@ -84,19 +73,12 @@ return require('packer').startup(function(use)
 	use 'scrooloose/nerdcommenter'
 	use 'tpope/vim-surround'
 	-- Git integration
---	use 'tpope/vim-fugitive'
-	use {
-		'lewis6991/gitsigns.nvim',
-		requires = { 'nvim-lua/plenary.nvim' },
+
+	use { 'bobrown101/git-blame.nvim',
 		config = function()
-			require('gitsigns').setup()
-		end
+			vim.api.nvim_set_keymap('n', '<leader>b', "<cmd>lua require('git_blame').run()<cr>", { noremap = true, silent = true })
+		end,
 	}
-	--use {
-		--"lukas-reineke/indent-blankline.nvim",
-		--config = function()
-			--g.indent_blankline_space_char = ' '
-		--end,
-	--}
+
 
 end)

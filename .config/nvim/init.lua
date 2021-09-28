@@ -9,14 +9,6 @@ end
 
 require('plugins')
 
-vim.api.nvim_exec([[
-  augroup Packer
-	autocmd!
-	autocmd BufWritePost init.lua PackerCompile
-	autocmd BufWritePost plugins.lua PackerSync
-  augroup end
-]], false)
-
 local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
 local g = vim.g      -- a table to access global variables
 local opt = vim.opt  -- to set options

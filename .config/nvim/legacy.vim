@@ -2,8 +2,9 @@
 autocmd FileType dart setlocal shiftwidth=2 softtabstop=2 expandtab
 " Automatically deletes all trailing whitespace on save.
 autocmd BufWritePre * %s/\s\+$//e
-" Open file explorer on startup
-"autocmd BufEnter * NvimTreeOpen
+
+" Autosave, doesnt work perfectly with go auto format. TODO fix
+autocmd InsertLeave * write
 
 syntax on
 
@@ -12,10 +13,14 @@ hi Normal guibg=NONE ctermbg=NONE
 let g:onedark_transparent_background = 1 " By default it is 0
 colorscheme onedark
 
-" Nvim-tree.lua
-nnoremap ,m :NvimTreeToggle<CR>
-nnoremap ,n :NvimTreeRefresh<CR>
-nnoremap <leader>n :NvimTreeFindFile<CR>
+" ChadTree
+nnoremap ,m <cmd>CHADopen<cr>
+" Cursor is always in the middle of the screen
+" Must be done with a autocmd because ChadTree behaves weird otherwise
+autocmd BufEnter * setlocal scrolloff=999
+" Removes listchars from CHADTree
+" Doesnt work atm TODO fix it
+autocmd Filetype CHADTree setlocal nolist
 
 " Telescope
 nnoremap <C-F> <cmd>lua require('telescope.builtin').find_files()<cr>

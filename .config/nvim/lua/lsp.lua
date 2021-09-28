@@ -1,5 +1,19 @@
 local nvim_lsp = require('lspconfig')
 
+
+function format_range_operator()
+  local old_func = vim.go.operatorfunc
+  _G.op_func_formatting = function()
+    local start = vim.api.nvim_buf_get_mark(0, '[')
+    local finish = vim.api.nvim_buf_get_mark(0, ']')
+    vim.lsp.buf.range_formatting({}, start, finish)
+    vim.go.operatorfunc = old_func
+    _G.op_func_formatting = nil
+  end
+  vim.go.operatorfunc = 'v:lua.op_func_formatting'
+  vim.api.nvim_feedkeys('g@', 'n', false)
+end
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -14,7 +28,7 @@ local on_attach = function(client, bufnr)
 
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
 	buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-	buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+	buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>zz', opts)
 	buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
 	buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
 	-- buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
@@ -32,9 +46,10 @@ local on_attach = function(client, bufnr)
 	if client.resolved_capabilities.document_formatting then
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 	elseif client.resolved_capabilities.document_range_formatting then
-		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-		buf_set_keymap("v", "<C-m>", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", { silent=false })
+		vim.api.nvim_set_keymap("n", "gm", "<cmd>lua format_range_operator()<CR>", {noremap = true})
+		vim.api.nvim_set_keymap("v", "gm", "<cmd>lua format_range_operator()<CR>", {noremap = true})
 	end
+
 	-- Set autocommands conditional on server_capabilities
 	if client.resolved_capabilities.document_highlight then
 		vim.api.nvim_exec([[
@@ -111,8 +126,8 @@ local function setup_servers()
 		if server == "gopls" then
 			-- Setup autoformatting on save
 			vim.api.nvim_exec([[
-				autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 200)
-				autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 200)
+				autocmd BufWritePost *.go lua vim.lsp.buf.formatting_sync(nil, 100)
+				autocmd BufWritePost *.go.in lua vim.lsp.buf.formatting_sync(nil, 100)
 				]], false)
 		end
 		require'lspconfig'[server].setup(config)
