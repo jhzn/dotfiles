@@ -110,7 +110,7 @@ function sudo() {
 		echo "Don't run your editor as root ya dumbwit! Use sudoedit instead!"
 	else
 		#Sudo is bloat :)
-		command /usr/bin/doas "$@"
+		command doas "$@"
 	fi
 }
 
