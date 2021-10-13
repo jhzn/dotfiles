@@ -164,6 +164,8 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 bindkey '^ ' autosuggest-accept
 
 
+export LS_COLORS="$(< ~/.config/dotfiles/lscolors.sh)"
+
 #begin prompt config
 function zle-line-init zle-keymap-select {
 	PROMPT=$(purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}" )

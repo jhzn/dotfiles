@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ -n "$@" ]; then
+	exec /usr/bin/sway "$@"
+fi
+
 #truncate before launch of sway
 #>~/sway.log
 
