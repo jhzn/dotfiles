@@ -57,17 +57,26 @@ return require('packer').startup(function(use)
 
 	-- LSP stuff
 	use 'neovim/nvim-lspconfig'
-	use "hrsh7th/nvim-compe"
+	use 'hrsh7th/cmp-nvim-lsp'
+	use 'hrsh7th/cmp-buffer'
+	use 'hrsh7th/nvim-cmp'
+
+	-- Snippets
+	use "L3MON4D3/LuaSnip"
+	use "saadparwaiz1/cmp_luasnip"
+
 	use {
 		"kosayoda/nvim-lightbulb",
 		config = function()
 			vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
 		end,
 	}
-	use "L3MON4D3/LuaSnip"
 
 	-- GO stuff
-	use 'fatih/vim-go' -- not needed anymore?
+	-- not needed anymore?
+	-- GoCoverage, snippets are used
+	-- use 'fatih/vim-go'
+	use "kyoh86/vim-go-coverage"
 	use 'buoto/gotests-vim'
 
 	use 'scrooloose/nerdcommenter'

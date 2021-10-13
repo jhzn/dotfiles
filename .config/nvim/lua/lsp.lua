@@ -4,11 +4,11 @@ local nvim_lsp = require('lspconfig')
 function format_range_operator()
   local old_func = vim.go.operatorfunc
   _G.op_func_formatting = function()
-    local start = vim.api.nvim_buf_get_mark(0, '[')
-    local finish = vim.api.nvim_buf_get_mark(0, ']')
-    vim.lsp.buf.range_formatting({}, start, finish)
-    vim.go.operatorfunc = old_func
-    _G.op_func_formatting = nil
+	local start = vim.api.nvim_buf_get_mark(0, '[')
+	local finish = vim.api.nvim_buf_get_mark(0, ']')
+	vim.lsp.buf.range_formatting({}, start, finish)
+	vim.go.operatorfunc = old_func
+	_G.op_func_formatting = nil
   end
   vim.go.operatorfunc = 'v:lua.op_func_formatting'
   vim.api.nvim_feedkeys('g@', 'n', false)
@@ -74,6 +74,8 @@ local on_attach = function(client, bufnr)
 
 	-- show a window with the LSP diagnostic when moving cursor on the same line
 	--vim.cmd [[ autocmd CursorMoved * lua vim.lsp.diagnostic.show_line_diagnostics() ]]
+  -- Setup lspconfig.
+  --
 	--
 	print("Starting LSP server" .. bufnr)
 end
@@ -103,6 +105,7 @@ local lua_settings = {
 -- config that activates keymaps and enables snippet support
 local function make_config()
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
+	capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 	capabilities.textDocument.completion.completionItem.snippetSupport = true
 	return {
 	-- enable snippet support
@@ -145,41 +148,50 @@ setup_servers()
 ---------------------------------------------
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noinsert'
+vim.o.completeopt = "menu,menuone,noselect"
 
-require'compe'.setup {
-	enabled = true;
-	autocomplete = true;
-	debug = false;
-	min_length = 1;
-	preselect = 'enable';
-	throttle_time = 80;
-	source_timeout = 200;
-	resolve_timeout = 800;
-	incomplete_delay = 400;
-	max_abbr_width = 100;
-	max_kind_width = 100;
-	max_menu_width = 100;
-	documentation = {
-		border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
-		winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
-		max_width = 120,
-		min_width = 60,
-		max_height = math.floor(vim.o.lines * 0.3),
-		min_height = 1,
-	};
+-- Setup nvim-cmp.
+local cmp = require'cmp'
 
-	source = {
-		path = true;
-		buffer = true;
-		calc = true;
-		nvim_lsp = true;
-		nvim_lua = true;
-		vsnip = true;
-		ultisnips = true;
-		luasnip = true;
-	};
+cmp.setup({
+snippet = {
+  expand = function(args)
+	-- For `vsnip` user.
+	-- vim.fn["vsnip#anonymous"](args.body)
+
+	-- For `luasnip` user.
+	require('luasnip').lsp_expand(args.body)
+
+	-- For `ultisnips` user.
+	-- vim.fn["UltiSnips#Anon"](args.body)
+  end,
+},
+mapping = {
+  ['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+  ['<s-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+  ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+  ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+  ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+  ['<C-f>'] = cmp.mapping.scroll_docs(4),
+  ['<C-Space>'] = cmp.mapping.complete(),
+  ['<C-e>'] = cmp.mapping.close(),
+  ['<CR>'] = cmp.mapping.confirm({ select = true }),
+},
+sources = {
+  { name = 'nvim_lsp' },
+
+  -- For vsnip user.
+  -- { name = 'vsnip' },
+
+  -- For luasnip user.
+  { name = 'luasnip' },
+
+  -- For ultisnips user.
+  -- { name = 'ultisnips' },
+
+  { name = 'buffer' },
 }
+})
 
 
 
@@ -188,60 +200,58 @@ require'compe'.setup {
 
 
 
+-- ----------------------------------------------
+-- -------------- Snippets ----------------------
+-- ----------------------------------------------
 
 
-----------------------------------------------
--------------- Snippets ----------------------
-----------------------------------------------
+-- -- Utility functions for compe and luasnip
+-- local t = function(str)
+	-- return vim.api.nvim_replace_termcodes(str, true, true, true)
+-- end
 
+-- local check_back_space = function()
+	-- local col = vim.fn.col '.' - 1
+	-- if col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' then
+		-- return true
+	-- else
+		-- return false
+	-- end
+-- end
 
--- Utility functions for compe and luasnip
-local t = function(str)
-	return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
+-- -- Use (s-)tab to:
+-- --- move to prev/next item in completion menu
+-- --- jump to prev/next snippet's placeholder
+-- local luasnip = require 'luasnip'
 
-local check_back_space = function()
-	local col = vim.fn.col '.' - 1
-	if col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' then
-		return true
-	else
-		return false
-	end
-end
+-- _G.tab_complete = function()
+	-- if vim.fn.pumvisible() == 1 then
+		-- return t '<C-n>'
+	-- elseif luasnip.expand_or_jumpable() then
+		-- return t '<Plug>luasnip-expand-or-jump'
+	-- elseif check_back_space() then
+		-- return t '<Tab>'
+	-- else
+		-- return vim.fn['compe#complete']()
+	-- end
+-- end
 
--- Use (s-)tab to:
---- move to prev/next item in completion menu
---- jump to prev/next snippet's placeholder
-local luasnip = require 'luasnip'
+-- _G.s_tab_complete = function()
+	-- if vim.fn.pumvisible() == 1 then
+		-- return t '<C-p>'
+	-- elseif luasnip.jumpable(-1) then
+		-- return t '<Plug>luasnip-jump-prev'
+	-- else
+		-- return t '<S-Tab>'
+	-- end
+-- end
 
-_G.tab_complete = function()
-	if vim.fn.pumvisible() == 1 then
-		return t '<C-n>'
-	elseif luasnip.expand_or_jumpable() then
-		return t '<Plug>luasnip-expand-or-jump'
-	elseif check_back_space() then
-		return t '<Tab>'
-	else
-		return vim.fn['compe#complete']()
-	end
-end
+-- -- Map tab to the above tab complete functions
+-- vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', { expr = true })
+-- vim.api.nvim_set_keymap('s', '<Tab>', 'v:lua.tab_complete()', { expr = true })
+-- vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
+-- vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
 
-_G.s_tab_complete = function()
-	if vim.fn.pumvisible() == 1 then
-		return t '<C-p>'
-	elseif luasnip.jumpable(-1) then
-		return t '<Plug>luasnip-jump-prev'
-	else
-		return t '<S-Tab>'
-	end
-end
-
--- Map tab to the above tab complete functions
-vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', { expr = true })
-vim.api.nvim_set_keymap('s', '<Tab>', 'v:lua.tab_complete()', { expr = true })
-vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
-vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
-
--- Map compe confirm and complete functions
-vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })
-vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })
+-- -- Map compe confirm and complete functions
+-- vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })
+-- vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })

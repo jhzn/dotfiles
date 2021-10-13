@@ -4,7 +4,7 @@ autocmd FileType dart setlocal shiftwidth=2 softtabstop=2 expandtab
 autocmd BufWritePre * %s/\s\+$//e
 
 " Autosave, doesnt work perfectly with go auto format. TODO fix
-autocmd InsertLeave * write
+" autocmd InsertLeave * write
 
 syntax on
 
@@ -14,13 +14,22 @@ let g:onedark_transparent_background = 1 " By default it is 0
 colorscheme onedark
 
 " ChadTree
-nnoremap ,m <cmd>CHADopen<cr>
+" Need a function because CHADtree doesnt work great when using:
+" autocmd Filetype CHADTree
+function CTree()
+    CHADopen
+    redraw
+    sleep 100m
+	" Removes listchars from CHADTree
+	setlocal nolist
+endfunction
+nnoremap ,m <cmd>call CTree()<cr>
 " Cursor is always in the middle of the screen
 " Must be done with a autocmd because ChadTree behaves weird otherwise
 autocmd BufEnter * setlocal scrolloff=999
-" Removes listchars from CHADTree
-" Doesnt work atm TODO fix it
-autocmd Filetype CHADTree setlocal nolist
+"close vim if chadtree is the last window
+autocmd BufEnter * if (winnr("$") == 1 && &filetype == "chadtree") | q | endif
+
 
 " Telescope
 nnoremap <C-F> <cmd>lua require('telescope.builtin').find_files()<cr>
@@ -79,6 +88,11 @@ vnoremap <leader>d "_d
 "replace with Register 0
 map <leader>rr ciw<C-r>0<Esc>
 
+nnoremap <leader>d "_d
+
+" Source: https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text
+map <silent> p p:let @+=@0<CR>
+
 "Clears highlighted
 nnoremap <ESC> :noh<CR>
 nnoremap <BS> :
@@ -121,7 +135,12 @@ nnoremap <leader>m :tabedit %<CR>
 nnoremap gx :execute
 			\ "!xdg-open" expand("<cfile>")" &"<cr>
 
-noremap <C-s> :update<CR>
+" normal mode: save
+nnoremap <c-s> :w<CR>
+" insert mode: escape to normal and save
+inoremap <c-s> <Esc>:w<CR>
+" visual mode: escape to normal and save
+vnoremap <c-s> <Esc>:w<CR>
 
 " Some sweet macros!
 " PHP

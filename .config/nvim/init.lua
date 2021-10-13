@@ -38,7 +38,7 @@ opt.wrap = false  --dont wrap lines visually
 opt.relativenumber = true --Relative linenumber and absolut linenumber where the cursor currently is
 opt.number = true --Relative linenumber and absolut linenumber where the cursor currently is
 opt.list = true-- Shows whitespace as a character
-opt.listchars = { lead = '.', trail = '.', tab = '→ ', eol = '¬' }
+opt.listchars = { lead = '·', trail = '·', tab = '→ ', eol = '¬' }
 g.tabstop = 4       -- number of visual spaces per TAB
 opt.softtabstop = 4   -- number of spaces in tab when editing
 opt.shiftwidth = 4 -- Make tabbing 4 spaces wide
