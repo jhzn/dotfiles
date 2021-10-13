@@ -9,6 +9,10 @@ function gen_pass {
 	head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '';
 }
 
+function gen_uuid {
+	cat /proc/sys/kernel/random/uuid
+}
+
 function base64_encoded_to_png {
 	[ -z "$1" ] && echo "No input received" && return
 
