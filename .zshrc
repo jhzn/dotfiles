@@ -7,6 +7,9 @@ source ~/.profile
 
 #CTRL+d no longer closes terminal
 set -o ignoreeof
+# Turn off control flow
+stty -ixon
+
 
 #begin history config
 
@@ -182,3 +185,10 @@ function _prompt_purs_precmd() {
 add-zsh-hook precmd _prompt_purs_precmd
 
 # end of prompt config
+#
+
+#setopt interactivecomments #Allow comment when using zsh interactively
+#ZSH_HIGHLIGHT_STYLES[comment]='none' # Fixes comment being a better color for visibility
+#ZSH_HIGHLIGHT_STYLES[comment]=fg=245,standout
+#: ${ZSH_HIGHLIGHT_STYLES[comment]=fg=245,italic}
+#ll#

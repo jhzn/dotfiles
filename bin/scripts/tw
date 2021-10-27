@@ -1,0 +1,4 @@
+#!/bin/bash
+
+opt=$(printf "summary\ncontinue\nstart\nstop" | fzf)
+timew "$opt"

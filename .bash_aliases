@@ -41,7 +41,7 @@ alias ll='ls --color=auto --group-directories-first --classify -l'
 alias lla='ls --color=auto --group-directories-first --classify -la'
 
 #Allows moving the config file
-alias tmux="tmux -f ~/.config/tmux/.tmux.conf"
+alias tmux="tmux -2 -f ~/.config/tmux/tmux.conf"
 #Easier to remember/type
 alias open="xdg-open"
 #shorter
@@ -64,7 +64,7 @@ alias mkdir="mkdir -v"
 alias less="less --status-column"
 
 #natural language dictionary
-alias dic="sdcv"
+alias dic="STARDICT_DATA_DIR=~/.config/stardict/dic sdcv"
 
 alias cal="cal -3 --monday --week --color=always"
 alias ne="nix-env"

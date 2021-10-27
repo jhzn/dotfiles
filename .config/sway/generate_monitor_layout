@@ -8,34 +8,34 @@ import subprocess
 from argparse import ArgumentParser
 import json
 import math
+from typing import List, Dict
 
 def run(args):
     # print("Running: " + args)
     return subprocess.run(args, shell=True, capture_output=True).stdout.decode("ascii")
 
-def divide_chunks(list, count):
+def divide_chunks(list: list[int], count: int):
     for i in range(0, len(list), count):
         yield list[i:i + count]
 
 # global, ugly, but w/e, good enough
 sway_outputs = json.loads(run("swaymsg --raw -t get_outputs"))
 
-def get_monitor_names():
+def get_monitor_names() -> List[str]:
     monitor_names = []
     for monitor in sway_outputs:
-        monitor_names.insert(0, monitor["name"])
+        monitor_names.append(monitor["name"])
     return monitor_names
 
 def list_monitors():
-    print("Use the number of your desired primary monitor as argumnt to the --generate command\n")
-    monitor_names = get_monitor_names()
+    print("Use the number of your desired primary monitor as argument to the --generate command\n")
     counter = 1
-    for monitor in monitor_names:
-        print("{}: {}".format(counter, monitor))
+    for monitor in sway_outputs:
+        print("{}: {} ({})".format(counter, monitor["name"], monitor["model"]))
         counter += 1
 
 
-def get_workspaces_divided_per_monitor(monitor_names):
+def get_workspaces_divided_per_monitor(monitor_names: List[str]) -> List[List[int]]:
     workspaces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     chunk_size = math.floor(len(workspaces) / len(monitor_names))
 
@@ -43,7 +43,7 @@ def get_workspaces_divided_per_monitor(monitor_names):
     if len(workspaces) % len(monitor_names) == 0:
         return list(divide_chunks(workspaces, chunk_size))
     else:
-        monitor_desktop_chunks = []
+        monitor_desktop_chunks: List[List[int]] = []
         remains = len(workspaces) % len(monitor_names)
         is_first_monitor_handled = False
         next = 0
@@ -58,51 +58,59 @@ def get_workspaces_divided_per_monitor(monitor_names):
 
         return monitor_desktop_chunks
 
-def generate(primary_monitor_number):
+def generate(primary_monitor_number: int):
     monitor_names = get_monitor_names()
     primary_monitor = monitor_names[primary_monitor_number - 1]
-    # Rearrange monitors in list so that our primary monitor get the first chunk of the workspaces
+    # Rearrange monitors in list so that our primary monitor gets the first chunk of the workspaces
     monitor_names.remove(primary_monitor)
     monitor_names.insert(0, primary_monitor)
 
-    monitor_commands = []
-    waybar_monitor_config = []
-    monitor_variables = []
-    monitor_variables_map = {}
+    monitor_commands: List[str] = []
+    waybar_monitor_config: List[str] = []
+    monitor_variables: List[str] = []
+    monitor_variables_map: Dict[str, str] = {}
 
     monitor_desktop_chunks = get_workspaces_divided_per_monitor(monitor_names)
     current_chunk_counter = 0
     for monitor_name in monitor_names:
 
         monitor_assigned_chunk = monitor_desktop_chunks[current_chunk_counter]
-        monitor_variables.insert(0, "MON_{}={}".format(current_chunk_counter, monitor_name))
+        if current_chunk_counter == 0:
+            monitor_variables.append("MON_{}={} #This is your 'primary' monitor".format(current_chunk_counter, monitor_name))
+        else:
+            monitor_variables.append("MON_{}={}".format(current_chunk_counter, monitor_name))
         monitor_variables_map[monitor_name] = "MON_{}".format(current_chunk_counter)
 
         for workspace in monitor_assigned_chunk:
             if workspace == " ":
                 continue
             curent_var = f"$MON_{current_chunk_counter}"
-            monitor_commands.insert(0, f"swaymsg \"workspace {workspace} output {curent_var}; workspace number {workspace}; move workspace to {curent_var}\"")
-            waybar_monitor_config.insert(0, '"{}": ["{}"],'.format(workspace, curent_var))
+            monitor_commands.append(f"swaymsg \"workspace {workspace} output {curent_var}; workspace number {workspace}; move workspace to {curent_var}\"")
+            waybar_monitor_config.append('"{}": ["{}"],'.format(workspace, curent_var))
 
         current_chunk_counter = current_chunk_counter + 1
 
     # add some line breaks to script
-    monitor_commands.insert(0, "")
+    monitor_commands.append("")
 
     for monitor in sway_outputs:
         if not monitor["active"]:
-            monitor_commands.insert(0, "swaymsg output {} disable".format(monitor["name"]))
+            monitor_commands.append("swaymsg output {} disable".format(monitor["name"]))
         else:
 
             command = [
                 "swaymsg output ${}".format(monitor_variables_map[monitor["name"]]),
-                "res {}x{}".format(monitor["current_mode"]["width"], monitor["current_mode"]["height"]),
+                "res {}x{}@{}hz".format(
+                    monitor["current_mode"]["width"],
+                    monitor["current_mode"]["height"],
+                    monitor["current_mode"]["refresh"] / 1000,
+                ),
                 "scale {}".format(monitor["scale"]),
+                "transform {}".format(monitor["transform"]),
                 "pos {} {}".format(monitor["rect"]["x"], monitor["rect"]["y"]),
                 "enable"
             ]
-            monitor_commands.insert(0, " ".join(command))
+            monitor_commands.append(" ".join(command))
 
     print("#!/bin/bash\n")
     for command in monitor_variables:
@@ -116,7 +124,8 @@ def generate(primary_monitor_number):
     for command in waybar_monitor_config:
         print(command)
     print("}\nEOF\n)")
-    print('jq \'."sway\/workspaces".persistent_workspaces = \'"$waybar_persistent_workspaces" ~/.config/waybar/config_base > ~/.config/waybar/config')
+    print("# This jq command replaces the JSON key's value with our own")
+    print('jq \'."sway\/workspaces".persistent_workspaces = \'"$waybar_persistent_workspaces" \\\n\t~/.config/waybar/config_base > ~/.config/waybar/config')
 
     # NOTE
     # I'm keeping this around in case I switch to some other bar than Waybar
