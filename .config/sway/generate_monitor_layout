@@ -67,7 +67,6 @@ def generate(primary_monitor_number: int):
 
     monitor_commands: List[str] = []
     waybar_monitor_config: List[str] = []
-    monitor_variables: List[str] = []
     monitor_variables_map: Dict[str, str] = {}
 
     monitor_desktop_chunks = get_workspaces_divided_per_monitor(monitor_names)
@@ -75,18 +74,14 @@ def generate(primary_monitor_number: int):
     for monitor_name in monitor_names:
 
         monitor_assigned_chunk = monitor_desktop_chunks[current_chunk_counter]
-        if current_chunk_counter == 0:
-            monitor_variables.append("MON_{}={} #This is your 'primary' monitor".format(current_chunk_counter, monitor_name))
-        else:
-            monitor_variables.append("MON_{}={}".format(current_chunk_counter, monitor_name))
         monitor_variables_map[monitor_name] = "MON_{}".format(current_chunk_counter)
 
         for workspace in monitor_assigned_chunk:
             if workspace == " ":
                 continue
-            curent_var = f"$MON_{current_chunk_counter}"
-            monitor_commands.append(f"swaymsg \"workspace {workspace} output {curent_var}; workspace number {workspace}; move workspace to {curent_var}\"")
-            waybar_monitor_config.append('"{}": ["{}"],'.format(workspace, curent_var))
+            current_mon = f"$MON_{current_chunk_counter}"
+            monitor_commands.append(f"swaymsg \"workspace {workspace} output {current_mon}; workspace number {workspace}; move workspace to {current_mon}\"")
+            waybar_monitor_config.append('"{}": ["{}"],'.format(workspace, current_mon))
 
         current_chunk_counter = current_chunk_counter + 1
 
@@ -113,8 +108,11 @@ def generate(primary_monitor_number: int):
             monitor_commands.append(" ".join(command))
 
     print("#!/bin/bash\n")
-    for command in monitor_variables:
-        print(command)
+    for monitor_name, variable_name in monitor_variables_map.items():
+        if monitor_name is primary_monitor:
+            print("{}={} #This is your 'primary' monitor".format(variable_name, monitor_name))
+        else:
+            print("{}={}".format(variable_name, monitor_name))
     print("")
     for command in monitor_commands:
         print(command)
@@ -124,9 +122,18 @@ def generate(primary_monitor_number: int):
     for command in waybar_monitor_config:
         print(command)
     print("}\nEOF\n)")
+
     print("# This jq command replaces the JSON key's value with our own")
     print('jq \'."sway\/workspaces".persistent_workspaces = \'"$waybar_persistent_workspaces" \\\n\t~/.config/waybar/config_base > ~/.config/waybar/config')
 
+    # TODO
+    #  for monitor_name, variable_name in monitor_variables_map.items():
+        #  # configure main monitors bar
+        #  if monitor_name is primary_monitor:
+            #  print('jq \'.["output"] += ["\'${}\'"]\' \\\n\t~/.config/waybar/config_base > ~/.config/waybar/config'.format(variable_name))
+        #  #  configure non-main monitor bars
+        #  if monitor_name is primary_monitor:
+            #  print('jq \'.["output"] += ["\'${}\'"]\' \\\n\t~/.config/waybar/config_base > ~/.config/waybar/config'.format(variable_name))
     # NOTE
     # I'm keeping this around in case I switch to some other bar than Waybar
     #

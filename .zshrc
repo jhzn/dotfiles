@@ -158,6 +158,7 @@ bindkey -s "^o" "lfcd\n"  # bash keybinding
 
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
+bindkey -s "^q" "exit\n"  # exit shell
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
