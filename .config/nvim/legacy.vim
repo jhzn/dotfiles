@@ -32,7 +32,10 @@ autocmd BufEnter * if (winnr("$") == 1 && &filetype == "chadtree") | q | endif
 
 
 " Telescope
-nnoremap <C-F> <cmd>lua require('telescope.builtin').find_files()<cr>
+" nnoremap <C-F> <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <S-F> <cmd>lua require("telescope.builtin").find_files({no_ignore=true, hidden=true})<cr>
+nnoremap <C-F> <cmd>lua require("telescope.builtin").find_files()<cr>
+" nnoremap <S-P> <cmd>lua require('telescope.builtin').live_grep({no_ignore=true, hidden=true})<cr>
 nnoremap <C-P> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>

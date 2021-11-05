@@ -57,8 +57,12 @@ return require('packer').startup(function(use)
 
 	-- LSP stuff
 	use 'neovim/nvim-lspconfig'
+
+	-- conf for nvim-cmp
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
+	use 'hrsh7th/cmp-path'
+	use 'hrsh7th/cmp-cmdline'
 	use 'hrsh7th/nvim-cmp'
 
 	-- Snippets
@@ -88,6 +92,6 @@ return require('packer').startup(function(use)
 			vim.api.nvim_set_keymap('n', '<leader>b', "<cmd>lua require('git_blame').run()<cr>", { noremap = true, silent = true })
 		end,
 	}
-
+	use "editorconfig/editorconfig-vim"
 
 end)
