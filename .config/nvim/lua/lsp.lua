@@ -1,4 +1,4 @@
-local nvim_lsp = require('lspconfig')
+-- local nvim_lsp = require('lspconfig')
 
 function _G.put(...)
 	local objects = {}
@@ -11,18 +11,18 @@ function _G.put(...)
 	return ...
 end
 
-function format_range_operator()
-	local old_func = vim.go.operatorfunc
-	_G.op_func_formatting = function()
-		local start = vim.api.nvim_buf_get_mark(0, '[')
-		local finish = vim.api.nvim_buf_get_mark(0, ']')
-		vim.lsp.buf.range_formatting({}, start, finish)
-		vim.go.operatorfunc = old_func
-		_G.op_func_formatting = nil
-	end
-	vim.go.operatorfunc = 'v:lua.op_func_formatting'
-	vim.api.nvim_feedkeys('g@', 'n', false)
-end
+-- local function format_range_operator()
+	-- local old_func = vim.go.operatorfunc
+	-- _G.op_func_formatting = function()
+		-- local start = vim.api.nvim_buf_get_mark(0, '[')
+		-- local finish = vim.api.nvim_buf_get_mark(0, ']')
+		-- vim.lsp.buf.range_formatting({}, start, finish)
+		-- vim.go.operatorfunc = old_func
+		-- _G.op_func_formatting = nil
+	-- end
+	-- vim.go.operatorfunc = 'v:lua.op_func_formatting'
+	-- vim.api.nvim_feedkeys('g@', 'n', false)
+-- end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -108,30 +108,40 @@ local on_attach = function(client, bufnr)
 	-- print("Starting LSP server: " .. client.name)
 end
 
--- Configure lua language server for neovim development
-local lua_settings = {
-	Lua = {
+local function lua_lsp_conf()
+	local sumneko_root_path = '/usr/lib/lua-language-server'
+	local sumneko_binary = "/usr/bin/lua-language-server"
+
+	local runtime_path = vim.split(package.path, ';')
+	table.insert(runtime_path, "lua/?.lua")
+	table.insert(runtime_path, "lua/?/init.lua")
+	-- Configure lua language server for neovim development
+	return {
+		cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
+		-- cmd = {sumneko_binary},
+		Lua = {
 			runtime = {
-			-- LuaJIT in the case of Neovim
-			version = 'LuaJIT',
-			path = vim.split(package.path, ';'),
-		},
-		diagnostics = {
-			-- Get the language server to recognize the `vim` global
-			globals = {'vim'},
-		},
-		workspace = {
-			-- Make the server aware of Neovim runtime files
-			library = {
-					[vim.fn.expand('$VIMRUNTIME/lua')] = true,
+				-- LuaJIT in the case of Neovim
+				version = 'LuaJIT',
+				path = vim.split(package.path, ';'),
+			},
+			diagnostics = {
+				enable = true,
+                globals = {'vim', 'describe'},
+			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files
+				library = {
+					[vim.fn.expand('$VIMRUNTIME/lua/vim')] = true,
 					[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
 				},
-		},
+			},
+		}
 	}
-}
+end
 
 -- config that activates keymaps and enables snippet support
-local function make_config(servername)
+local function make_config()
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
@@ -157,7 +167,7 @@ local function efm_conf()
 		-- formatStdin = true,
 	}
 
-	local clang_format = { formatCommand = 'clang-format -style=LLVM ${INPUT}', formatStdin = true }
+	-- local clang_format = { formatCommand = 'clang-format -style=LLVM ${INPUT}', formatStdin = true }
 	local prettier = { formatCommand = 'prettier --stdin-filepath ${INPUT}', formatStdin = true }
 	local stylua = { formatCommand = 'stylua -s -', formatStdin = true }
 
@@ -179,20 +189,29 @@ local function efm_conf()
 	}
 end
 
+local function merge(a, b)
+    if type(a) == 'table' and type(b) == 'table' then
+        for k,v in pairs(b) do if type(v)=='table' and type(a[k] or false)=='table' then merge(a[k],v) else a[k]=v end end
+    end
+    return a
+end
 
 local function setup_servers()
 	local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm" }
 	for _, server in pairs(servers) do
-		local config = make_config(server)
+		local config = make_config()
 		-- language specific config
-		if server == "lua" then
-			config.settings = lua_settings
+		if server == "sumneko_lua" then
+			config = merge(config, lua_lsp_conf())
+			-- put(config)
 		end
 		if server == "efm" then
-			format_config = efm_conf()
+			local format_config = efm_conf()
 			config.init_options = { documentFormatting = true }
 			config.filetypes = vim.tbl_keys(format_config)
 			config.settings = {
+					logFile = "/tmp/efm.log",
+					logLevel = 3,
 					lintDebounce = "2s",
 					rootMarkers = {".git/"},
 					languages = format_config,

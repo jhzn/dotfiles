@@ -7,6 +7,17 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	execute 'packadd packer.nvim'
 end
 
+function _G.put(...)
+	local objects = {}
+	for i = 1, select('#', ...) do
+		local v = select(i, ...)
+		table.insert(objects, vim.inspect(v))
+	end
+
+	print(table.concat(objects, '\n'))
+	return ...
+end
+
 require('plugins')
 
 local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
@@ -64,5 +75,18 @@ map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
 
 -- TODO port to lua
 cmd'source ~/.config/nvim/legacy.vim'
+
+-- Detect filetype and set it, if vim cant figure it out
+detect_ft = function()
+	if vim.bo.filetype == "" then
+		set_ft = function(t) vim.opt.filetype=t end
+		local cmd = 'file --mime-type ' .. vim.api.nvim_buf_get_name(0) ..  " | awk '{printf \"%s\", $2}'"
+		local mime = vim.fn.system({"sh", "-c", cmd})
+		if mime == "application/json" then set_ft("json") end
+		if mime == "application/xml" then set_ft("xml") end
+	end
+end
+
+vim.cmd [[ autocmd BufEnter * lua detect_ft() ]]
 
 require('lsp')

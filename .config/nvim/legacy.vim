@@ -17,11 +17,11 @@ colorscheme onedark
 " Need a function because CHADtree doesnt work great when using:
 " autocmd Filetype CHADTree
 function CTree()
-    CHADopen
-    redraw
-    sleep 100m
+	CHADopen
 	" Removes listchars from CHADTree
+	sleep 100m
 	setlocal nolist
+	" redraw
 endfunction
 nnoremap ,m <cmd>call CTree()<cr>
 " Cursor is always in the middle of the screen
