@@ -94,7 +94,7 @@ map <leader>rr ciw<C-r>0<Esc>
 nnoremap <leader>d "_d
 
 " Source: https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text
-map <silent> p p:let @+=@0<CR>
+xnoremap <silent> p p:let @+=@0<CR>:let @"=@0<CR>
 
 "Clears highlighted
 nnoremap <ESC> :noh<CR>
@@ -150,9 +150,9 @@ vnoremap <c-s> <Esc>:w<CR>
 "replace PHP array() to []
 let @p='/\<array\>(dema%r]``ar['
 
-
-
-
+" Setup easier bindings for help/man pages
+autocmd FileType help nnoremap <buffer> gd <C-]>
+autocmd FileType man nnoremap <buffer> gd <C-]>
 
 
 " TODO these are not perfect, find a better solution

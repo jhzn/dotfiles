@@ -24,7 +24,7 @@ end
 g.mapleader = " "
 
 -- Make VIM and X11 share the came clipboard
-opt.clipboard:append { "unnamedplus" }
+opt.clipboard:append { "unnamed", "unnamedplus" }
 vim.o.completeopt = "menuone,noselect"
 
 opt.guicursor = 'a:blinkon100' -- make cursor blink
@@ -52,6 +52,7 @@ opt.ignorecase = true
 -- Ignore filepaths when fuzzy finding
 opt.wildignore:append { '**/node_modules/**', '**/vendor/**' }
 opt.mouse = "nv"
+opt.autowrite = true
 
 -- increment to 2 because the format changed in some version of neovim
 opt.undodir = HOME .. '/.cache/nvim_undo2'
