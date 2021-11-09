@@ -169,6 +169,7 @@ bindkey '^ ' autosuggest-accept
 
 
 export LS_COLORS="$(< ~/.config/dotfiles/lscolors.sh)"
+export MANPAGER='nvim +Man!'
 
 #begin prompt config
 function zle-line-init zle-keymap-select {
@@ -188,8 +189,7 @@ add-zsh-hook precmd _prompt_purs_precmd
 # end of prompt config
 #
 
-#setopt interactivecomments #Allow comment when using zsh interactively
-#ZSH_HIGHLIGHT_STYLES[comment]='none' # Fixes comment being a better color for visibility
-#ZSH_HIGHLIGHT_STYLES[comment]=fg=245,standout
-#: ${ZSH_HIGHLIGHT_STYLES[comment]=fg=245,italic}
-#ll#
+setopt interactivecomments #Allow comment when using zsh interactively
+ZSH_HIGHLIGHT_STYLES[comment]='none' # Fixes comment being a better color for visibility
+ZSH_HIGHLIGHT_STYLES[comment]=fg=245,standout
+ZSH_HIGHLIGHT_STYLES[comment]=fg=245,italic
