@@ -1,7 +1,10 @@
 #!/bin/sh
 
+if [ -n "$SWAY_BIN" ]; then
+	swaybin="$SWAY_BIN"
+fi
 if [ -n "$@" ]; then
-	exec /usr/bin/sway "$@"
+	exec "$swaybin" "$@"
 fi
 
 #truncate before launch of sway
@@ -16,10 +19,17 @@ exec 2>&1
 printf "Launching sway at: "
 date --rfc-3339=s
 
+# Run FF in wayland
 export MOZ_ENABLE_WAYLAND=1
+# Hardwar acceleration
 export MOZ_WAYLAND_USE_VAAPI=1
+# Touch support, I think
 export MOZ_USE_XINPUT2=1
-export MOZ_DISABLE_RDD_SANDBOX=1
+# TODO why?
+# export MOZ_DISABLE_RDD_SANDBOX=1
+# Fixes opening of links in XWayland apps?
+# TODO verify
+export MOZ_DBUS_REMOTE=1
 
 export XDG_SESSION_TYPE=wayland
 export XDG_CURRENT_DESKTOP=sway
@@ -36,7 +46,5 @@ fi
 
 export QT_QPA_PLATFORM=wayland
 
-#X11 thing
-unset DISPLAY
+exec "$swaybin"
 
-exec /usr/bin/sway

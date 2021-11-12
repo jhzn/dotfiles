@@ -1,4 +1,11 @@
 #!/bin/bash
 
+set -eu pipefail
+
 opt=$(printf "summary\ncontinue\nstart\nstop" | fzf)
+
+if [[ "$opt" == "start" && "$(timew | grep Started)" ]]; then
+	echo "You are currently tracking...Exiting" && exit 1
+fi
+
 timew "$opt"

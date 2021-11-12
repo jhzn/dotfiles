@@ -156,11 +156,14 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 source ~/.config/lf/lfcd.sh
 bindkey -s "^o" "lfcd\n"  # bash keybinding
 
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-export SSH_AUTH_SOCK
 bindkey -s "^q" "exit\n"  # exit shell
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -z "$SSH_AUTH_SOCK" ]; then
+	eval $(/usr/bin/gnome-keyring-daemon)
+	export SSH_AUTH_SOCK
+fi
+
 
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20

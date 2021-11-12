@@ -1,25 +1,16 @@
 #!/bin/sh
 #Do not edit directly! File is generated.
-codium --install-extension bmewburn.vscode-intelephense-client
 codium --install-extension CoenraadS.bracket-pair-colorizer-2
-codium --install-extension coolbear.systemd-unit-file
-codium --install-extension dbaeumer.vscode-eslint
 codium --install-extension eamodio.gitlens
 codium --install-extension emmanuelbeziat.vscode-great-icons
 codium --install-extension Equinusocio.vsc-community-material-theme
 codium --install-extension Equinusocio.vsc-material-theme
 codium --install-extension equinusocio.vsc-material-theme-icons
-codium --install-extension felixfbecker.php-debug
-codium --install-extension jakebathman.mysql-syntax
 codium --install-extension jolaleye.horizon-theme-vscode
-codium --install-extension JPTarquino.postgresql
 codium --install-extension LaurentTreguier.vscode-simple-icons
-codium --install-extension liximomo.sftp
 codium --install-extension mads-hartmann.bash-ide-vscode
-codium --install-extension mikestead.dotenv
 codium --install-extension ms-azuretools.vscode-docker
 codium --install-extension ms-vscode.Go
-codium --install-extension octref.vetur
 codium --install-extension PKief.material-icon-theme
 codium --install-extension rust-lang.rust
 codium --install-extension tomoki1207.selectline-statusbar
@@ -27,4 +18,3 @@ codium --install-extension vadimcn.vscode-lldb
 codium --install-extension vscode-icons-team.vscode-icons
 codium --install-extension vscodevim.vim
 codium --install-extension zhuangtongfa.material-theme
-codium --install-extension zxh404.vscode-proto3

@@ -15,6 +15,8 @@ git config --global alias.co "checkout"
 git config --global alias.cob '! git checkout $(git branch | fzf)'
 git config --global alias.br "branch"
 git config --global alias.d "diff"
+git config --global alias.p "pull"
+git config --global alias.f "fetch"
 git config --global alias.wip "! git add . && git commit -m 'WIP' && git push"
 git config --global alias.authors "shortlog -s -n -e"
 git config --global alias.filehist "log -p"
