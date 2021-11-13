@@ -1,6 +1,3 @@
-[submodule "bin/scripts/emoji_finder.sh"]
-	path = bin/scripts/emoji_finder.sh
-	url = https://github.com/jhzn/emoji_finder.sh
 [submodule ".config/nvim"]
 	path = .config/nvim
 	url = https://github.com/jhzn/vim_config
