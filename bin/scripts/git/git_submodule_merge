@@ -117,7 +117,8 @@ function main() {
   git filter-branch --index-filter "${filter}" HEAD
   popd
 
-  sub=$(echo "$sub" | sed 's/\.//')
+  # Fixes some issue with path having a dot(.)
+  # sub=$(echo "$sub" | sed 's/\.//')
 
   # Merge in rewritten submodule history
   git remote add "${sub}" "${tmpdir}"
