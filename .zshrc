@@ -36,7 +36,8 @@ zstyle ':completion::complete:*' gain-privileges 1
 
 # Basic auto/tab complete:
 autoload -U compinit
-zstyle ':completion:*' menu select
+source ~/.config/dotfiles/fzf-tab-completion/zsh/fzf-zsh-completion.sh
+# zstyle ':completion:*:*:*:default' menu yes select search interactive
 # Auto complete with case insenstivity
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
@@ -124,7 +125,7 @@ source ~/.host_specific_settings.sh
 
 
 # begin FZF config
-
+FZF_DEFAULT_OPTS="--bind 'tab:toggle-down,btab:toggle-up'"
 [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 #overwrite exinting function to change "fc" to include timestampt as well.
 #TODO make pull request to FZF github repo
