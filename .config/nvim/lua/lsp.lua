@@ -11,6 +11,129 @@ function _G.put(...)
 	return ...
 end
 
+
+---------------------------------------------
+------------------ Completion ---------------
+---------------------------------------------
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = "menu,menuone,noselect"
+
+-- Setup nvim-cmp.
+local cmp = require'cmp'
+local lsp_symbols = {
+	Text = "   (Text) ",
+	Method = "   (Method)",
+	Function = "   (Function)",
+	Constructor = "   (Constructor)",
+	Field = " ﴲ  (Field)",
+	Variable = "[] (Variable)",
+	Class = "   (Class)",
+	Interface = " ﰮ  (Interface)",
+	Module = "   (Module)",
+	Property = " 襁 (Property)",
+	Unit = "   (Unit)",
+	Value = "   (Value)",
+	Enum = " 練 (Enum)",
+	Keyword = "   (Keyword)",
+	Snippet = "   (Snippet)",
+	Color = "   (Color)",
+	File = "   (File)",
+	Reference = "   (Reference)",
+	Folder = "   (Folder)",
+	EnumMember = "   (EnumMember)",
+	Constant = " ﲀ  (Constant)",
+	Struct = " ﳤ  (Struct)",
+	Event = "   (Event)",
+	Operator = "   (Operator)",
+	TypeParameter = "   (TypeParameter)",
+}
+
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local luasnip = require("luasnip")
+
+cmp.setup({
+	snippet = {
+		expand = function(args)
+			-- For `luasnip` user.
+			luasnip.lsp_expand(args.body)
+		end,
+	},
+	formatting = {
+		format = function(entry, item)
+			item.kind = lsp_symbols[item.kind]
+			item.menu = ({
+				buffer = "[Buffer]",
+				nvim_lsp = "[LSP]",
+				luasnip = "[Snippet]",
+				neorg = "[Neorg]",
+			})[entry.source.name]
+
+			return item
+		end,
+	},
+	mapping = {
+		["<Tab>"] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			elseif luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
+			elseif has_words_before() then
+				cmp.complete()
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
+
+		["<S-Tab>"] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif luasnip.jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
+		['<C-d>'] = cmp.mapping.scroll_docs(-4),
+		['<C-f>'] = cmp.mapping.scroll_docs(4),
+		['<C-Space>'] = cmp.mapping.complete(),
+		['<C-e>'] = cmp.mapping.close(),
+		['<CR>'] = cmp.mapping.confirm({
+		behavior = cmp.ConfirmBehavior.Replace,
+			select  = true,
+		}),
+	},
+	sources = {
+		{ name = 'nvim_lsp' },
+		{ name = 'luasnip' },
+		{ name = 'buffer' },
+		{ name = 'path' },
+	}
+})
+-- Use buffer source for `/`.
+cmp.setup.cmdline('/', {
+	sources = {
+		{ name = 'buffer' }
+	}
+})
+-- Use cmdline & path source for ':'.
+cmp.setup.cmdline(':', {
+	sources = cmp.config.sources({
+		{ name = 'path' }
+	}, {
+		{ name = 'cmdline' }
+	})
+})
+
+---------------------------------------------
+------------------ LSP ----------------------
+---------------------------------------------
+
+
 -- local function format_range_operator()
 	-- local old_func = vim.go.operatorfunc
 	-- _G.op_func_formatting = function()
@@ -28,12 +151,7 @@ end
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
---	local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-	--Enable completion triggered by <c-x><c-o>
-	-- buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-	-- Mappings.
 	local opts = { noremap=true }
 
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -77,7 +195,6 @@ local on_attach = function(client, bufnr)
 			autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 100)
 			]], false)
 	end
-
 
 	-- Set autocommands conditional on server_capabilities
 	if client.resolved_capabilities.document_highlight then
@@ -127,7 +244,7 @@ local function lua_lsp_conf()
 			},
 			diagnostics = {
 				enable = true,
-                globals = {'vim', 'describe'},
+				globals = {'vim', 'describe'},
 			},
 			workspace = {
 				-- Make the server aware of Neovim runtime files
@@ -142,9 +259,7 @@ end
 
 -- config that activates keymaps and enables snippet support
 local function make_config()
-	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
-
+	local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 	-- local on_attach_fn = on_attach(servername)
 	return {
 	-- enable snippet support
@@ -190,205 +305,31 @@ local function efm_conf()
 end
 
 local function merge(a, b)
-    if type(a) == 'table' and type(b) == 'table' then
-        for k,v in pairs(b) do if type(v)=='table' and type(a[k] or false)=='table' then merge(a[k],v) else a[k]=v end end
-    end
-    return a
-end
-
-local function setup_servers()
-	local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm" }
-	for _, server in pairs(servers) do
-		local config = make_config()
-		-- language specific config
-		if server == "sumneko_lua" then
-			config = merge(config, lua_lsp_conf())
-			-- put(config)
-		end
-		if server == "efm" then
-			local format_config = efm_conf()
-			config.init_options = { documentFormatting = true }
-			config.filetypes = vim.tbl_keys(format_config)
-			config.settings = {
-					logFile = "/tmp/efm.log",
-					logLevel = 3,
-					lintDebounce = "2s",
-					rootMarkers = {".git/"},
-					languages = format_config,
-				}
-		end
-		-- print(server)
-		require'lspconfig'[server].setup(config)
+	if type(a) == 'table' and type(b) == 'table' then
+		for k,v in pairs(b) do if type(v)=='table' and type(a[k] or false)=='table' then merge(a[k],v) else a[k]=v end end
 	end
+	return a
 end
 
-setup_servers()
+local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm" }
+for _, server in pairs(servers) do
+	local config = make_config()
+	-- language specific config
+	if server == "sumneko_lua" then
+		config = merge(config, lua_lsp_conf())
+		-- put(config)
+	end
+	if server == "efm" then
+		local format_config = efm_conf()
+		config.init_options = { documentFormatting = true }
+		config.filetypes = vim.tbl_keys(format_config)
+		config.cmd = {"efm-langserver", "-logfile", "/tmp/efm.log", "-loglevel", "4" }
+		config.settings = {
+				lintDebounce = "2s",
+				rootMarkers = {".git/"},
+				languages = format_config,
+			}
+	end
+	require'lspconfig'[server].setup(config)
+end
 
-
----------------------------------------------
------------------- Completion ---------------
----------------------------------------------
-
--- Set completeopt to have a better completion experience
-vim.o.completeopt = "menu,menuone,noselect"
-
--- Setup nvim-cmp.
-local cmp = require'cmp'
-local lsp_symbols = {
-	Text = "   (Text) ",
-	Method = "   (Method)",
-	Function = "   (Function)",
-	Constructor = "   (Constructor)",
-	Field = " ﴲ  (Field)",
-	Variable = "[] (Variable)",
-	Class = "   (Class)",
-	Interface = " ﰮ  (Interface)",
-	Module = "   (Module)",
-	Property = " 襁 (Property)",
-	Unit = "   (Unit)",
-	Value = "   (Value)",
-	Enum = " 練 (Enum)",
-	Keyword = "   (Keyword)",
-	Snippet = "   (Snippet)",
-	Color = "   (Color)",
-	File = "   (File)",
-	Reference = "   (Reference)",
-	Folder = "   (Folder)",
-	EnumMember = "   (EnumMember)",
-	Constant = " ﲀ  (Constant)",
-	Struct = " ﳤ  (Struct)",
-	Event = "   (Event)",
-	Operator = "   (Operator)",
-	TypeParameter = "   (TypeParameter)",
-}
-
-cmp.setup({
-	formatting = {
-		format = function(entry, item)
-			item.kind = lsp_symbols[item.kind]
-			item.menu = ({
-				buffer = "[Buffer]",
-				nvim_lsp = "[LSP]",
-				luasnip = "[Snippet]",
-				neorg = "[Neorg]",
-			})[entry.source.name]
-
-			return item
-		end,
-	},
-	snippet = {
-		expand = function(args)
-			-- For `vsnip` user.
-			-- vim.fn["vsnip#anonymous"](args.body)
-
-			-- For `luasnip` user.
-			require('luasnip').lsp_expand(args.body)
-
-			-- For `ultisnips` user.
-			-- vim.fn["UltiSnips#Anon"](args.body)
-		end,
-	},
-	mapping = {
-		['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-		['<s-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-		['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-		['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-		['<C-d>'] = cmp.mapping.scroll_docs(-4),
-		['<C-f>'] = cmp.mapping.scroll_docs(4),
-		['<C-Space>'] = cmp.mapping.complete(),
-		['<C-e>'] = cmp.mapping.close(),
-		['<CR>'] = cmp.mapping.confirm({ select = true }),
-	},
-	sources = {
-		{ name = 'nvim_lsp' },
-
-		-- For vsnip user.
-		-- { name = 'vsnip' },
-
-		-- For luasnip user.
-		{ name = 'luasnip' },
-
-		-- For ultisnips user.
-		-- { name = 'ultisnips' },
-
-		{ name = 'buffer' },
-		{ name = 'path' },
-	}
-})
--- Use buffer source for `/`.
-cmp.setup.cmdline('/', {
-	sources = {
-		{ name = 'buffer' }
-	}
-})
--- Use cmdline & path source for ':'.
-cmp.setup.cmdline(':', {
-	sources = cmp.config.sources({
-		{ name = 'path' }
-	}, {
-		{ name = 'cmdline' }
-	})
-})
-
-
-
-
-
-
-
-
--- ----------------------------------------------
--- -------------- Snippets ----------------------
--- ----------------------------------------------
-
-
--- -- Utility functions for compe and luasnip
--- local t = function(str)
-	-- return vim.api.nvim_replace_termcodes(str, true, true, true)
--- end
-
--- local check_back_space = function()
-	-- local col = vim.fn.col '.' - 1
-	-- if col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' then
-		-- return true
-	-- else
-		-- return false
-	-- end
--- end
-
--- -- Use (s-)tab to:
--- --- move to prev/next item in completion menu
--- --- jump to prev/next snippet's placeholder
--- local luasnip = require 'luasnip'
-
--- _G.tab_complete = function()
-	-- if vim.fn.pumvisible() == 1 then
-		-- return t '<C-n>'
-	-- elseif luasnip.expand_or_jumpable() then
-		-- return t '<Plug>luasnip-expand-or-jump'
-	-- elseif check_back_space() then
-		-- return t '<Tab>'
-	-- else
-		-- return vim.fn['compe#complete']()
-	-- end
--- end
-
--- _G.s_tab_complete = function()
-	-- if vim.fn.pumvisible() == 1 then
-		-- return t '<C-p>'
-	-- elseif luasnip.jumpable(-1) then
-		-- return t '<Plug>luasnip-jump-prev'
-	-- else
-		-- return t '<S-Tab>'
-	-- end
--- end
-
--- -- Map tab to the above tab complete functions
--- vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', { expr = true })
--- vim.api.nvim_set_keymap('s', '<Tab>', 'v:lua.tab_complete()', { expr = true })
--- vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
--- vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
-
--- -- Map compe confirm and complete functions
--- vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })
--- vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })

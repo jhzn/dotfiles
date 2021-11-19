@@ -19,8 +19,8 @@ colorscheme onedark
 function CTree()
 	CHADopen
 	" Removes listchars from CHADTree
-	sleep 100m
-	setlocal nolist
+	" sleep 100m
+	" setlocal nolist
 	" redraw
 endfunction
 nnoremap ,m <cmd>call CTree()<cr>
@@ -29,14 +29,15 @@ nnoremap ,m <cmd>call CTree()<cr>
 autocmd BufEnter * setlocal scrolloff=999
 "close vim if chadtree is the last window
 autocmd BufEnter * if (winnr("$") == 1 && &filetype == "chadtree") | q | endif
+autocmd BufEnter * if (&filetype == "chadtree") | setlocal nolist
 
 
 " Telescope
 " nnoremap <C-F> <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <S-F> <cmd>lua require("telescope.builtin").find_files({no_ignore=true, hidden=true})<cr>
-nnoremap <C-F> <cmd>lua require("telescope.builtin").find_files()<cr>
+" nnoremap <S-P> <cmd>lua require("telescope.builtin").find_files({no_ignore=true, hidden=true})<cr>
+nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>
 " nnoremap <S-P> <cmd>lua require('telescope.builtin').live_grep({no_ignore=true, hidden=true})<cr>
-nnoremap <C-P> <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <C-F> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
 

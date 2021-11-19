@@ -244,5 +244,6 @@ exec_always {
 }
 
 include /etc/sway/config.d/*
+include ~/.config/sway/host_specific_config
 
 exec ~/.config/sway/startup.sh
