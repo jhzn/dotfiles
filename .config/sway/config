@@ -106,7 +106,9 @@ input type:keyboard {
 
 	#fast way to execute scripts from my scripts directory
 	bindsym $mod+Shift+Space exec $term -e browse_scripts.sh
-#
+
+	bindsym $mod+ctrl+s exec ~/.config/sway/wlsunset-toggle.sh
+
 # Moving around:
 #
 	# Move your focus around
