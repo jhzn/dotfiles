@@ -52,5 +52,5 @@ nnoremap <C-q> :call ToggleQFList(1)<CR>
 
 " close local fixlist window
 nnoremap <leader>q :call ToggleQFList(0)<CR>zz
-"nnoremap <leader>N :lnext<CR>zz
-"nnoremap <leader>n :lprev<CR>zz
+nnoremap <A-j> :lnext<CR>zz
+nnoremap <A-k> :lprev<CR>zz

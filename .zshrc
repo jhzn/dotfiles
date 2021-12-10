@@ -175,6 +175,9 @@ bindkey '^ ' autosuggest-accept
 export LS_COLORS="$(< ~/.config/dotfiles/lscolors.sh)"
 export MANPAGER='nvim +Man!'
 
+# make time output more readable
+export TIMEFMT=$'\n================\nreal\t%*E\nCPU\t%P\nuser\t%*U\nsystem\t%*S'
+
 #begin prompt config
 function zle-line-init zle-keymap-select {
 	PROMPT=$(purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}" )

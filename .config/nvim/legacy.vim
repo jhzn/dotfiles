@@ -8,6 +8,10 @@ autocmd BufWritePre * %s/\s\+$//e
 
 syntax on
 
+let g:go_def_mapping_enabled = 0
+let g:go_doc_keywordprg_enabled = 0
+let g:go_textobj_enabled = 0
+
 "Flashy transparency :) make sure you terminal follows along
 hi Normal guibg=NONE ctermbg=NONE
 let g:onedark_transparent_background = 1 " By default it is 0
@@ -33,10 +37,8 @@ autocmd BufEnter * if (&filetype == "chadtree") | setlocal nolist
 
 
 " Telescope
-" nnoremap <C-F> <cmd>lua require('telescope.builtin').find_files()<cr>
-" nnoremap <S-P> <cmd>lua require("telescope.builtin").find_files({no_ignore=true, hidden=true})<cr>
 nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>
-" nnoremap <S-P> <cmd>lua require('telescope.builtin').live_grep({no_ignore=true, hidden=true})<cr>
+nnoremap <A-p> <cmd>lua require('telescope.builtin').find_files({no_ignore=true, hidden=true})<cr>
 nnoremap <C-F> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
@@ -118,6 +120,11 @@ vnoremap > >gv
 
 "make Y behave like D and C
 nnoremap Y yg_
+
+" I never use x to copy stuff
+nnoremap x "_x
+" I never use c to copy stuff
+nnoremap c "_c
 
 " center cursor
 nnoremap n nzzzv

@@ -23,26 +23,25 @@ grimshot_cmd="grimshot"
 grimshot_cmd+=" save"
 
 opt1="Current window"
-opt2="Current screen"
+opt2="Current monitor"
 opt3="All monitors"
 opt4="Select area"
 opt5="Select window"
+opt6="Select area(timer 5 sec)"
 
-target=$(printf "$(join_by  $'\n' "$opt1" "$opt2" "$opt3" "$opt4" "$opt5")"  | prompt "Which target?")
-echo Target="$target"
+target=$(printf "$(join_by  $'\n' "$opt1" "$opt2" "$opt3" "$opt4" "$opt5" "$opt6")"  | prompt "Which target?")
 save_option=$(printf "Clipboard\nFile" | prompt "Destination?")
-echo save_option="$save_option"
 edit_option=$(printf "No\nYes" | prompt "Edit screenshot?")
-echo edit_option="$edit_option"
 
 tmp_filename="$screenshot_dir/tmp-screenshot.png"
 
 case $target in
 	"$opt1") grimshot_cmd+=" active";;
-	"$opt2") grimshot_cmd+=" screen";;
+	"$opt2") grimshot_cmd+=" output";;
+	"$opt3") grimshot_cmd+=" screen";;
 	"$opt4") grimshot_cmd+=" area";;
 	"$opt5") grimshot_cmd+=" window";;
-	"$opt3") grimshot_cmd+=" output";;
+	"$opt6") grimshot_cmd+=" area"; sleep 5;;
 	*) echo "Invalid option" && exit 3;;
 esac
 

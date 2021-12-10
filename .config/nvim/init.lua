@@ -89,4 +89,6 @@ end
 
 vim.cmd [[ autocmd BufEnter * lua detect_ft() ]]
 
+vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
+
 require('lsp')

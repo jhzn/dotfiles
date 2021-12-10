@@ -40,17 +40,28 @@ return require('packer').startup(function(use)
 		requires = {'kyazdani42/nvim-web-devicons', opt = true}
 	}
 
+	use "p00f/nvim-ts-rainbow"
+
 	use {
 		'nvim-treesitter/nvim-treesitter',
 		run = ':TSUpdate',
 		config = function()
 			require'nvim-treesitter.configs'.setup {
-					ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-					--ignore_install = { "javascript" }, -- List of parsers to ignore installing
-					highlight = {
+				ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+				--ignore_install = { "javascript" }, -- List of parsers to ignore installing
+				highlight = {
 					enable = true,              -- false will disable the whole extension
 					--disable = { "c", "rust" },  -- list of language that will be disabled
 				},
+				incremental_selection = { enable = true, keymaps = { init_selection = '<CR>', scope_incremental = '<CR>', node_incremental = '<TAB>', node_decremental = '<S-TAB>', }, },
+				rainbow = {
+					enable = true,
+					-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+					extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+					max_file_lines = nil, -- Do not enable for files with more than n lines, int
+					-- colors = {}, -- table of hex strings
+					-- termcolors = {} -- table of colour name strings
+				}
 			}
 		end,
 	}
@@ -79,7 +90,14 @@ return require('packer').startup(function(use)
 	-- GO stuff
 	-- not needed anymore?
 	-- GoCoverage, snippets are used
-	-- use 'fatih/vim-go'
+	use {
+		'fatih/vim-go',
+		config = function()
+			vim.g.go_def_mapping_enabled = 0
+			vim.g.go_doc_keywordprg_enabled = 0
+			vim.g.go_textobj_enabled = 0
+		end,
+	}
 	use "kyoh86/vim-go-coverage"
 	use 'buoto/gotests-vim'
 

@@ -1,8 +1,8 @@
--- local nvim_lsp = require('lspconfig')
+local lspconfig = require('lspconfig')
+local lsputil = require 'lspconfig/util'
 
 function _G.put(...)
-	local objects = {}
-	for i = 1, select('#', ...) do
+	local objects = {} for i = 1, select('#', ...) do
 		local v = select(i, ...)
 		table.insert(objects, vim.inspect(v))
 	end
@@ -56,6 +56,9 @@ end
 
 local luasnip = require("luasnip")
 
+require("snippets")
+
+
 cmp.setup({
 	snippet = {
 		expand = function(args)
@@ -103,7 +106,7 @@ cmp.setup({
 		['<C-Space>'] = cmp.mapping.complete(),
 		['<C-e>'] = cmp.mapping.close(),
 		['<CR>'] = cmp.mapping.confirm({
-		behavior = cmp.ConfirmBehavior.Replace,
+		behavior = cmp.ConfirmBehavior.Insert,
 			select  = true,
 		}),
 	},
@@ -132,6 +135,45 @@ cmp.setup.cmdline(':', {
 ---------------------------------------------
 ------------------ LSP ----------------------
 ---------------------------------------------
+
+
+local go_lsp_conf = function()
+	-- Goimports = function(timeout_ms)
+		-- local context = { only = { "source.organizeImports" } }
+		-- vim.validate { context = { context, "t", true } }
+
+		-- local params = vim.lsp.util.make_range_params()
+		-- params.context = context
+
+		-- -- See the implementation of the textDocument/codeAction callback
+		-- -- (lua/vim/lsp/handler.lua) for how to do this properly.
+		-- local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+		-- if not result or next(result) == nil then return end
+		-- local actions = result[1].result
+		-- if not actions then return end
+		-- local action = actions[1]
+
+		-- -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+		-- -- is a CodeAction, it can have either an edit, a command or both. Edits
+		-- -- should be executed first.
+		-- if action.edit or type(action.command) == "table" then
+			-- if action.edit then
+				-- vim.lsp.util.apply_workspace_edit(action.edit)
+			-- end
+			-- if type(action.command) == "table" then
+				-- vim.lsp.buf.execute_command(action.command)
+			-- end
+		-- else
+			-- vim.lsp.buf.execute_command(action)
+		-- end
+	-- end
+		-- -- autocmd BufWritePre *.go lua Goimports(1000)
+			-- Setup autoformatting on save
+	vim.api.nvim_exec([[
+		autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 500)
+		autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 500)
+		]], false)
+end
 
 
 -- local function format_range_operator()
@@ -189,11 +231,7 @@ local on_attach = function(client, bufnr)
 			]], false)
 	end
 	if client.name == "gopls" then
-		-- Setup autoformatting on save
-		vim.api.nvim_exec([[
-			autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 100)
-			autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 100)
-			]], false)
+		go_lsp_conf()
 	end
 
 	-- Set autocommands conditional on server_capabilities
@@ -222,12 +260,12 @@ local on_attach = function(client, bufnr)
 	--vim.cmd [[ autocmd CursorMoved * lua vim.lsp.diagnostic.show_line_diagnostics() ]]
   -- Setup lspconfig.
   --
-	-- print("Starting LSP server: " .. client.name)
+	-- put("Starting LSP server: " .. client.name)
 end
 
 local function lua_lsp_conf()
-	local sumneko_root_path = '/usr/lib/lua-language-server'
-	local sumneko_binary = "/usr/bin/lua-language-server"
+	local sumneko_root_path = vim.env.HOME .. "/.nix-profile/share/lua-language-server"
+	local sumneko_binary = 'lua-language-server'
 
 	local runtime_path = vim.split(package.path, ';')
 	table.insert(runtime_path, "lua/?.lua")
@@ -310,11 +348,36 @@ local function merge(a, b)
 	end
 	return a
 end
-
-local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm" }
+local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm", "bicep", "yamlls" }
 for _, server in pairs(servers) do
 	local config = make_config()
 	-- language specific config
+	if server == "gopls" then
+		config.settings = {
+			gopls = {
+				analyses = {
+					unusedparams = true,
+					-- fieldalignment = true,
+					nilness = true,
+					shadow = true,
+					unusedwrite = true,
+				},
+				-- staticcheck = true,
+			},
+		}
+	end
+	if server == "yamlls" then
+		config.settings = {
+			yaml = {
+				-- ... -- other settings. note this overrides the lspconfig defaults.
+				schemas = {
+					["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+					-- ["../path/relative/to/file.yml"] = "/.github/workflows/*",
+					-- ["/path/from/root/of/project"] = "/.github/workflows/*",
+				},
+			},
+		}
+	end
 	if server == "sumneko_lua" then
 		config = merge(config, lua_lsp_conf())
 		-- put(config)
@@ -325,11 +388,15 @@ for _, server in pairs(servers) do
 		config.filetypes = vim.tbl_keys(format_config)
 		config.cmd = {"efm-langserver", "-logfile", "/tmp/efm.log", "-loglevel", "4" }
 		config.settings = {
-				lintDebounce = "2s",
-				rootMarkers = {".git/"},
+				lintDebounce = "5s",
+				rootMarkers = {"."},
 				languages = format_config,
 			}
 	end
-	require'lspconfig'[server].setup(config)
+	if server == "bicep" then
+		config = merge(config, {
+			cmd = { "dotnet", vim.env.HOME .. "/bin/bicep-langserver/Bicep.LangServer.dll" },
+		})
+	end
+	lspconfig[server].setup(config)
 end
-
