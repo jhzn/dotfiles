@@ -26,9 +26,12 @@ alias paruu="paru --sudo=doas -Syu"
 alias code="codium"
 alias dc="docker-compose"
 alias lad="lazydocker"
+alias g="git"
+
 alias v="nvim"
 alias vim="nvim"
-alias g="git"
+alias j='nvim -c "set ft=json"'
+alias pager="nvim -R"
 
 alias grep='grep --colour=auto'
 alias egrep='egrep --colour=auto'

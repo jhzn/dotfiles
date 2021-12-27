@@ -47,10 +47,10 @@ fun! UnsetQFControlVariable()
 endfun
 
 nnoremap <C-q> :call ToggleQFList(1)<CR>
-"nnoremap <C-N> :cnext<CR>zz
-"nnoremap <C-n> :cprev<CR>zz
+nnoremap <A-j> :cnext<CR>zz
+nnoremap <A-k> :cprev<CR>zz
 
 " close local fixlist window
 nnoremap <leader>q :call ToggleQFList(0)<CR>zz
-nnoremap <A-j> :lnext<CR>zz
-nnoremap <A-k> :lprev<CR>zz
+nnoremap <leader>j :lnext<CR>zz
+nnoremap <leader>k :lprev<CR>zz

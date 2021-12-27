@@ -157,7 +157,8 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 source ~/.config/lf/lfcd.sh
 bindkey -s "^o" "lfcd\n"  # bash keybinding
 
-bindkey -s "^q" "exit\n"  # exit shell
+# Add a space before command to prevent history entry
+bindkey -s "^q" " exit\n"  # exit shell
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [ -z "$SSH_AUTH_SOCK" ]; then

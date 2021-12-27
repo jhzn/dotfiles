@@ -36,6 +36,13 @@ autocmd BufEnter * if (winnr("$") == 1 && &filetype == "chadtree") | q | endif
 autocmd BufEnter * if (&filetype == "chadtree") | setlocal nolist
 
 
+function FileAndLineNumber()
+	let file_and_line_number=execute('echo @% . ":" . line(".")')
+	"remove \n from begining of string
+	let @+=substitute(file_and_line_number, "\n", "", "")
+endfunction
+nnoremap <leader>y <cmd>call FileAndLineNumber()<CR>
+
 " Telescope
 nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>
 nnoremap <A-p> <cmd>lua require('telescope.builtin').find_files({no_ignore=true, hidden=true})<cr>
