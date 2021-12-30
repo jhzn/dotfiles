@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# set -euo pipefail
 shopt -s nullglob globstar
 
 wl_copy_args=("--paste-once --trim-newline")
@@ -40,7 +40,9 @@ done
 
 shift $(expr $OPTIND - 1 )
 
-[[ $1 = "--" ]] && shift
+if [[ "$1" = "--" ]]; then
+	shift
+fi
 wofi_args=$@
 prefix=${PASSWORD_STORE_DIR-~/.password-store}
 password_files=( "$prefix"/**/*.gpg )
@@ -67,6 +69,6 @@ else
 	bash_arg='bash -c '"'echo "'"'"$password_cleartext"'"'"'"
 
 	#this here allows us to clear 1 item from the history
-	clipman clear -t CUSTOM --tool-args "$bash_arg" \
-		&& notify-send "Clipboard manager" "Cleared password from password manager"
+	clipman clear -t CUSTOM --tool-args "$bash_arg"
+	notify-send "Clipboard manager" "Cleared password from password manager"
 fi

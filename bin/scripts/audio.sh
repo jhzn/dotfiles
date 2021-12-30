@@ -38,6 +38,8 @@ current_volume () {
 }
 
 case $1 in
+	set) pulsemixer --set-volume "$2" && notifiy "Audio change" "Volume: $(current_volume) %" "volume";;
+
 	up) pulsemixer --change-volume +5 && notifiy "Audio change" "Volume: $(current_volume) %" "volume";;
 
 	down ) pulsemixer --change-volume -5 && notifiy "Audio change" "Volume: $(current_volume) %" "volume";;
