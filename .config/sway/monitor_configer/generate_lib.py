@@ -35,9 +35,7 @@ def get_workspaces_divided_per_monitor(monitor_count: int) -> List[List[int]]:
         remains = len(workspaces) % monitor_count
         is_first_monitor_handled = False
         next = 0
-        #  print("chunk_size", chunk_size)
         for i in range(0, monitor_count):
-            #  print(i)
             if not is_first_monitor_handled:
                 next = chunk_size + remains
                 monitor_desktop_chunks.insert(i, workspaces[i:next])
@@ -172,21 +170,22 @@ def parse_sway_output(sway_outputs) -> List[models.Swayoutput]:
     return out
 
 
-def generate(sway_outputs: models.Swayoutput, primary_monitor_number: int):
+def generate(sway_outputs: [models.Swayoutput], primary_monitor_number: int) -> List[str]:
     monitor_names = get_monitor_names(sway_outputs)
     primary_monitor = monitor_names[primary_monitor_number - 1]
     monitor_map = create_monitor_map(sway_outputs, primary_monitor)
+    out = []
 
-    print("#!/bin/bash\n")
-    print("\n".join(monitor_assignments(monitor_map, primary_monitor)))
-    print("")
-    print("\n".join(arrange_workspacess(monitor_map)))
-    print("")
-    print("\n".join(conf_outputs(sway_outputs, monitor_map)))
-    print("")
+    out.append("#!/bin/bash\n")
+    out.append("\n".join(monitor_assignments(monitor_map, primary_monitor)))
+    out.append("")
+    out.append("\n".join(arrange_workspacess(monitor_map)))
+    out.append("")
+    out.append("\n".join(conf_outputs(sway_outputs, monitor_map)))
+    out.append("")
 
     # generate persistent workspaces for waybar so that the assigned workspaces are shown in the bar of the individual monitors
-    print("""waybar_persistent_workspaces=$(cat << EOF
+    out.append("""waybar_persistent_workspaces=$(cat << EOF
 {{
 {}
 }}
@@ -194,5 +193,7 @@ EOF
 )
 """.format("\n".join(waybar(monitor_map))))
 
-    print("""jq '."sway\/workspaces".persistent_workspaces = '"$waybar_persistent_workspaces" \\
+    out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$waybar_persistent_workspaces" \\
     ~/.config/waybar/config_base > ~/.config/waybar/config""")
+
+    return out

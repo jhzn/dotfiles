@@ -19,7 +19,6 @@ def run(args):
     return subprocess.run(args, shell=True, capture_output=True).stdout.decode("ascii")
 
 
-# global, ugly, but w/e, good enough
 sway_outputs = generate_lib.parse_sway_output(json.loads(run("swaymsg --raw -t get_outputs")))
 
 args = parser.parse_args()
@@ -27,7 +26,7 @@ if args.list:
     generate_lib.list_monitors(sway_outputs)
     exit(0)
 if args.generate is not None:
-    generate_lib.generate(sway_outputs, args.generate)
+    print("\n".join(generate_lib.generate(sway_outputs, args.generate)))
     exit(0)
 
 # no option was chosen, print helpful info
