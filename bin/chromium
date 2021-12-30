@@ -9,4 +9,4 @@ fi
 
 export CHROME_VERSION_EXTRA="stable"
 
-exec chromium "$@" $USER_FLAGS
+exec /bin/chromium "$@" $USER_FLAGS

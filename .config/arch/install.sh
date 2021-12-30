@@ -71,14 +71,7 @@ pacman -S --needed zathura zathura-pdf-poppler sdcv
 pacman -S --needed fzf ripgrep jq \
 	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui
 #security
-pacman -S --needed firejail doas
-#if this holds true assume it's a fresh install of arch
-if [ ! "$(which yay)" ]; then
-	echo "Configuring firejail to be used by default!"
-	#To use Firejail by default for all applications for which it has profiles, run the firecfg tool as root.
-	#https://wiki.archlinux.org/index.php/Firejail#Using_Firejail_by_default
-	firecfg
-fi
+pacman -S --needed doas
 #files
 pacman -S --needed unzip zip nemo pcmanfm syncthing exa plocate
 #disks

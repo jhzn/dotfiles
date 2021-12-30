@@ -1,19 +1,19 @@
-#!/bin/sh
+#!/bin/bash -x
 
-if [ -n "$SWAY_BIN" ]; then
-	swaybin="$SWAY_BIN"
-fi
-if [ -n "$@" ]; then
-	exec "$swaybin" "$@"
-fi
+swaybin="/bin/sway"
+[[ -n "$SWAY_BIN" ]] && swaybin="$SWAY_BIN"
+
+[[ -n "$@" ]] && exec "$swaybin" "$@"
 
 #truncate before launch of sway
 #>~/sway.log
 
 # Open STDOUT as $LOG_FILE file for write.
-exec 1>>~/sway.log
 # Redirect STDERR to STDOUT
-exec 2>&1
+# Filter out garbage from xwayland
+exec &>> >(sed '/Errors from xkbcomp are not fatal to the X server/d; /The XKEYBOARD keymap compiler (xkbcomp) reports:/d; /Unsupported maximum keycode/d; /X11 cannot support keycodes above 255/d' | tee -a ~/sway.log)
+# exec 1> ~/sway.log
+# exec 2> ~/sway.error
 
 #nice way to separate launches
 printf "Launching sway at: "
@@ -39,9 +39,10 @@ if [ "$HOST" == "johan-laptop" ]; then
 	export LIBVA_DRIVER_NAME=i965
 fi
 if [ "$HOST" == "johan-desktop" ]; then
-	#open source drivers
+	# open source drivers
 	export VDPAU_DRIVER=nouveau
 	export LIBVA_DRIVER_NAME=nouveau
+	# swaybin="$swaybin --unsupported-gpu"
 fi
 
 export QT_QPA_PLATFORM=wayland
