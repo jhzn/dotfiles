@@ -6,6 +6,7 @@ class Monitor(NamedTuple):
     assigned_workspaces: List[int]
     # Like $MON_1
     variable_name: str
+    is_primary: bool
 
 
 # Keyed on monitor interface like DP-1

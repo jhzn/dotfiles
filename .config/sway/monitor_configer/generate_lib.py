@@ -1,9 +1,9 @@
 import math
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import models
 
 
-def divide_chunks(list: list[int], count: int):
+def divide_chunks(list: List[int], count: int) -> List[int]:
     for i in range(0, len(list), count):
         yield list[i:i + count]
 
@@ -48,9 +48,9 @@ def get_workspaces_divided_per_monitor(monitor_count: int) -> List[List[int]]:
         return monitor_desktop_chunks
 
 
-def monitor_assignments(monitor_variables_map: models.MonitorMap, primary_monitor: str) -> List[str]:
+def monitor_assignments(monitors_map: models.MonitorMap, primary_monitor: str) -> List[str]:
     out = []
-    for monitor_name, monitor in monitor_variables_map.items():
+    for monitor_name, monitor in monitors_map.items():
         if monitor_name is primary_monitor:
             out.append("{}={} #This is your 'primary' monitor".format(
                 monitor.variable_name.replace("$", ""), monitor_name))
@@ -60,7 +60,7 @@ def monitor_assignments(monitor_variables_map: models.MonitorMap, primary_monito
     return out
 
 
-def conf_outputs(sway_outputs, monitor_variables_map: models.MonitorMap) -> List[str]:
+def conf_outputs(sway_outputs: List[models.Swayoutput], monitor_variables_map: models.MonitorMap) -> List[str]:
     out = []
     for monitor in sway_outputs:
         if not monitor.active:
@@ -97,52 +97,52 @@ def arrange_workspacess(monitor_map: models.MonitorMap) -> List[str]:
     return out
 
 
-def waybar(monitor_map: models.MonitorMap) -> List[str]:
-    out = []
+def waybar(monitor_map: models.MonitorMap) -> Tuple[List[str], List[str]]:
+    out_primary_monitor = []
+    out_aux_monitor = []
     for monitor_name, monitor in monitor_map.items():
         for workspace in monitor.assigned_workspaces:
-            out.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
-    return out
+            if monitor.is_primary:
+                out_primary_monitor.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
+            else:
+                out_aux_monitor.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
+
+    return (out_primary_monitor, out_aux_monitor)
 
 
-def create_monitor_map(sway_outputs, primary_monitor: str) -> models.MonitorMap:
+def create_monitor_map(sway_outputs: List[models.Swayoutput], primary_monitor: str) -> models.MonitorMap:
     monitor_names = get_monitor_names(sway_outputs)
 
-    monitor_map: Dict[str, models.Monitor] = {}
     for m in sway_outputs:
         if not m.active:
             monitor_names.remove(m.name)
 
     monitor_desktop_chunks = get_workspaces_divided_per_monitor(len(monitor_names))
+    monitor_map: Dict[str, models.Monitor] = {}
+
+    def assign(output: models.Swayoutput, current_chunk: int):
+        if not monitor.active:
+            return
+        monitor_assigned_chunk = monitor_desktop_chunks[current_chunk]
+        monitor_map[output.name] = models.Monitor(
+            variable_name="$MON_{}".format(current_chunk),
+            assigned_workspaces=monitor_assigned_chunk,
+            is_primary=output.name is primary_monitor,
+        )
+
     current_chunk_counter = 0
-
-    # Very crude assignement because primary_monitor needs to have $MON_0
-    # Rearrange monitors in list so that our primary monitor gets the first chunk of the workspaces
-    # TODO make prettier
+    # Handle primary monitor first because it needs to have $MON_0 variable
     for monitor in sway_outputs:
-        monitor_name = monitor.name
-        if not monitor.active:
-            continue
-        if monitor_name is primary_monitor:
-            monitor_assigned_chunk = monitor_desktop_chunks[current_chunk_counter]
-            monitor_map[monitor_name] = models.Monitor(
-                variable_name="$MON_{}".format(current_chunk_counter),
-                assigned_workspaces=monitor_assigned_chunk,
-            )
-            current_chunk_counter = current_chunk_counter + 1
+        if monitor.name is primary_monitor:
+            assign(monitor, current_chunk_counter)
+            current_chunk_counter += 1
+            break
 
+    # Then the others
     for monitor in sway_outputs:
-        monitor_name = monitor.name
-        if not monitor.active:
-            continue
-
-        if monitor_name is not primary_monitor:
-            monitor_assigned_chunk = monitor_desktop_chunks[current_chunk_counter]
-            monitor_map[monitor_name] = models.Monitor(
-                variable_name="$MON_{}".format(current_chunk_counter),
-                assigned_workspaces=monitor_assigned_chunk,
-            )
-            current_chunk_counter = current_chunk_counter + 1
+        if monitor.name is not primary_monitor:
+            assign(monitor, current_chunk_counter)
+            current_chunk_counter += 1
 
     return monitor_map
 
@@ -170,12 +170,17 @@ def parse_sway_output(sway_outputs) -> List[models.Swayoutput]:
     return out
 
 
-def generate(sway_outputs: [models.Swayoutput], primary_monitor_number: int) -> List[str]:
+def generate(sway_outputs: List[models.Swayoutput], primary_monitor_number: int) -> List[str]:
     monitor_names = get_monitor_names(sway_outputs)
     primary_monitor = monitor_names[primary_monitor_number - 1]
     monitor_map = create_monitor_map(sway_outputs, primary_monitor)
-    out = []
 
+    aux_monitors = []
+    for m in sway_outputs:
+        if m.name is not primary_monitor and m.active:
+            aux_monitors.append(m.name)
+
+    out = []
     out.append("#!/bin/bash\n")
     out.append("\n".join(monitor_assignments(monitor_map, primary_monitor)))
     out.append("")
@@ -184,16 +189,30 @@ def generate(sway_outputs: [models.Swayoutput], primary_monitor_number: int) -> 
     out.append("\n".join(conf_outputs(sway_outputs, monitor_map)))
     out.append("")
 
-    # generate persistent workspaces for waybar so that the assigned workspaces are shown in the bar of the individual monitors
-    out.append("""waybar_persistent_workspaces=$(cat << EOF
+    def create_shell_variable(name: str, value: List[str]) -> str:
+        return """{}=$(cat << EOF
 {{
 {}
 }}
 EOF
 )
-""".format("\n".join(waybar(monitor_map))))
+""".format(name, "\n".join(value))
 
-    out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$waybar_persistent_workspaces" \\
-    ~/.config/waybar/config_base > ~/.config/waybar/config""")
+    # Now we setup things for waybar
+    # I want Waybar to 1 type of bar layout for the primary monitor and another for the non-primary monitors(called aux monitors in the script)
+    # We have ~/.config/waybar/primary_conf_template and ~/.config/waybar/aux_conf_template which are templates to create our final waybar config file
+    primary_monitor_waybar_cfg, aux_monitor_waybar_cfg = waybar(monitor_map)
+    out.append(create_shell_variable("prim_waybar_persistent_workspaces", primary_monitor_waybar_cfg))
+
+    if len(aux_monitors) > 0:
+        out.append(create_shell_variable("aux_waybar_persistent_workspaces", aux_monitor_waybar_cfg))
+
+        out.append("echo -e '[' > ~/.config/waybar/config")
+        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "{}" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config""".format(primary_monitor))
+        out.append("echo -e ',' >> ~/.config/waybar/config")
+        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ {} ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config""".format('"' + '" ,"'.join(aux_monitors) + '"'))
+        out.append("echo -e ']' >> ~/.config/waybar/config")
+    else:
+        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces" ~/.config/waybar/primary_conf_template > ~/.config/waybar/config""".format(primary_monitor))
 
     return out
