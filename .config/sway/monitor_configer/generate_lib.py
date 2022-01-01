@@ -213,6 +213,6 @@ EOF
         out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ {} ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config""".format('"' + '" ,"'.join(aux_monitors) + '"'))
         out.append("echo -e ']' >> ~/.config/waybar/config")
     else:
-        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces" ~/.config/waybar/primary_conf_template > ~/.config/waybar/config""".format(primary_monitor))
+        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "{}" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config""".format(primary_monitor))
 
     return out

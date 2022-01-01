@@ -508,7 +508,7 @@ prim_waybar_persistent_workspaces=$(cat << EOF
 EOF
 )
 
-jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces" ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
+jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "HDMI-A-1" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
 
     assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
 
