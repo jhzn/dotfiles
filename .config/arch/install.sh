@@ -19,27 +19,27 @@ OG_USER="$1"
 #setup done, now we can do what we want to do
 
 #desktop
-pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmux firefox transmission-gtk brightnessctl
+pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmux \
+	firefox transmission-gtk brightnessctl network-manager-applet
 
 #hardens firefox a bit
 cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json
 
 #xorg
-pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
-	xdg-utils xorg-setxkbmap xorg-xinit xf86-input-libinput \
-	network-manager-applet arandr \
-	xclip redshift picom unclutter feh deepin-screenshot wmname
+# pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
+	# xdg-utils xorg-setxkbmap xorg-xinit xf86-input-libinput \
+	 # arandr xclip redshift picom unclutter feh deepin-screenshot wmname
 
 # wayland
 pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wofi
 
-echo "Setting up custom X11 conf.."
-if ! "/home/$OG_USER/.config/arch/X11.sh" ; then
-	echo ".. It went bad"
-	exit 1
-else
-	echo ".. It went ok"
-fi
+# echo "Setting up custom X11 conf.."
+# if ! "/home/$OG_USER/.config/arch/X11.sh" ; then
+	# echo ".. It went bad"
+	# exit 1
+# else
+	# echo ".. It went ok"
+# fi
 
 #networking
 pacman -S --needed iptables-nft
@@ -93,7 +93,7 @@ cp ~/.config/arch/*.hook /etc/pacman.d/hooks/
 
 #install AUR packages
 echo "Installing AUR packages.."
-#Here we need to run yay as a non-root user because yay wants that
+#Here we need to run paru as a non-root user because paru wants that
 if ! sudo -u "$OG_USER" ~/.config/arch/aur.sh; then
 	echo ".. It went bad"
 	exit 1

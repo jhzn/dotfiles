@@ -1,15 +1,17 @@
 #!/bin/sh
 
-if [ ! $(which yay) ]; then
-	echo "AUR helper, yay not found, installing.."
-	#Need golang to build
-	#https://github.com/Jguer/yay
-	git clone https://aur.archlinux.org/yay.git
-	cd yay
+if [ ! $(which paru) ]; then
+	echo "AUR helper, paru not found, installing.."
+	#Need rust to build
+	git clone https://aur.archlinux.org/paru.git
+	cd paru
 	makepkg -si
-	echo "AUR helper, yay is now installed!"
+	echo "AUR helper, paru is now installed!"
 fi
 
-yay -S --needed polybar tealdeer-git lf vscodium-bin \
-	nerd-fonts-jetbrains-mono zeal rofi-greenclip passff-host \
-	sirula-git clipman wdisplays notify-send.sh autotiling-rs-git wlogout pandoc-bin wlsunset
+# xorg stuff
+# paru -S --needed polybar rofi-greenclip
+
+paru -S --needed tealdeer-git lf vscodium-bin \
+	nerd-fonts-jetbrains-mono zeal \
+	clipman wdisplays notify-send.sh autotiling-rs-git wlogout pandoc-bin wlsunset
