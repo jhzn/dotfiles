@@ -12,10 +12,6 @@ let g:go_def_mapping_enabled = 0
 let g:go_doc_keywordprg_enabled = 0
 let g:go_textobj_enabled = 0
 
-"Flashy transparency :) make sure you terminal follows along
-hi Normal guibg=NONE ctermbg=NONE
-let g:onedark_transparent_background = 1 " By default it is 0
-colorscheme onedark
 
 " ChadTree
 " Need a function because CHADtree doesnt work great when using:

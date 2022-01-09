@@ -25,21 +25,8 @@ pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmu
 #hardens firefox a bit
 cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json
 
-#xorg
-# pacman -S --needed xorg bspwm sxhkd rofi dunst xss-lock xsecurelock \
-	# xdg-utils xorg-setxkbmap xorg-xinit xf86-input-libinput \
-	 # arandr xclip redshift picom unclutter feh deepin-screenshot wmname
-
 # wayland
 pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wofi
-
-# echo "Setting up custom X11 conf.."
-# if ! "/home/$OG_USER/.config/arch/X11.sh" ; then
-	# echo ".. It went bad"
-	# exit 1
-# else
-	# echo ".. It went ok"
-# fi
 
 #networking
 pacman -S --needed iptables-nft

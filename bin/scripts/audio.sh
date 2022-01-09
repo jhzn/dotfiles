@@ -1,10 +1,13 @@
 #!/bin/bash
 
+
 # This script is used as a general audio handling script for volume/play-pause etc.
 # It uses existing notification support to display to the end user the status and therefore does not need any additional widget program.
 # It only supports wayland atm, with mako as the notification daemon
 
 # Depends on https://github.com/vlevit/notify-send.sh being available in PATH
+
+source ~/.config/dotfiles/bash_strict_mode.sh
 
 #we have to do some additional work because mako does not support using "notify-send" with "hints" that is, with "-h" flag.
 #we therefore have to use notify-send.sh which adds support for outputting notification ID and replacing current notifications

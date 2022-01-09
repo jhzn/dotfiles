@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 source ~/.config/dotfiles/bash_strict_mode.sh
 
@@ -48,5 +48,6 @@ if [[ "$backend" == "ddcutil" ]]; then
 
 	for d in $displays;do
 		ddcutil --display="$d" setvcp 10 "$new_level"
+		echo "Setting display $d to brightness of $new_level%"
 	done
 fi
