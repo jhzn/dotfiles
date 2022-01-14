@@ -20,7 +20,6 @@ end
 vim.o.completeopt = "menu,menuone,noselect"
 
 -- Setup nvim-cmp.
-local cmp = require'cmp'
 local lsp_symbols = {
 	Text = "   (Text) ",
 	Method = "   (Method)",
@@ -55,7 +54,7 @@ local has_words_before = function()
 end
 
 local luasnip = require("luasnip")
-
+local cmp = require('cmp')
 require("snippets")
 
 
@@ -106,7 +105,7 @@ cmp.setup({
 		['<C-Space>'] = cmp.mapping.complete(),
 		['<C-e>'] = cmp.mapping.close(),
 		['<CR>'] = cmp.mapping.confirm({
-		behavior = cmp.ConfirmBehavior.Insert,
+			behavior = cmp.ConfirmBehavior.Insert,
 			select  = true,
 		}),
 	},
@@ -138,41 +137,42 @@ cmp.setup.cmdline(':', {
 
 
 local go_lsp_conf = function()
-	-- Goimports = function(timeout_ms)
-		-- local context = { only = { "source.organizeImports" } }
-		-- vim.validate { context = { context, "t", true } }
+	Goimports = function(timeout_ms)
+		local context = { only = { "source.organizeImports" } }
+		vim.validate { context = { context, "t", true } }
 
-		-- local params = vim.lsp.util.make_range_params()
-		-- params.context = context
+		local params = vim.lsp.util.make_range_params()
+		params.context = context
 
-		-- -- See the implementation of the textDocument/codeAction callback
-		-- -- (lua/vim/lsp/handler.lua) for how to do this properly.
-		-- local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-		-- if not result or next(result) == nil then return end
-		-- local actions = result[1].result
-		-- if not actions then return end
-		-- local action = actions[1]
+		-- See the implementation of the textDocument/codeAction callback
+		-- (lua/vim/lsp/handler.lua) for how to do this properly.
+		local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+		if not result or next(result) == nil then return end
+		local actions = result[1].result
+		if not actions then return end
+		local action = actions[1]
 
-		-- -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
-		-- -- is a CodeAction, it can have either an edit, a command or both. Edits
-		-- -- should be executed first.
-		-- if action.edit or type(action.command) == "table" then
-			-- if action.edit then
-				-- vim.lsp.util.apply_workspace_edit(action.edit)
-			-- end
-			-- if type(action.command) == "table" then
-				-- vim.lsp.buf.execute_command(action.command)
-			-- end
-		-- else
-			-- vim.lsp.buf.execute_command(action)
-		-- end
-	-- end
-		-- -- autocmd BufWritePre *.go lua Goimports(1000)
-			-- Setup autoformatting on save
-	vim.api.nvim_exec([[
+		-- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+		-- is a CodeAction, it can have either an edit, a command or both. Edits
+		-- should be executed first.
+		if action.edit or type(action.command) == "table" then
+			if action.edit then
+				vim.lsp.util.apply_workspace_edit(action.edit)
+			end
+			if type(action.command) == "table" then
+				vim.lsp.buf.execute_command(action.command)
+			end
+		else
+			vim.lsp.buf.execute_command(action)
+		end
+	end
+
+	vim.cmd([[ autocmd BufWritePre *.go lua Goimports(1000) ]])
+	-- Setup autoformatting on save
+	vim.cmd([[
 		autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 500)
 		autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 500)
-		]], false)
+		]])
 end
 
 
@@ -224,7 +224,7 @@ local on_attach = function(client, bufnr)
 	end
 
 	if client.name == "efm" then
-				-- Setup autoformatting on save
+		-- Setup autoformatting on save
 		vim.api.nvim_exec([[
 			autocmd BufWritePre *.ts lua vim.lsp.buf.formatting_sync(nil, 2000)
 			autocmd BufWritePre *.tsx lua vim.lsp.buf.formatting_sync(nil, 2000)

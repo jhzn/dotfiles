@@ -1,9 +1,9 @@
 import math
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Generator
 import models
 
 
-def divide_chunks(list: List[int], count: int) -> List[int]:
+def divide_chunks(list: List[int], count: int) -> Generator[List[int], None, None]:
     for i in range(0, len(list), count):
         yield list[i:i + count]
 
@@ -92,12 +92,12 @@ def arrange_workspacess(monitor_map: models.MonitorMap) -> List[str]:
         for workspace in monitor.assigned_workspaces:
             out.append(
                 f"swaymsg \"workspace {workspace} output {monitor.variable_name}; workspace number {workspace}; move workspace to {monitor.variable_name}\"")
-    # focuses workspace 1 after script has run
-    out.append('swaymsg "workspace number 1"')
+    # This makes it so that the first workspace on each monitor is focused
+    out.reverse()
     return out
 
 
-def waybar(monitor_map: models.MonitorMap) -> Tuple[List[str], List[str]]:
+def waybar_monitors(monitor_map: models.MonitorMap) -> Tuple[List[str], List[str]]:
     out_primary_monitor = []
     out_aux_monitor = []
     for monitor_name, monitor in monitor_map.items():
@@ -108,6 +108,48 @@ def waybar(monitor_map: models.MonitorMap) -> Tuple[List[str], List[str]]:
                 out_aux_monitor.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
 
     return (out_primary_monitor, out_aux_monitor)
+
+
+def create_shell_variable(name: str, value: List[str]) -> str:
+    return """{}=$(cat << EOF
+{{
+{}
+}}
+EOF
+)
+""".format(name, "\n".join(value))
+
+
+def waybar(monitor_map: models.MonitorMap) -> List[str]:
+
+    # Now we setup things for waybar
+    # I want Waybar to one type of bar layout for the primary monitor and another for the non-primary monitors(called aux monitors in the script)
+    # We have ~/.config/waybar/primary_conf_template and ~/.config/waybar/aux_conf_template which are templates to create our final waybar config file
+    primary_monitor_waybar_cfg, aux_monitor_waybar_cfg = waybar_monitors(monitor_map)
+
+    primary_mon_var = ""
+    aux_mon_vars = []
+    for monitor_name, monitor in monitor_map.items():
+        if monitor.is_primary:
+            primary_mon_var = monitor.variable_name
+            continue
+        aux_mon_vars.append(monitor.variable_name)
+
+    out = []
+    out.append(create_shell_variable("prim_waybar_persistent_workspaces", primary_monitor_waybar_cfg))
+
+    if len(aux_mon_vars) > 0:
+        out.append(create_shell_variable("aux_waybar_persistent_workspaces", aux_monitor_waybar_cfg))
+
+        out.append("echo -e '[' > ~/.config/waybar/config")
+        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"{}"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config""".format(primary_mon_var))
+        out.append("echo -e ',' >> ~/.config/waybar/config")
+        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"{}"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config""".format('"\'","\'"'.join(aux_mon_vars)))
+        out.append("echo -e ']' >> ~/.config/waybar/config")
+    else:
+        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"{}"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config""".format(primary_mon_var))
+
+    return out
 
 
 def create_monitor_map(sway_outputs: List[models.Swayoutput], primary_monitor: str) -> models.MonitorMap:
@@ -175,11 +217,6 @@ def generate(sway_outputs: List[models.Swayoutput], primary_monitor_number: int)
     primary_monitor = monitor_names[primary_monitor_number - 1]
     monitor_map = create_monitor_map(sway_outputs, primary_monitor)
 
-    aux_monitors = []
-    for m in sway_outputs:
-        if m.name is not primary_monitor and m.active:
-            aux_monitors.append(m.name)
-
     out = []
     out.append("#!/bin/bash\n")
     out.append("\n".join(monitor_assignments(monitor_map, primary_monitor)))
@@ -188,31 +225,6 @@ def generate(sway_outputs: List[models.Swayoutput], primary_monitor_number: int)
     out.append("")
     out.append("\n".join(conf_outputs(sway_outputs, monitor_map)))
     out.append("")
-
-    def create_shell_variable(name: str, value: List[str]) -> str:
-        return """{}=$(cat << EOF
-{{
-{}
-}}
-EOF
-)
-""".format(name, "\n".join(value))
-
-    # Now we setup things for waybar
-    # I want Waybar to 1 type of bar layout for the primary monitor and another for the non-primary monitors(called aux monitors in the script)
-    # We have ~/.config/waybar/primary_conf_template and ~/.config/waybar/aux_conf_template which are templates to create our final waybar config file
-    primary_monitor_waybar_cfg, aux_monitor_waybar_cfg = waybar(monitor_map)
-    out.append(create_shell_variable("prim_waybar_persistent_workspaces", primary_monitor_waybar_cfg))
-
-    if len(aux_monitors) > 0:
-        out.append(create_shell_variable("aux_waybar_persistent_workspaces", aux_monitor_waybar_cfg))
-
-        out.append("echo -e '[' > ~/.config/waybar/config")
-        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "{}" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config""".format(primary_monitor))
-        out.append("echo -e ',' >> ~/.config/waybar/config")
-        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ {} ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config""".format('"' + '" ,"'.join(aux_monitors) + '"'))
-        out.append("echo -e ']' >> ~/.config/waybar/config")
-    else:
-        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "{}" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config""".format(primary_monitor))
+    out.append("\n".join(waybar(monitor_map)))
 
     return out

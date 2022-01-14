@@ -46,7 +46,7 @@ fun! UnsetQFControlVariable()
 	end
 endfun
 
-nnoremap <C-q> :call ToggleQFList(1)<CR>
+nnoremap <A-q> :call ToggleQFList(1)<CR>
 nnoremap <A-j> :cnext<CR>zz
 nnoremap <A-k> :cprev<CR>zz
 

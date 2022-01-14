@@ -18,20 +18,33 @@ let g:go_textobj_enabled = 0
 " autocmd Filetype CHADTree
 function CTree()
 	CHADopen
-	" Removes listchars from CHADTree
-	" sleep 100m
-	" setlocal nolist
-	" redraw
+	" " Removes listchars from CHADTree
+	" " sleep 100m
+	" " setlocal nolist
+	" " redraw
 endfunction
 nnoremap ,m <cmd>call CTree()<cr>
-" Cursor is always in the middle of the screen
-" Must be done with a autocmd because ChadTree behaves weird otherwise
-autocmd BufEnter * setlocal scrolloff=999
+autocmd BufEnter * if (&filetype == "chadtree") | setlocal nolist
 "close vim if chadtree is the last window
 autocmd BufEnter * if (winnr("$") == 1 && &filetype == "chadtree") | q | endif
-autocmd BufEnter * if (&filetype == "chadtree") | setlocal nolist
 
+" Nvim-tree.lua
+" nnoremap ,m :NvimTreeToggle<CR>
+" nnoremap ,n :NvimTreeRefresh<CR>
+" " autocmd BufEnter * :NvimTreeFindFile
+" function Banan()
+	" if (&filetype != "NvimTree")
+		" NvimTreeFindFile
+	" endif
+" endfunction
+"autocmd BufEnter * call Banan()
 
+" Cursor is always in the middle of the screen
+" Must be done with a autocmd because ChadTree behaves weird otherwise
+" autocmd BufEnter * setlocal scrolloff=999
+set scrolloff=999
+
+" Useful when for example wanting to run dlv with a break point
 function FileAndLineNumber()
 	let file_and_line_number=execute('echo @% . ":" . line(".")')
 	"remove \n from begining of string
@@ -97,10 +110,12 @@ vnoremap <leader>d "_d
 "replace with Register 0
 map <leader>rr ciw<C-r>0<Esc>
 
+map <C-q> :x<CR>
+
 nnoremap <leader>d "_d
 
 " Source: https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text
-xnoremap <silent> p p:let @+=@0<CR>:let @"=@0<CR>
+vnoremap p "_dP
 
 "Clears highlighted
 nnoremap <ESC> :noh<CR>
@@ -155,6 +170,10 @@ nnoremap <c-s> :w<CR>
 inoremap <c-s> <Esc>:w<CR>
 " visual mode: escape to normal and save
 vnoremap <c-s> <Esc>:w<CR>
+
+" ability to insert newline. Should work without shortcut, but something is
+" affecting it. TODO What is?
+inoremap <CR> <CR>
 
 " Some sweet macros!
 " PHP

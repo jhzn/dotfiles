@@ -2,18 +2,18 @@
 #These are sourced by the shell process
 
 #Useful when you've cd'ed into a symlink to get the real path
-function fix_cwd { cd $(pwd -P); }
+fix_cwd() { cd $(pwd -P); }
 
 #Generate a password
-function gen_pass {
+gen_pass() {
 	head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '';
 }
 
-function gen_uuid {
+gen_uuid() {
 	cat /proc/sys/kernel/random/uuid
 }
 
-function base64_encoded_to_png {
+base64_encoded_to_png() {
 	[ -z "$1" ] && echo "No input received" && return
 
 	echo $1 | sed -e 's#data:image/png;base64,##' | \
@@ -21,7 +21,7 @@ function base64_encoded_to_png {
 	echo "Created file named out.png";
 }
 
-function json_pretty {
+json_pretty() {
 	#xp is an alias to paste from clipboard
 	xp | jq;
 }
@@ -36,7 +36,7 @@ dc-restart(){
 
 #colorize "go test" output to make it easier to parse for the eyes
 #Example "go test | go_test_color"
-function go_test_color {
+go_test_color() {
 	awk '{
 		sub("FAIL","\033[31mFAIL\033[0m", $0); # Prints it in RED
 		sub("ERROR","\033[31mERROR\033[0m", $0); # Prints it in RED
@@ -52,6 +52,16 @@ function go_test_color {
 			$0);
 		print
 	}'
+}
+
+echo_and_run() {
+	echo "Running:" "$@"
+	eval $(printf '%q ' "$@") < /dev/tty
+}
+
+gotest() {
+	echo "Running: time go test -race -count=1 -v $@ | go_test_color\n"
+	time go test -race -count=1 -v $@ | go_test_color
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)

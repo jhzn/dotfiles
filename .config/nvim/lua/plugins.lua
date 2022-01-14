@@ -21,7 +21,7 @@ return require('packer').startup(function(use)
 			]])
 			require('onedark').setup {
 				-- Main options --
-				style = 'dark', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+				style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
 				transparent = true,  -- Show/hide background
 				term_colors = true, -- Change terminal color as per the selected theme style
 				ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
@@ -96,7 +96,7 @@ return require('packer').startup(function(use)
 					enable = true,              -- false will disable the whole extension
 					--disable = { "c", "rust" },  -- list of language that will be disabled
 				},
-				incremental_selection = { enable = true, keymaps = { init_selection = '<CR>', scope_incremental = '<CR>', node_incremental = '<TAB>', node_decremental = '<S-TAB>', }, },
+				-- incremental_selection = { enable = true, keymaps = { init_selection = '<CR>', scope_incremental = '<CR>', node_incremental = '<TAB>', node_decremental = '<S-TAB>', }, },
 				rainbow = {
 					enable = true,
 					-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
@@ -133,14 +133,14 @@ return require('packer').startup(function(use)
 	-- GO stuff
 	-- not needed anymore?
 	-- GoCoverage, snippets are used
-	use {
-		'fatih/vim-go',
-		config = function()
-			vim.g.go_def_mapping_enabled = 0
-			vim.g.go_doc_keywordprg_enabled = 0
-			vim.g.go_textobj_enabled = 0
-		end,
-	}
+	-- use {
+		-- 'fatih/vim-go',
+		-- config = function()
+			-- vim.g.go_def_mapping_enabled = 0
+			-- vim.g.go_doc_keywordprg_enabled = 0
+			-- vim.g.go_textobj_enabled = 0
+		-- end,
+	-- }
 	use "kyoh86/vim-go-coverage"
 	use 'buoto/gotests-vim'
 

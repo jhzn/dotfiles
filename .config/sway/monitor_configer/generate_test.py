@@ -428,17 +428,16 @@ def test_generate():
 MON_0=DP-1 #This is your 'primary' monitor
 MON_1=HDMI-A-1
 
-swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
-swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0"
-swaymsg "workspace 3 output $MON_0; workspace number 3; move workspace to $MON_0"
-swaymsg "workspace 4 output $MON_0; workspace number 4; move workspace to $MON_0"
-swaymsg "workspace 5 output $MON_0; workspace number 5; move workspace to $MON_0"
-swaymsg "workspace 6 output $MON_1; workspace number 6; move workspace to $MON_1"
-swaymsg "workspace 7 output $MON_1; workspace number 7; move workspace to $MON_1"
-swaymsg "workspace 8 output $MON_1; workspace number 8; move workspace to $MON_1"
-swaymsg "workspace 9 output $MON_1; workspace number 9; move workspace to $MON_1"
 swaymsg "workspace 10 output $MON_1; workspace number 10; move workspace to $MON_1"
-swaymsg "workspace number 1"
+swaymsg "workspace 9 output $MON_1; workspace number 9; move workspace to $MON_1"
+swaymsg "workspace 8 output $MON_1; workspace number 8; move workspace to $MON_1"
+swaymsg "workspace 7 output $MON_1; workspace number 7; move workspace to $MON_1"
+swaymsg "workspace 6 output $MON_1; workspace number 6; move workspace to $MON_1"
+swaymsg "workspace 5 output $MON_0; workspace number 5; move workspace to $MON_0"
+swaymsg "workspace 4 output $MON_0; workspace number 4; move workspace to $MON_0"
+swaymsg "workspace 3 output $MON_0; workspace number 3; move workspace to $MON_0"
+swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0"
+swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
 
 swaymsg output $MON_1 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 0 enable
 swaymsg output $MON_0 res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
@@ -466,9 +465,9 @@ EOF
 )
 
 echo -e '[' > ~/.config/waybar/config
-jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "DP-1" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config
+jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config
 echo -e ',' >> ~/.config/waybar/config
-jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "HDMI-A-1" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
+jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
 echo -e ']' >> ~/.config/waybar/config"""
 
     assert got == expected, "test with 2 monitors failed\n{}".format(diff_strings(expected, got))
@@ -478,17 +477,16 @@ echo -e ']' >> ~/.config/waybar/config"""
 
 MON_0=HDMI-A-1 #This is your 'primary' monitor
 
-swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
-swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0"
-swaymsg "workspace 3 output $MON_0; workspace number 3; move workspace to $MON_0"
-swaymsg "workspace 4 output $MON_0; workspace number 4; move workspace to $MON_0"
-swaymsg "workspace 5 output $MON_0; workspace number 5; move workspace to $MON_0"
-swaymsg "workspace 6 output $MON_0; workspace number 6; move workspace to $MON_0"
-swaymsg "workspace 7 output $MON_0; workspace number 7; move workspace to $MON_0"
-swaymsg "workspace 8 output $MON_0; workspace number 8; move workspace to $MON_0"
-swaymsg "workspace 9 output $MON_0; workspace number 9; move workspace to $MON_0"
 swaymsg "workspace 10 output $MON_0; workspace number 10; move workspace to $MON_0"
-swaymsg "workspace number 1"
+swaymsg "workspace 9 output $MON_0; workspace number 9; move workspace to $MON_0"
+swaymsg "workspace 8 output $MON_0; workspace number 8; move workspace to $MON_0"
+swaymsg "workspace 7 output $MON_0; workspace number 7; move workspace to $MON_0"
+swaymsg "workspace 6 output $MON_0; workspace number 6; move workspace to $MON_0"
+swaymsg "workspace 5 output $MON_0; workspace number 5; move workspace to $MON_0"
+swaymsg "workspace 4 output $MON_0; workspace number 4; move workspace to $MON_0"
+swaymsg "workspace 3 output $MON_0; workspace number 3; move workspace to $MON_0"
+swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0"
+swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
 
 swaymsg output $MON_0 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 0 enable
 
@@ -508,8 +506,7 @@ prim_waybar_persistent_workspaces=$(cat << EOF
 EOF
 )
 
-jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "HDMI-A-1" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
-
+jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config"""
     assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
 
 

@@ -11,7 +11,7 @@ swaybin="/bin/sway"
 # Open STDOUT as $LOG_FILE file for write.
 # Redirect STDERR to STDOUT
 # Filter out garbage from xwayland
-exec &>> >(sed '/Errors from xkbcomp are not fatal to the X server/d; /The XKEYBOARD keymap compiler (xkbcomp) reports:/d; /Unsupported maximum keycode/d; /X11 cannot support keycodes above 255/d' | tee -a ~/sway.log)
+exec &>> >(sed '/Errors from xkbcomp are not fatal to the X server/d; /The XKEYBOARD keymap compiler (xkbcomp) reports:/d; /Unsupported maximum keycode/d; /X11 cannot support keycodes above 255/d; /Could not resolve keysym/d' | tee -a ~/sway.log)
 # exec 1> ~/sway.log
 # exec 2> ~/sway.error
 

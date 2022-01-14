@@ -35,7 +35,8 @@ end
 g.mapleader = " "
 
 -- Make VIM and X11 share the came clipboard
-opt.clipboard:append { "unnamed", "unnamedplus" }
+-- opt.clipboard:append { "unnamed", "unnamedplus" }
+opt.clipboard:append { "unnamedplus" }
 vim.o.completeopt = "menuone,noselect"
 
 opt.guicursor = 'a:blinkon100' -- make cursor blink
@@ -73,22 +74,22 @@ opt.undofile = true
 map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
 map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
 
--- TODO port to lua
-cmd'source ~/.config/nvim/legacy.vim'
 
 -- Detect filetype and set it, if vim cant figure it out
-detect_ft = function()
+Detect_ft = function()
 	if vim.bo.filetype == "" then
-		set_ft = function(t) vim.opt.filetype=t end
+		local set_ft = function(t) vim.opt.filetype=t end
 		local cmd = 'file --mime-type ' .. vim.api.nvim_buf_get_name(0) ..  " | awk '{printf \"%s\", $2}'"
 		local mime = vim.fn.system({"sh", "-c", cmd})
 		if mime == "application/json" then set_ft("json") end
 		if mime == "application/xml" then set_ft("xml") end
 	end
 end
+cmd [[ autocmd BufEnter * lua Detect_ft() ]]
 
-vim.cmd [[ autocmd BufEnter * lua detect_ft() ]]
+cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
 
-vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
-
+-- TODO port to lua
+cmd'source ~/.config/nvim/legacy.vim'
 require('lsp')
+require('treesitting')
