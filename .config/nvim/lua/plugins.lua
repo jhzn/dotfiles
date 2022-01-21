@@ -94,9 +94,8 @@ return require('packer').startup(function(use)
 				--ignore_install = { "javascript" }, -- List of parsers to ignore installing
 				highlight = {
 					enable = true,              -- false will disable the whole extension
-					--disable = { "c", "rust" },  -- list of language that will be disabled
+					additional_vim_regex_highlighting = true -- Makes highliting only comment when using :set spell
 				},
-				-- incremental_selection = { enable = true, keymaps = { init_selection = '<CR>', scope_incremental = '<CR>', node_incremental = '<TAB>', node_decremental = '<S-TAB>', }, },
 				rainbow = {
 					enable = true,
 					-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for

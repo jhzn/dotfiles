@@ -202,7 +202,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
 	buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
 	-- buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-	buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+	-- buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 	buf_set_keymap('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 	buf_set_keymap('n', '<C-space>', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
@@ -348,7 +348,9 @@ local function merge(a, b)
 	end
 	return a
 end
-local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm", "bicep", "yamlls" }
+-- local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm", "bicep", "yamlls" }
+local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm"  }
+-- local servers = {}
 for _, server in pairs(servers) do
 	local config = make_config()
 	-- language specific config
@@ -366,18 +368,18 @@ for _, server in pairs(servers) do
 			},
 		}
 	end
-	if server == "yamlls" then
-		config.settings = {
-			yaml = {
-				-- ... -- other settings. note this overrides the lspconfig defaults.
-				schemas = {
-					["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-					-- ["../path/relative/to/file.yml"] = "/.github/workflows/*",
-					-- ["/path/from/root/of/project"] = "/.github/workflows/*",
-				},
-			},
-		}
-	end
+	-- if server == "yamlls" then
+		-- config.settings = {
+			-- yaml = {
+				-- -- ... -- other settings. note this overrides the lspconfig defaults.
+				-- schemas = {
+					-- ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+					-- -- ["../path/relative/to/file.yml"] = "/.github/workflows/*",
+					-- -- ["/path/from/root/of/project"] = "/.github/workflows/*",
+				-- },
+			-- },
+		-- }
+	-- end
 	if server == "sumneko_lua" then
 		config = merge(config, lua_lsp_conf())
 		-- put(config)
@@ -393,10 +395,31 @@ for _, server in pairs(servers) do
 				languages = format_config,
 			}
 	end
-	if server == "bicep" then
-		config = merge(config, {
-			cmd = { "dotnet", vim.env.HOME .. "/bin/bicep-langserver/Bicep.LangServer.dll" },
-		})
-	end
+	-- if server == "bicep" then
+		-- config = merge(config, {
+			-- cmd = { "dotnet", vim.env.HOME .. "/bin/bicep-langserver/Bicep.LangServer.dll" },
+		-- })
+	-- end
 	lspconfig[server].setup(config)
+end
+
+-- Set location list with the errors of a file
+do
+	local method = "textDocument/publishDiagnostics"
+	local default_handler = vim.lsp.handlers[method]
+	vim.lsp.handlers[method] = function(err, method, result, client_id, bufnr, config)
+		default_handler(err, method, result, client_id, bufnr, config)
+		local diagnostics = vim.lsp.diagnostic.get_all()
+		local qflist = {}
+		for buffer_number, diagnostic in pairs(diagnostics) do
+			for _, d in ipairs(diagnostic) do
+				d.bufnr = buffer_number
+				d.lnum = d.range.start.line + 1
+				d.col = d.range.start.character + 1
+				d.text = d.message
+				table.insert(qflist, d)
+			end
+		end
+		vim.lsp.util.set_loclist(qflist)
+	end
 end

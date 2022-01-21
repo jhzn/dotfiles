@@ -26,5 +26,12 @@
 			"fmt.Errorf(\"${1:Not implemented yet}\")"
 		],
 		"description": "Log output to console"
+	},
+	"JSON print variable": {
+		"prefix": "pjson",
+		"body": [
+			"jsonbanan, _ := json.MarshalIndent($1, \"\",\"\\t\")\nfmt.Printf(\"BANAN JSON print var \\n%s\\n\", jsonbanan)"
+		],
+		"description": "Print JSON to console"
 	}
 }

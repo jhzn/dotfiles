@@ -60,8 +60,8 @@ echo_and_run() {
 }
 
 gotest() {
-	echo "Running: time go test -race -count=1 -v $@ | go_test_color\n"
-	time go test -race -count=1 -v $@ | go_test_color
+	echo "Running: time go test -failfast -race -count=1 -v $@ | go_test_color"
+	time go test -failfast -race -count=1 -v $@ | go_test_color
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)

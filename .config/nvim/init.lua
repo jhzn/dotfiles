@@ -43,7 +43,9 @@ opt.guicursor = 'a:blinkon100' -- make cursor blink
 -- Splits open at the bottom and right, which is non-retarded, unlike vim defaults :)
 opt.splitbelow = true
 opt.splitright = true
-opt.spelllang = { 'en_gb', 'sv' }
+-- opt.spelllang = { 'en_gb', 'sv' } -- TODO figure out some way to toggle between different languages
+opt.spelllang = { 'en_gb'}
+opt.spell = true
 opt.tabstop = 4      -- To match the sample file
 opt.expandtab = false    -- Use tabs, not spaces
 opt.wrap = false  --dont wrap lines visually
