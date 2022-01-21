@@ -19,10 +19,10 @@ fun! ToggleQFList(global)
 endfun
 
 " Populate locallist with lsp diagnostics automatically
-augroup locallist
-	autocmd!
-	autocmd User LspDiagnosticsChanged :lua vim.lsp.diagnostic.set_loclist({open_loclist = false})
-augroup END
+" augroup locallist
+	" autocmd!
+	" autocmd User LspDiagnosticsChanged :lua vim.lsp.diagnostic.set_loclist({open_loclist = false})
+" augroup END
 
 augroup fixlist
 	autocmd!

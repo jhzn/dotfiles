@@ -62,6 +62,24 @@ return require('packer').startup(function(use)
 		end,
 	}
 
+
+	-- use {
+		-- 'kyazdani42/nvim-tree.lua',
+		-- requires = {
+			-- 'kyazdani42/nvim-web-devicons', -- optional, for file icon
+		-- },
+		-- -- config = function() require("file-explorer") end
+		-- config = function()
+			-- require("file-explorer")
+			-- require'nvim-tree'.setup {
+				-- update_focused_file = {
+					-- enable      = true,
+					-- -- update_cwd  = false,
+					-- -- ignore_list = {}
+				-- },
+			-- }
+		-- end
+	-- }
 	use {
 		"ms-jpq/chadtree",
 		branch = "chad",
