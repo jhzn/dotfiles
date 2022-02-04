@@ -1,6 +1,12 @@
 -- Bootstrap packer if it is not installed on the host
 local execute = vim.api.nvim_command
 local fn = vim.fn
+local g = vim.g      -- a table to access global variables
+local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
+local opt = vim.opt
+local HOME = vim.env.HOME
+
+-- Bootstrap packer
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
 	fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
@@ -19,11 +25,6 @@ function _G.put(...)
 end
 
 require('plugins')
-
-local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
-local g = vim.g      -- a table to access global variables
-local opt = vim.opt  -- to set options
-local HOME = vim.env.HOME
 
 -- easier to create mappings with this
 local function map(mode, lhs, rhs, opts)

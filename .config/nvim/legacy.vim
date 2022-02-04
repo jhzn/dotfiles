@@ -8,41 +8,14 @@ autocmd BufWritePre * %s/\s\+$//e
 
 syntax on
 
-let g:go_def_mapping_enabled = 0
-let g:go_doc_keywordprg_enabled = 0
-let g:go_textobj_enabled = 0
-
-
-" ChadTree
-" Need a function because CHADtree doesnt work great when using:
-" autocmd Filetype CHADTree
-function CTree()
-	CHADopen
-	" " Removes listchars from CHADTree
-	" " sleep 100m
-	" " setlocal nolist
-	" " redraw
-endfunction
-nnoremap ,m <cmd>call CTree()<cr>
-autocmd BufEnter * if (&filetype == "chadtree") | setlocal nolist
-"close vim if chadtree is the last window
-autocmd BufEnter * if (winnr("$") == 1 && &filetype == "chadtree") | q | endif
-
 " Nvim-tree.lua
-" nnoremap ,m :NvimTreeToggle<CR>
-" nnoremap ,n :NvimTreeRefresh<CR>
-" " autocmd BufEnter * :NvimTreeFindFile
-" function Banan()
-	" if (&filetype != "NvimTree")
-		" NvimTreeFindFile
-	" endif
-" endfunction
-"autocmd BufEnter * call Banan()
+nnoremap ,m :NvimTreeToggle<CR>
+nnoremap ,n :NvimTreeRefresh<CR>
 
 " Cursor is always in the middle of the screen
 " Must be done with a autocmd because ChadTree behaves weird otherwise
-" autocmd BufEnter * setlocal scrolloff=999
-set scrolloff=999
+autocmd BufEnter * setlocal scrolloff=999
+" set scrolloff=999
 
 " Useful when for example wanting to run dlv with a break point
 function FileAndLineNumber()
@@ -52,14 +25,18 @@ function FileAndLineNumber()
 endfunction
 nnoremap <leader>y <cmd>call FileAndLineNumber()<CR>
 
-" Telescope
+" Telescope(fuzzy picker for file names and file content)
 nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>
 nnoremap <A-p> <cmd>lua require('telescope.builtin').find_files({no_ignore=true, hidden=true})<cr>
 nnoremap <C-F> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
 
-" Nerdcommenter
+" Spectre(project wide search and replace)
+nnoremap <A-f> :lua require('spectre').open()<CR>
+nnoremap <A-r> :lua require('spectre.actions').run_replace()<CR>
+
+" Nerdcommenter (commenter plugin)
 " remove default mappings
 let g:NERDCreateDefaultMappings = 0
 " Add spaces after comment delimiters by default
@@ -69,12 +46,9 @@ let g:NERDCompactSexyComs = 1
 nnoremap <C-c> :call nerdcommenter#Comment("n", "Toggle")<CR>
 vnoremap <C-c> :call nerdcommenter#Comment("n", "Toggle")<CR>
 
-" LSP completion
-"inoremap <silent><expr> <C-Space> compe#complete()
-"inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-"inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-"inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-"inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+" Hop plugin
+nnoremap <A-h> :lua require'hop'.hint_words()<cr>
+vnoremap <A-h> :lua require'hop'.hint_words()<cr>
 
 "Disable Ex mode
 map Q <nop>
@@ -186,6 +160,9 @@ let @p='/\<array\>(dema%r]``ar['
 autocmd FileType help nnoremap <buffer> gd <C-]>
 autocmd FileType man nnoremap <buffer> gd <C-]>
 
+" Search literally!
+" use :Search .....
+com! -nargs=1 Search :let @/='\V'.escape(<q-args>, '\\')| normal! n
 
 " TODO these are not perfect, find a better solution
 " Return indent (all whitespace at start of a line), converted from

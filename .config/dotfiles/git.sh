@@ -23,6 +23,11 @@ git config --global alias.sw "switch"
 git config --global alias.wip "! git add . && git commit -m 'WIP' && git push"
 git config --global alias.authors "shortlog -s -n -e"
 git config --global alias.filehist "log -p"
+git config --global alias.filerev '! git show'
+# git config --global alias.filerev '! GIT_PAGER="nvim -c set ft="$(echo -e "go\npython" | fzf)"" git show'
+
+# find most changed file
+# git log --name-status --pretty=format: | sed 's!.*/!!' | grep ".go" | cut --fields=2- | sort | uniq --count | sort --numeric-sort --reverse
 
 git config --global core.editor "nvim"
 git config --global core.eol "lf"

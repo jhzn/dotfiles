@@ -201,15 +201,10 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>zz', opts)
 	buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
 	buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-	-- buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-	-- buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 	buf_set_keymap('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 	buf_set_keymap('n', '<C-space>', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 	buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-	--buf_set_keymap('n', '<space>j', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-	--buf_set_keymap('n', '<space>k', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-	--buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
 	if client.name == "tsserver" then
 		client.resolved_capabilities.document_formatting = false
@@ -245,7 +240,67 @@ local on_attach = function(client, bufnr)
 			]], false)
 	end
 
-	vim.cmd 'source ~/.config/nvim/quickfix.vim'
+	-- vim.cmd 'source ~/.config/nvim/quickfix.vim'
+	require("quickfix")
+
+
+	-- -- Set location list with the errors of a file
+	-- local method = "textDocument/publishDiagnostics"
+	-- local default_handler = vim.lsp.handlers[method]
+	-- vim.lsp.handlers[method] = function(err, method, result, client_id, bufnr, config)
+		-- print("banan")
+		-- default_handler(err, method, result, client_id, bufnr, config)
+		-- local diagnostics = vim.diagnostic.get(nil, { severity = vim.diagnostic.severity.ERROR})
+		-- local qflist = {}
+		-- for buffer_number, diagnostic in pairs(diagnostics) do
+			-- for _, d in ipairs(diagnostic) do
+				-- d.bufnr = buffer_number
+				-- d.lnum = d.range.start.line + 1
+				-- d.col = d.range.start.character + 1
+				-- d.text = d.message
+				-- table.insert(qflist, d)
+			-- end
+		-- end
+		-- vim.diagnostic.setloclist(qflist,'r')
+	-- end
+
+	-- local severity_map = { "E", "W", "I", "H" }
+
+	-- local parse_diagnostics = function(diagnostics)
+		-- if not diagnostics then return end
+		-- local items = {}
+		-- for _, diagnostic in ipairs(diagnostics) do
+			-- local fname = vim.fn.bufname()
+			-- local position = diagnostic.range.start
+			-- local severity = diagnostic.severity
+			-- table.insert(items, {
+				-- filename = fname,
+				-- type = severity_map[severity],
+				-- lnum = position.line + 1,
+				-- col = position.character + 1,
+				-- text = diagnostic.message:gsub("\r", ""):gsub("\n", " ")
+			-- })
+		-- end
+		-- return items
+	-- end
+
+	-- -- redefine unwanted callbacks to be an empty function
+	-- -- notice that I keep `vim.lsp.util.buf_diagnostics_underline()`
+	-- vim.lsp.util.buf_diagnostics_signs = function() return end
+	-- vim.lsp.util.buf_diagnostics_virtual_text = function() return end
+
+	-- update_diagnostics_loclist = function()
+		-- bufnr = vim.fn.bufnr()
+		-- diagnostics = vim.lsp.util.diagnostics_by_buf[bufnr]
+
+		-- items = parse_diagnostics(diagnostics)
+		-- vim.diagnostic.setloclist(items)
+
+		-- -- vim.api.nvim_command("doautocmd QuickFixCmdPost")
+	-- end
+
+	-- vim.api.nvim_command [[autocmd! User LspDiagnosticsChanged lua update_diagnostics_loclist()]]
+
 
 		--vim.lsp.diagnostic.on_publish_diagnostics, {
 			--vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -364,7 +419,7 @@ for _, server in pairs(servers) do
 					shadow = true,
 					unusedwrite = true,
 				},
-				-- staticcheck = true,
+				staticcheck = true,
 			},
 		}
 	end
@@ -403,23 +458,3 @@ for _, server in pairs(servers) do
 	lspconfig[server].setup(config)
 end
 
--- Set location list with the errors of a file
-do
-	local method = "textDocument/publishDiagnostics"
-	local default_handler = vim.lsp.handlers[method]
-	vim.lsp.handlers[method] = function(err, method, result, client_id, bufnr, config)
-		default_handler(err, method, result, client_id, bufnr, config)
-		local diagnostics = vim.lsp.diagnostic.get_all()
-		local qflist = {}
-		for buffer_number, diagnostic in pairs(diagnostics) do
-			for _, d in ipairs(diagnostic) do
-				d.bufnr = buffer_number
-				d.lnum = d.range.start.line + 1
-				d.col = d.range.start.character + 1
-				d.text = d.message
-				table.insert(qflist, d)
-			end
-		end
-		vim.lsp.util.set_loclist(qflist)
-	end
-end

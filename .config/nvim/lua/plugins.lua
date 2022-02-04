@@ -2,10 +2,10 @@ vim.cmd [[packadd packer.nvim]]
 vim.cmd [[packadd vimball]]
 
 vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
+	augroup packer_user_config
+		autocmd!
+		autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+	augroup end
 ]])
 
 return require('packer').startup(function(use)
@@ -19,6 +19,7 @@ return require('packer').startup(function(use)
 			vim.cmd([[
 				hi Normal guibg=NONE ctermbg=NONE
 			]])
+			-- local c = require('onedark.colors')
 			require('onedark').setup {
 				-- Main options --
 				style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
@@ -42,7 +43,10 @@ return require('packer').startup(function(use)
 
 				-- Custom Highlights --
 				colors = {}, -- Override default colors
-				highlights = {}, -- Override highlight groups
+				highlights = {
+					CursorLine = {bg = '$bg0'},
+					Visual = {bg = '$bg0'},
+				}, -- Override highlight groups
 
 				-- Plugins Config --
 				diagnostics = {
@@ -63,28 +67,22 @@ return require('packer').startup(function(use)
 	}
 
 
-	-- use {
-		-- 'kyazdani42/nvim-tree.lua',
-		-- requires = {
-			-- 'kyazdani42/nvim-web-devicons', -- optional, for file icon
-		-- },
-		-- -- config = function() require("file-explorer") end
-		-- config = function()
-			-- require("file-explorer")
-			-- require'nvim-tree'.setup {
-				-- update_focused_file = {
-					-- enable      = true,
-					-- -- update_cwd  = false,
-					-- -- ignore_list = {}
-				-- },
-			-- }
-		-- end
-	-- }
 	use {
-		"ms-jpq/chadtree",
-		branch = "chad",
-		run = ":CHADdeps",
+		'kyazdani42/nvim-tree.lua',
+		requires = {
+			'kyazdani42/nvim-web-devicons', -- optional, for file icon
+		},
+		-- config = function() require("file-explorer") end
+		config = function()
+			require("file-explorer")
+		end
 	}
+
+	-- use {
+		-- "ms-jpq/chadtree",
+		-- branch = "chad",
+		-- run = ":CHADdeps",
+	-- }
 
 	use {
 		'nvim-telescope/telescope.nvim',
@@ -95,10 +93,19 @@ return require('packer').startup(function(use)
 	}
 
 	use {
-		'glepnir/galaxyline.nvim',
+		'NTBBloodbath/galaxyline.nvim',
 		branch = 'main',
 		config = function() require'galaxylineconf' end,
 		requires = {'kyazdani42/nvim-web-devicons', opt = true}
+	}
+
+	use {
+		'phaazon/hop.nvim',
+		branch = 'v1', -- optional but strongly recommended
+		config = function()
+			-- you can configure Hop the way you like here; see :h hop-config
+			require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+		end
 	}
 
 	use "p00f/nvim-ts-rainbow"
@@ -128,6 +135,18 @@ return require('packer').startup(function(use)
 
 	-- LSP stuff
 	use 'neovim/nvim-lspconfig'
+	-- Lua
+	-- use {
+		-- "folke/trouble.nvim",
+		-- requires = "kyazdani42/nvim-web-devicons",
+		-- config = function()
+			-- require("trouble").setup {
+				-- -- your configuration comes here
+				-- -- or leave it empty to use the default settings
+				-- -- refer to the configuration section below
+			-- }
+		-- end
+	-- }
 
 	-- conf for nvim-cmp
 	use 'hrsh7th/cmp-nvim-lsp'

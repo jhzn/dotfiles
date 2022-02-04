@@ -8,7 +8,12 @@ set $up k
 set $right l
 set $term alacritty
 
+# Replaces wofi for app launcher
 for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10
+
+# Replaces wofi for clipman etc
+for_window [app_id="^picker$"] floating enable, sticky enable, resize set 80 ppt 35 ppt, border pixel 10
+
 set $menu exec $term -o font.size=16 --class=launcher -e sway-launcher-desktop
 
 
@@ -99,7 +104,7 @@ input type:keyboard {
 	bindsym ctrl+alt+l exec powermenu.sh
 
 	#clipboard history
-	bindsym $mod+e exec clipman pick --tool=wofi
+	bindsym $mod+e exec $term -o font.size=14 --class=picker -e zsh -c "clipman pick --tool=CUSTOM --tool-args=fzf"
 
 	#password manager
 	bindsym $mod+w exec wofipass.sh
