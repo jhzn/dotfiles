@@ -9,6 +9,7 @@ git config --global user.name "Johan Håkansson"
 
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date-order"
 git config --global alias.st "status"
+git config --global alias.s "status"
 git config --global alias.cm "commit -m"
 git config --global alias.c "commit -v"
 git config --global alias.ca "commit -v -a"
