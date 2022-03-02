@@ -192,6 +192,9 @@ def create_monitor_map(sway_outputs: List[models.Swayoutput], primary_monitor: s
 def parse_sway_output(sway_outputs) -> List[models.Swayoutput]:
     out = []
     for monitor in sway_outputs:
+        if monitor.get("current_mode") is None:
+            continue
+
         out.append(models.Swayoutput(
             name=monitor["name"],
             model=monitor["model"],

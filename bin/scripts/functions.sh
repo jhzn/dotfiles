@@ -25,6 +25,7 @@ json_pretty() {
 	#xp is an alias to paste from clipboard
 	xp | jq;
 }
+alias jsonp=json_pretty
 # restart services in docker-compose
 dc-restart(){
 	[ -z $@ ] && echo "No containers args given" && return 1
@@ -32,6 +33,13 @@ dc-restart(){
 	docker-compose rm -f -v $@
 	docker-compose create --force-recreate $@
 	docker-compose start $@
+}
+
+# returns the default app for opening a certain file
+mime() {
+	[ -z "$1" ] && echo "Missing file arg" && return 1
+	[ ! -e "$1" ] && echo "Given arg does not match anything existing" && return 2
+	xdg-mime query default $(xdg-mime query filetype "$1")
 }
 
 #colorize "go test" output to make it easier to parse for the eyes
@@ -59,9 +67,10 @@ echo_and_run() {
 	eval $(printf '%q ' "$@") < /dev/tty
 }
 
+# TODO figure out how dedup the "echo" and the actual command, very prone to errors
 gotest() {
 	echo "Running: time go test -cover -failfast -race -count=1 -v $@ | go_test_color"
-	time go test -cover -failfast -race -count=1 -v $@ | go_test_color
+	time go test -cover -failfast -race -count=1 -v $@ | go_test_color; notify-send --urgency=low -t 3000 TEST Done!
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)

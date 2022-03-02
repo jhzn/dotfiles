@@ -30,7 +30,7 @@ alias g="git"
 
 alias v="nvim"
 alias vim="nvim"
-alias j='nvim -c "set ft=json"'
+alias j='nvim -R -c "set ft=json"'
 alias pager="nvim -R"
 
 alias grep='grep --colour=auto'

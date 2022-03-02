@@ -50,8 +50,9 @@ vnoremap <C-c> :call nerdcommenter#Comment("n", "Toggle")<CR>
 nnoremap <A-h> :lua require'hop'.hint_words()<cr>
 vnoremap <A-h> :lua require'hop'.hint_words()<cr>
 
-"Disable Ex mode
-map Q <nop>
+"Disable command history
+nnoremap q: <nop>
+nnoremap Q <nop>
 
 " Disable Arrow keys in Normal mode
 map <up> <nop>
@@ -161,8 +162,8 @@ autocmd FileType help nnoremap <buffer> gd <C-]>
 autocmd FileType man nnoremap <buffer> gd <C-]>
 
 " Search literally!
-" use :Search .....
-com! -nargs=1 Search :let @/='\V'.escape(<q-args>, '\\')| normal! n
+" use :S .....
+com! -nargs=1 S :let @/='\V'.escape(<q-args>, '\\')| normal! n
 
 " TODO these are not perfect, find a better solution
 " Return indent (all whitespace at start of a line), converted from
