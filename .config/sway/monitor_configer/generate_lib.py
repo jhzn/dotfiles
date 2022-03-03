@@ -66,11 +66,9 @@ def conf_outputs(sway_outputs: List[models.Swayoutput], monitor_variables_map: m
         if not monitor.active:
             out.append("swaymsg output {} disable".format(monitor.name))
         else:
-            mon = monitor_variables_map[monitor.name]
-
-            command = [
+            out.append(" ".join([
                 "swaymsg output {}".format(
-                    mon.variable_name),
+                    monitor_variables_map[monitor.name].variable_name),
                 "res {}x{}@{}hz".format(
                     monitor.current_mode.width,
                     monitor.current_mode.height,
@@ -80,8 +78,7 @@ def conf_outputs(sway_outputs: List[models.Swayoutput], monitor_variables_map: m
                 "transform {}".format(monitor.transform),
                 "pos {} {}".format(monitor.rect.x, monitor.rect.y),
                 "enable"
-            ]
-            out.append(" ".join(command))
+            ]))
 
     return out
 
@@ -120,34 +117,42 @@ EOF
 """.format(name, "\n".join(value))
 
 
+WAYBAR_CONFIG_FILE = "~/.config/waybar/config"
+WAYBAR_PRIMARY_TEMPLATE = "~/.config/waybar/primary_conf_template"
+WAYBAR_AUX_TEMPLATE = "~/.config/waybar/aux_conf_template"
+
+
 def waybar(monitor_map: models.MonitorMap) -> List[str]:
 
     # Now we setup things for waybar
-    # I want Waybar to one type of bar layout for the primary monitor and another for the non-primary monitors(called aux monitors in the script)
+    # I want Waybar to have one type of bar layout for the primary monitor and another for the non-primary monitors(called aux monitors in the script)
     # We have ~/.config/waybar/primary_conf_template and ~/.config/waybar/aux_conf_template which are templates to create our final waybar config file
     primary_monitor_waybar_cfg, aux_monitor_waybar_cfg = waybar_monitors(monitor_map)
 
-    primary_mon_var = ""
+    primary_mon_variable = ""
     aux_mon_vars = []
     for monitor_name, monitor in monitor_map.items():
         if monitor.is_primary:
-            primary_mon_var = monitor.variable_name
+            primary_mon_variable = monitor.variable_name
             continue
         aux_mon_vars.append(monitor.variable_name)
 
     out = []
-    out.append(create_shell_variable("prim_waybar_persistent_workspaces", primary_monitor_waybar_cfg))
+    primary_workspaces_var_name = "prim_waybar_persistent_workspaces"
+    out.append(create_shell_variable(primary_workspaces_var_name, primary_monitor_waybar_cfg))
 
     if len(aux_mon_vars) > 0:
-        out.append(create_shell_variable("aux_waybar_persistent_workspaces", aux_monitor_waybar_cfg))
+        aux_workspaces_var_name = "aux_waybar_persistent_workspaces"
+        out.append(create_shell_variable(aux_workspaces_var_name, aux_monitor_waybar_cfg))
 
-        out.append("echo -e '[' > ~/.config/waybar/config")
-        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"{}"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config""".format(primary_mon_var))
-        out.append("echo -e ',' >> ~/.config/waybar/config")
-        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"{}"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config""".format('"\'","\'"'.join(aux_mon_vars)))
-        out.append("echo -e ']' >> ~/.config/waybar/config")
+        out.append(
+            f"""echo -e '[' > {WAYBAR_CONFIG_FILE}
+jq '."sway\/workspaces".persistent_workspaces = '"${primary_workspaces_var_name}"' | ."output"= [ "'"{primary_mon_variable}"'" ]' {WAYBAR_PRIMARY_TEMPLATE} >> {WAYBAR_CONFIG_FILE}
+echo -e ',' >> {WAYBAR_CONFIG_FILE}
+jq '."sway\/workspaces".persistent_workspaces = '"${aux_workspaces_var_name}"' | ."output"= [ "'"{'''"'","'"'''.join(aux_mon_vars)}"'" ]' {WAYBAR_AUX_TEMPLATE} >> {WAYBAR_CONFIG_FILE}
+echo -e ']' >> {WAYBAR_CONFIG_FILE}""")
     else:
-        out.append("""jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"{}"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config""".format(primary_mon_var))
+        out.append(f"""jq '."sway\/workspaces".persistent_workspaces = '"${primary_workspaces_var_name}"' | ."output"= [ "'"{primary_mon_variable}"'" ]' {WAYBAR_PRIMARY_TEMPLATE} >> {WAYBAR_CONFIG_FILE}""")
 
     return out
 

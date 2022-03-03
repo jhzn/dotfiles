@@ -16,7 +16,7 @@ MonitorMap = Dict[str, Monitor]
 class Current_mode(NamedTuple):
     width: int
     height: int
-    refresh: int
+    refresh: float
 
 
 class Rect(NamedTuple):
@@ -32,7 +32,7 @@ class Swayoutput(NamedTuple):
     active: bool
     current_mode: Current_mode
     # Example 2
-    scale: int
+    scale: float
     # Like normal
     transform: str
     rect: Rect
