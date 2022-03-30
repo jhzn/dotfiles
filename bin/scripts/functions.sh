@@ -93,28 +93,21 @@ wv() {
 	mpv --ytdl-format="$YT_DL_FORMAT" "$1"
 }
 
-# Better branch creation ergonmics when using worktrees
+# Better branch creation ergonmics when using git worktrees
 create_branch() {
-
 	if [ ! -f "HEAD" ]; then
 		echo "You're not in the root of the bare repo. Aborting..."; return
 	fi
 
 	branch_name="$1"
-
 	if [ -z "$branch_name" ]; then
 		echo "Missing first arg for branch name. Aborting..."; return
 	fi
 
 	git branch "$branch_name"
-
 	mkdir -p code
-
 	dir="code/${branch_name##*/}"
-
 	git worktree add "$dir" "$branch_name"
-
 	echo "Created dir: $dir"
-
 	cd "$dir"
 }
