@@ -9,9 +9,12 @@ def diff_strings(expected: str, got: str) -> str:
 
 
 mock_data = [
-    models.Swayoutput(name='eDP-1', model='0x08DA', active=True, current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0), scale=1.0, transform='normal', rect=models.Rect(x=0, y=1080)),
-    models.Swayoutput(name='HDMI-A-1', model='U2777B', active=True, current_mode=models.Current_mode(width=3840, height=2160, refresh=59.997), scale=1.5, transform='normal', rect=models.Rect(x=1920, y=0)),
-    models.Swayoutput(name='DP-8', model='BenQ GL2240', active=True, current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0), scale=1.0, transform='normal', rect=models.Rect(x=0, y=0))
+    models.Swayoutput(name='eDP-1', model='0x08DA', current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0), scale=1.0, transform='normal', rect=models.Rect(x=0, y=1080)),
+    models.Swayoutput(name='HDMI-A-1', model='U2777B', current_mode=models.Current_mode(width=3840, height=2160, refresh=59.997), scale=1.5, transform='normal', rect=models.Rect(x=1920, y=0)),
+    models.Swayoutput(name='DP-8', model='BenQ GL2240', current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0), scale=1.0, transform='normal', rect=models.Rect(x=0, y=0))
+]
+disabled_mock_data = [
+    models.SwayoutputDisabled(name='DP-1', model='SOMETHING'),
 ]
 mock_swaymsg_data = json.loads("""[
   {
@@ -525,9 +528,38 @@ mock_swaymsg_data = json.loads("""[
     "max_render_time": 0,
     "focused": false,
     "subpixel_hinting": "unknown"
+  },
+  {
+    "type": "output",
+    "name": "DP-1",
+    "active": false,
+    "dpms": false,
+    "primary": false,
+    "make": "Unknown",
+    "model": "SOMETHING",
+    "serial": "0x00000000",
+    "modes": [
+      {
+        "width": 1920,
+        "height": 1080,
+        "refresh": 40000
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "refresh": 60000
+      }
+    ],
+    "current_workspace": null,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "percent": null
   }
 ]""")
-
 
 def test_get_workspaces_divided_per_monitor():
     got = lib.get_workspaces_divided_per_monitor(2)
@@ -541,12 +573,13 @@ def test_get_workspaces_divided_per_monitor():
 
 
 def test_parse_sway_output():
-    got = lib.parse_sway_output(mock_swaymsg_data)
+    (got, got_disabled) = lib.parse_sway_output(mock_swaymsg_data)
     assert got == mock_data, f"failed got: {got}"
+    assert got_disabled == disabled_mock_data, f"failed got: {got}"
 
 
 def test_generate():
-    got = "\n".join(lib.generate([mock_data[0]], 0))
+    got = "\n".join(lib.generate([mock_data[0]], disabled_mock_data, 0))
     expected = """#!/bin/bash
 
 MON_0=eDP-1 #This is your 'primary' monitor
@@ -563,6 +596,7 @@ swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0
 swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
 
 swaymsg output $MON_0 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
+swaymsg output DP-1 disable
 
 prim_waybar_persistent_workspaces=$(cat << EOF
 {
@@ -583,7 +617,7 @@ EOF
 jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config"""
     assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
 
-    got = "\n".join(lib.generate(mock_data[0:2], 2))
+    got = "\n".join(lib.generate(mock_data[0:2], disabled_mock_data, 2))
     expected = """#!/bin/bash
 
 MON_0=HDMI-A-1 #This is your 'primary' monitor
@@ -602,6 +636,7 @@ swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0
 
 swaymsg output $MON_1 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
 swaymsg output $MON_0 res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
+swaymsg output DP-1 disable
 
 prim_waybar_persistent_workspaces=$(cat << EOF
 {
@@ -633,7 +668,7 @@ echo -e ']' >> ~/.config/waybar/config"""
 
     assert got == expected, "test with 2 monitors failed\n{}".format(diff_strings(expected, got))
 
-    got = "\n".join(lib.generate(mock_data, 2))
+    got = "\n".join(lib.generate(mock_data,[], 2))
     expected = """#!/bin/bash
 
 MON_0=HDMI-A-1 #This is your 'primary' monitor

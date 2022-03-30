@@ -29,10 +29,13 @@ class Rect(NamedTuple):
 class Swayoutput(NamedTuple):
     name: str
     model: str
-    active: bool
     current_mode: Current_mode
     # Example 2
     scale: float
     # Like normal
     transform: str
     rect: Rect
+
+class SwayoutputDisabled(NamedTuple):
+    name: str
+    model: str

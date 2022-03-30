@@ -423,6 +423,20 @@ for _, server in pairs(servers) do
 			},
 		}
 	end
+	if server == "pylsp" then
+		config.settings = {
+			pylsp = {
+				-- configurationSources = {'flake8'},
+				plugins = {
+					pylint = { enabled = false },
+					flake8 = { enabled = true },
+					pycodestyle = { enabled = false },
+					pyflakes = { enabled = false },
+					mccabe = { enabled = false },
+				}
+			}
+		}
+	end
 	-- if server == "yamlls" then
 		-- config.settings = {
 			-- yaml = {

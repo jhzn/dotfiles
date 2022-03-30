@@ -1,5 +1,5 @@
 import math
-from typing import List, Dict, Tuple, Generator
+from typing import List, Dict, Tuple, Generator, Sequence
 import models
 
 
@@ -8,14 +8,14 @@ def divide_chunks(list: List[int], count: int) -> Generator[List[int], None, Non
         yield list[i:i + count]
 
 
-def get_monitor_names(sway_outputs: List[models.Swayoutput]) -> List[str]:
+def get_monitor_names(sway_outputs: Sequence[models.Swayoutput]) -> List[str]:
     monitor_names = []
     for monitor in sway_outputs:
         monitor_names.append(monitor.name)
     return monitor_names
 
 
-def list_monitors(sway_outputs: List[models.Swayoutput]):
+def list_monitors(sway_outputs: Sequence[models.Swayoutput]):
     print("Use the number of your desired primary monitor as argument to the --generate command\n")
     counter = 1
     for monitor in sway_outputs:
@@ -60,25 +60,25 @@ def monitor_assignments(monitors_map: models.MonitorMap, primary_monitor: str) -
     return out
 
 
-def conf_outputs(sway_outputs: List[models.Swayoutput], monitor_variables_map: models.MonitorMap) -> List[str]:
+def conf_outputs(sway_outputs: Sequence[models.Swayoutput], sway_outputs_disabled: Sequence[models.SwayoutputDisabled], monitor_variables_map: models.MonitorMap) -> List[str]:
     out = []
     for monitor in sway_outputs:
-        if not monitor.active:
-            out.append("swaymsg output {} disable".format(monitor.name))
-        else:
-            out.append(" ".join([
-                "swaymsg output {}".format(
-                    monitor_variables_map[monitor.name].variable_name),
-                "res {}x{}@{}hz".format(
-                    monitor.current_mode.width,
-                    monitor.current_mode.height,
-                    monitor.current_mode.refresh,
-                ),
-                "scale {}".format(monitor.scale),
-                "transform {}".format(monitor.transform),
-                "pos {} {}".format(monitor.rect.x, monitor.rect.y),
-                "enable"
-            ]))
+        out.append(" ".join([
+            "swaymsg output {}".format(
+                monitor_variables_map[monitor.name].variable_name),
+            "res {}x{}@{}hz".format(
+                monitor.current_mode.width,
+                monitor.current_mode.height,
+                monitor.current_mode.refresh,
+            ),
+            "scale {}".format(monitor.scale),
+            "transform {}".format(monitor.transform),
+            "pos {} {}".format(monitor.rect.x, monitor.rect.y),
+            "enable"
+        ]))
+
+    for m in sway_outputs_disabled:
+        out.append("swaymsg output {} disable".format(m.name))
 
     return out
 
@@ -157,19 +157,13 @@ echo -e ']' >> {WAYBAR_CONFIG_FILE}""")
     return out
 
 
-def create_monitor_map(sway_outputs: List[models.Swayoutput], primary_monitor: str) -> models.MonitorMap:
+def create_monitor_map(sway_outputs: Sequence[models.Swayoutput], primary_monitor: str) -> models.MonitorMap:
     monitor_names = get_monitor_names(sway_outputs)
-
-    for m in sway_outputs:
-        if not m.active:
-            monitor_names.remove(m.name)
 
     monitor_desktop_chunks = get_workspaces_divided_per_monitor(len(monitor_names))
     monitor_map: Dict[str, models.Monitor] = {}
 
     def assign(output: models.Swayoutput, current_chunk: int):
-        if not monitor.active:
-            return
         monitor_assigned_chunk = monitor_desktop_chunks[current_chunk]
         monitor_map[output.name] = models.Monitor(
             variable_name="$MON_{}".format(current_chunk),
@@ -194,33 +188,37 @@ def create_monitor_map(sway_outputs: List[models.Swayoutput], primary_monitor: s
     return monitor_map
 
 
-def parse_sway_output(sway_outputs) -> List[models.Swayoutput]:
+def parse_sway_output(sway_outputs) -> Tuple[List[models.Swayoutput], List[models.SwayoutputDisabled]]:
     out = []
+    disabled = []
     for monitor in sway_outputs:
-        if monitor.get("current_mode") is None:
-            continue
+        if monitor["active"]:
+            out.append(models.Swayoutput(
+                name=monitor["name"],
+                model=monitor["model"],
+                current_mode=models.Current_mode(
+                    width=monitor["current_mode"]["width"],
+                    height=monitor["current_mode"]["height"],
+                    refresh=monitor["current_mode"]["refresh"] / 1000,
+                ),
+                scale=monitor["scale"],
+                transform=monitor["transform"],
+                rect=models.Rect(
+                    x=monitor["rect"]["x"],
+                    y=monitor["rect"]["y"],
+                )
 
-        out.append(models.Swayoutput(
-            name=monitor["name"],
-            model=monitor["model"],
-            active=monitor["active"],
-            current_mode=models.Current_mode(
-                width=monitor["current_mode"]["width"],
-                height=monitor["current_mode"]["height"],
-                refresh=monitor["current_mode"]["refresh"] / 1000,
-            ),
-            scale=monitor["scale"],
-            transform=monitor["transform"],
-            rect=models.Rect(
-                x=monitor["rect"]["x"],
-                y=monitor["rect"]["y"],
-            )
+            ))
+        else:
+            disabled.append(models.SwayoutputDisabled(
+                name=monitor["name"],
+                model=monitor["model"],
+            ))
 
-        ))
-    return out
+    return (out, disabled)
 
 
-def generate(sway_outputs: List[models.Swayoutput], primary_monitor_number: int) -> List[str]:
+def generate(sway_outputs: Sequence[models.Swayoutput], sway_outputs_disabled: Sequence[models.SwayoutputDisabled], primary_monitor_number: int) -> List[str]:
     monitor_names = get_monitor_names(sway_outputs)
     primary_monitor = monitor_names[primary_monitor_number - 1]
     monitor_map = create_monitor_map(sway_outputs, primary_monitor)
@@ -231,7 +229,7 @@ def generate(sway_outputs: List[models.Swayoutput], primary_monitor_number: int)
     out.append("")
     out.append("\n".join(arrange_workspacess(monitor_map)))
     out.append("")
-    out.append("\n".join(conf_outputs(sway_outputs, monitor_map)))
+    out.append("\n".join(conf_outputs(sway_outputs, sway_outputs_disabled, monitor_map)))
     out.append("")
     out.append("\n".join(waybar(monitor_map)))
 

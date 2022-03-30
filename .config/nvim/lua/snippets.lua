@@ -63,8 +63,14 @@ ls.snippets = {
 		pair("'", "'", neg, even_count),
 		pair('"', '"', neg, even_count),
 		pair("`", "`", neg, even_count),
+	},
+	sh = {
+		s("set", {
+			t("set -euo pipefail")
+		})
 	}
 }
+
 -- ls.autosnippets = {
 	-- all = {
 	-- },

@@ -69,8 +69,12 @@ echo_and_run() {
 
 # TODO figure out how dedup the "echo" and the actual command, very prone to errors
 gotest() {
+	# set -x
 	echo "Running: time go test -cover -failfast -race -count=1 -v $@ | go_test_color"
-	time go test -cover -failfast -race -count=1 -v $@ | go_test_color; notify-send --urgency=low -t 3000 TEST Done!
+	output=$(time go test -cover -failfast -race -count=1 -v $@)
+	result="$?"
+	printf $output | go_test_color
+	notify-send --urgency=low -t 10000 "Test done!" "Result = $([ "$result" -eq 0 ] && echo "👍" || echo "👎")"
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
@@ -87,4 +91,30 @@ tm() {
 #Watch a youtube video
 wv() {
 	mpv --ytdl-format="$YT_DL_FORMAT" "$1"
+}
+
+# Better branch creation ergonmics when using worktrees
+create_branch() {
+
+	if [ ! -f "HEAD" ]; then
+		echo "You're not in the root of the bare repo. Aborting..."; return
+	fi
+
+	branch_name="$1"
+
+	if [ -z "$branch_name" ]; then
+		echo "Missing first arg for branch name. Aborting..."; return
+	fi
+
+	git branch "$branch_name"
+
+	mkdir -p code
+
+	dir="code/${branch_name##*/}"
+
+	git worktree add "$dir" "$branch_name"
+
+	echo "Created dir: $dir"
+
+	cd "$dir"
 }
