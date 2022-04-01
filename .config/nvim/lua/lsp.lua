@@ -173,6 +173,35 @@ local go_lsp_conf = function()
 		autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 500)
 		autocmd BufWritePre *.go.in lua vim.lsp.buf.formatting_sync(nil, 500)
 		]])
+
+
+	-- Implements command to run gotests binary from vim
+	Go_tests = function(all)
+		local cmd = {}
+		local binary = "gotests"
+		if all == true then
+			cmd = {
+				binary,
+				'-w',
+				"-all",
+				vim.api.nvim_buf_get_name(0),
+			}
+		else
+			cmd = {
+				binary,
+				'-w',
+				"-only", string.format("^%s$", require("utils").ts_function_surrounding_cursor()), -- Regex looks like '^MyFunction$'
+				vim.api.nvim_buf_get_name(0), -- Current absolute filename
+			}
+		end
+
+		print(vim.fn.system(cmd))
+	end
+	vim.cmd([[
+		command! GoTest :lua Go_tests(false)
+		command! GoTestAll :lua Go_tests(true)
+	]])
+
 end
 
 
@@ -227,6 +256,11 @@ local on_attach = function(client, bufnr)
 	end
 	if client.name == "gopls" then
 		go_lsp_conf()
+	end
+	if client.name == "pylsp" then
+		vim.api.nvim_exec([[
+			autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 2000)
+			]], false)
 	end
 
 	-- Set autocommands conditional on server_capabilities
@@ -397,12 +431,8 @@ local function efm_conf()
 	}
 end
 
-local function merge(a, b)
-	if type(a) == 'table' and type(b) == 'table' then
-		for k,v in pairs(b) do if type(v)=='table' and type(a[k] or false)=='table' then merge(a[k],v) else a[k]=v end end
-	end
-	return a
-end
+local utils = require("utils")
+
 -- local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm", "bicep", "yamlls" }
 local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm"  }
 -- local servers = {}
@@ -450,7 +480,7 @@ for _, server in pairs(servers) do
 		-- }
 	-- end
 	if server == "sumneko_lua" then
-		config = merge(config, lua_lsp_conf())
+		config = utils.merge(config, lua_lsp_conf())
 		-- put(config)
 	end
 	if server == "efm" then

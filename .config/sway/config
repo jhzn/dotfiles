@@ -6,7 +6,7 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term alacritty
+set $term $TERMINAL
 
 # Replaces wofi for app launcher
 for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10
@@ -60,6 +60,7 @@ input type:touchpad {
 	middle_emulation enabled
 	accel_profile "flat" # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
 }
+
 input type:mouse {
 	accel_profile "flat" # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
 	# pointer_accel 0.5 # set mouse sensitivity (between -1 and 1)
@@ -89,6 +90,8 @@ input type:keyboard {
 
 	# Start your launcher
 	bindsym $mod+space exec $menu
+
+	bindsym $mod+b exec $BROWSER
 
 	# Drag floating windows by holding down $mod and left mouse button.
 	# Resize them with right mouse button + $mod.

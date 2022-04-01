@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Chromium
-GenericName=Web Browser
-Comment=A Web Browser
-Exec=~/bin/chromium

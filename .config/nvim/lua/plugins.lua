@@ -20,7 +20,7 @@ return require('packer').startup(function(use)
 				hi Normal guibg=NONE ctermbg=NONE
 			]])
 			-- local c = require('onedark.colors')
-			require('onedark').setup {
+			local cfg = {
 				-- Main options --
 				style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
 				transparent = true,  -- Show/hide background
@@ -42,7 +42,7 @@ return require('packer').startup(function(use)
 				},
 
 				-- Custom Highlights --
-				colors = {}, -- Override default colors
+				-- colors = {}, -- Override default colors
 				highlights = {
 					CursorLine = {bg = '$bg0'},
 					Visual = {bg = '$bg0'},
@@ -55,9 +55,22 @@ return require('packer').startup(function(use)
 					background = true,    -- use background color for virtual text
 				},
 			}
+			require('onedark').setup(cfg)
 			require('onedark').load()
-			end,
-		}
+		end,
+	}
+
+	use {
+		'NTBBloodbath/galaxyline.nvim',
+		branch = 'main',
+		config = function()
+			-- put(require('onedark.colors'))
+			require'galaxylineconf'
+		end,
+		requires = {'kyazdani42/nvim-web-devicons', opt = true},
+		after = "onedark.nvim",
+	}
+
 
 	use {
 		"windwp/nvim-spectre",
@@ -90,13 +103,6 @@ return require('packer').startup(function(use)
 		config = function()
 			require("telescope_conf")
 		end,
-	}
-
-	use {
-		'NTBBloodbath/galaxyline.nvim',
-		branch = 'main',
-		config = function() require'galaxylineconf' end,
-		requires = {'kyazdani42/nvim-web-devicons', opt = true}
 	}
 
 	use {
@@ -177,8 +183,7 @@ return require('packer').startup(function(use)
 			-- vim.g.go_textobj_enabled = 0
 		-- end,
 	-- }
-	use "kyoh86/vim-go-coverage"
-	use 'buoto/gotests-vim'
+	use { "kyoh86/vim-go-coverage", ft="go" }
 
 	use 'scrooloose/nerdcommenter'
 	use 'tpope/vim-surround'

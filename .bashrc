@@ -4,6 +4,8 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+source ~/.profile
+
 stty -ixon # Disable ctrl-s and ctrl-q in terminals.
 shopt -s autocd #Allows you to cd into directory merely by typing the directory name.
 #disabled CTRL + d in shell, this otherwise sends EOF to the shell
@@ -55,3 +57,4 @@ source /usr/share/bash-completion/bash_completion
 
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh 2> /dev/null)
 export SSH_AUTH_SOCK
+. "$HOME/.cargo/env"
