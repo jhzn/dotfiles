@@ -1,6 +1,11 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+
+src() {
+	[ -f "$1" ] && source "$1"
+}
+
 unset PS1
 
 source ~/.profile
@@ -36,7 +41,7 @@ zstyle ':completion::complete:*' gain-privileges 1
 
 # Basic auto/tab complete:
 autoload -U compinit
-source ~/.config/dotfiles/fzf-tab-completion/zsh/fzf-zsh-completion.sh
+src ~/.config/dotfiles/fzf-tab-completion/zsh/fzf-zsh-completion.sh
 # zstyle ':completion:*:*:*:default' menu yes select search interactive
 # Auto complete with case insenstivity
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
@@ -121,13 +126,13 @@ function sudo() {
 source ~/.bash_aliases
 source ~/bin/scripts/functions.sh
 #Make sure to never add this file to git!
-[ -f ~/.host_specific_settings.sh ] && source ~/.host_specific_settings.sh
-[ -f ~/.cache/tmux_theme ] && source ~/.cache/tmux_theme
+src ~/.host_specific_settings.sh
+src ~/.cache/tmux_theme
 
 
 # begin FZF config
 FZF_DEFAULT_OPTS="--bind 'tab:toggle-down,btab:toggle-up'"
-[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+src /usr/share/fzf/key-bindings.zsh
 #overwrite exinting function to change "fc" to include timestampt as well.
 #TODO make pull request to FZF github repo
 # CTRL-R - Paste the selected command from history into the command line
@@ -146,7 +151,7 @@ fzf-history-widget() {
 	zle reset-prompt
 	return $ret
 }
-[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+src /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -161,14 +166,14 @@ bindkey -s "^o" "lfcd\n"  # bash keybinding
 # Add a space before command to prevent history entry
 bindkey -s "^q" " exit\n"  # exit shell
 
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+src /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [ -z "$SSH_AUTH_SOCK" ]; then
 	eval $(/usr/bin/gnome-keyring-daemon)
 	export SSH_AUTH_SOCK
 fi
 
 
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+src /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 #ZSH_AUTOSUGGEST_COMPLETION_IGNORE="git *"
 bindkey '^ ' autosuggest-accept
@@ -181,20 +186,25 @@ export MANPAGER='nvim +Man!'
 export TIMEFMT=$'\n================\nreal\t%*E\nCPU\t%P\nuser\t%*U\nsystem\t%*S'
 
 #begin prompt config
-function zle-line-init zle-keymap-select {
-	PROMPT=$(purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}" )
-	zle reset-prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
+if command -v purs > /dev/null; then
+	function zle-line-init zle-keymap-select {
+		PROMPT=$(purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}" )
+		zle reset-prompt
+	}
+	zle -N zle-line-init
+	zle -N zle-keymap-select
 
-autoload -Uz add-zsh-hook
+	autoload -Uz add-zsh-hook
 
-function _prompt_purs_precmd() {
-	purs precmd --git-detailed
-}
-add-zsh-hook precmd _prompt_purs_precmd
-
+	function _prompt_purs_precmd() {
+		purs precmd --git-detailed
+	}
+	add-zsh-hook precmd _prompt_purs_precmd
+else
+	autoload -Uz promptinit
+	promptinit
+	prompt elite2
+fi
 # end of prompt config
 #
 
