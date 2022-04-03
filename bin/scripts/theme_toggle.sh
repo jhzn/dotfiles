@@ -3,7 +3,8 @@
 source ~/.config/dotfiles/bash_strict_mode.sh
 
 alacritty_theme() {
-	yq -i '.colors |= load("'$HOME/.config/alacritty/$1.yml'")' ~/.config/alacritty/alacritty.yml
+	touch ~/.config/alacritty/theme.yml
+	cat "$HOME/.config/alacritty/$1.yml" > ~/.config/alacritty/theme.yml
 }
 nvim_theme() {
 	echo 'vim.g.theme_style = "'$1'"' > ~/.config/nvim/lua/theme.lua

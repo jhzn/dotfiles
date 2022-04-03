@@ -1,8 +1,10 @@
+import:
+  - ~/.config/alacritty/theme.yml
+
 font:
   normal:
     # family: JetBrainsMono Nerd Font
     family: Fira code
-
 window:
   opacity: 0.95
 # Key bindings
