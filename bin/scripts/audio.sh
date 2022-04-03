@@ -9,13 +9,13 @@
 
 source ~/.config/dotfiles/bash_strict_mode.sh
 
-#we have to do some additional work because mako does not support using "notify-send" with "hints" that is, with "-h" flag.
-#we therefore have to use notify-send.sh which adds support for outputting notification ID and replacing current notifications
+# We have to do some additional work because mako does not support using "notify-send" with "hints" that is, with "-h" flag.
+# We therefore have to use notify-send.sh which adds support for outputting notification ID and replacing current notifications
 # $1 = Title of notification
 # $2 = Subject of notification
 # $3 = Context of notification. Replace notification which have the same context. This way we can have replacement of notifications instead of new ones.
 # Example, volume up and down replace the same notification.
-#TODO better naming of variables
+# TODO better naming of variables
 notifiy () {
 	readonly notification_context="$3"
 	notification_cached_id=/tmp/audio_notification_"$notification_context"

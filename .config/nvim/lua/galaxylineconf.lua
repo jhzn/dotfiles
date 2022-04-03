@@ -5,21 +5,9 @@ local utils = require("utils")
 
 gl.short_line_list = {" "}
 
-local theme_colors = require('onedark.colors')
-
-local colors = {
-	darker_black = "#1b1f27",
-	black2 = "#252931",
-	one_bg = "#282c34", -- real bg of onedark
-	one_bg2 = "#353b45",
-	one_bg3 = "#30343c",
-	grey_fg = "#565c64",
-	grey_fg2 = "#6f737b",
-	statusline_bg = "#22262e",
-	lightbg = "#2d3139",
-	lightbg2 = "#262a32"
-}
-colors = utils.merge(colors, theme_colors)
+local colors = require('onedark.palette')[vim.g.theme_style]
+colors.statusline_bg = colors.bg0
+colors.lightbg = colors.bg1
 -- put(colors)
 
 local checkwidth = function()
@@ -64,7 +52,7 @@ local left = {
 				local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
 				return "  " .. dir_name .. " "
 			end,
-			highlight = {colors.grey_fg2, colors.lightbg2},
+			highlight = {colors.grey, colors.lightbg2},
 			separator = " ",
 			separator_highlight = {colors.lightbg2, colors.statusline_bg}
 		}
@@ -82,7 +70,7 @@ local left = {
 			provider = "DiffModified",
 			condition = checkwidth,
 			icon = "   ",
-			highlight = {colors.grey_fg2, colors.statusline_bg}
+			highlight = {colors.grey, colors.statusline_bg}
 		}
 	},
 	{
@@ -90,7 +78,7 @@ local left = {
 			provider = "DiffRemove",
 			condition = checkwidth,
 			icon = "  ",
-			highlight = {colors.grey_fg2, colors.statusline_bg}
+			highlight = {colors.grey, colors.statusline_bg}
 		}
 	},
 	{
@@ -154,7 +142,7 @@ local right = {
 					return ""
 				end
 			end,
-			highlight = {colors.grey_fg2, colors.statusline_bg}
+			highlight = {colors.grey, colors.statusline_bg}
 		}
 	},
 	{
@@ -163,7 +151,7 @@ local right = {
 				return " "
 			end,
 			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = {colors.grey_fg2, colors.statusline_bg},
+			highlight = {colors.grey, colors.statusline_bg},
 			separator = " ",
 			separator_highlight = {colors.statusline_bg, colors.statusline_bg}
 		}
@@ -172,7 +160,7 @@ local right = {
 		GitBranch = {
 			provider = "GitBranch",
 			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = {colors.grey_fg2, colors.statusline_bg}
+			highlight = {colors.grey, colors.statusline_bg}
 		}
 	},
 	{

@@ -8,6 +8,11 @@ vim.cmd([[
 	augroup end
 ]])
 
+require("theme")
+if not vim.g.theme_style then
+	vim.g.theme_style = "darker"
+end
+
 return require('packer').startup(function(use)
 	-- Packer can manage itself
 	use 'wbthomason/packer.nvim'
@@ -22,7 +27,7 @@ return require('packer').startup(function(use)
 			-- local c = require('onedark.colors')
 			local cfg = {
 				-- Main options --
-				style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+				style = vim.g.theme_style, -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
 				transparent = true,  -- Show/hide background
 				term_colors = true, -- Change terminal color as per the selected theme style
 				ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden

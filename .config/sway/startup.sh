@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #start keyring daemon
 #https://wiki.archlinux.org/index.php/GNOME/Keyring
@@ -15,6 +15,8 @@ lxpolkit &
 wl-paste -t text --watch clipman store &
 #homemade cron
 ~/bin/scripts/cron.sh &
+[[ $(which kdeconnect-indicator) ]] && kdeconnect-indicator &
+
 
 #inactive windows are more transparent than focuses on
 inactive-windows-transparency.py &

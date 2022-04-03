@@ -121,7 +121,8 @@ function sudo() {
 source ~/.bash_aliases
 source ~/bin/scripts/functions.sh
 #Make sure to never add this file to git!
-source ~/.host_specific_settings.sh
+[ -f ~/.host_specific_settings.sh ] && source ~/.host_specific_settings.sh
+[ -f ~/.cache/tmux_theme ] && source ~/.cache/tmux_theme
 
 
 # begin FZF config

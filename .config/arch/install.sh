@@ -20,7 +20,7 @@ OG_USER="$1"
 
 #desktop
 pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmux \
-	firefox transmission-gtk brightnessctl network-manager-applet
+	firefox transmission-gtk brightnessctl network-manager-applet kdeconnect
 
 #hardens firefox a bit
 cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json
@@ -35,11 +35,15 @@ pacman -S --needed pipewire pipewire-pulse pulsemixer pavucontrol playerctl
 #bluetooth
 pacman -S --needed bluez bluez-utils
 #systemctl enable bluetooth && systemctl start bluetooth
+
 #development tools
-pacman -S --needed python2 python3 go nodejs npm yarn rustup gnu-netcat openssh docker docker-compose git-delta
+pacman -S --needed python3 python-pip go nodejs npm yarn rustup \
+	gnu-netcat openssh docker docker-compose git-delta
 if [ ! "$(which rustc)" ]; then
 	rustup default stable
 fi
+pip3 install requests
+yarn global add bash-language-server
 
 #shell
 pacman -S --needed bash-completion zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting
@@ -56,7 +60,7 @@ pacman -S --needed imv gimp swappy imagemagick
 pacman -S --needed zathura zathura-pdf-poppler sdcv
 #misc
 pacman -S --needed fzf ripgrep jq \
-	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui
+	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui mpv tealdeer
 #security
 pacman -S --needed doas
 #files

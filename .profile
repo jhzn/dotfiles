@@ -32,6 +32,7 @@ PATH=~/bin:$PATH
 PATH=~/bin/scripts:$PATH
 PATH=~/bin/scripts/emoji_finder.sh:$PATH
 PATH=~/bin/scripts/vimv:$PATH
+PATH=/usr/share/sway/scripts:$PATH
 
 export GOPATH=~/go
 export GOBIN=~/go/bin
@@ -40,7 +41,7 @@ PATH=~/.cargo/bin:$PATH
 PATH=~/.yarn/bin:$PATH
 PATH=~/.local/bin:$PATH
 PATH=/usr/lib:$PATH
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # This is the list for lf icons:
 # Taken from:
