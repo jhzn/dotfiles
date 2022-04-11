@@ -17,3 +17,6 @@ colors:
     magenta:    '#a626a4'
     cyan:       '#0184bc'
     white:      '#a0a1a7' # mono-3
+
+window:
+  opacity: 1

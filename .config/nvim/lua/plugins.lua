@@ -8,10 +8,6 @@ vim.cmd([[
 	augroup end
 ]])
 
-require("theme")
-if not vim.g.theme_style then
-	vim.g.theme_style = "darker"
-end
 
 return require('packer').startup(function(use)
 	-- Packer can manage itself
@@ -20,6 +16,12 @@ return require('packer').startup(function(use)
 	use {
 		'navarasu/onedark.nvim',
 		config = function()
+
+			require("theme")
+			if not vim.g.theme_style then
+				vim.g.theme_style = "darker"
+			end
+
 			-- Flashy transparency :) make sure you terminal follows along
 			vim.cmd([[
 				hi Normal guibg=NONE ctermbg=NONE
@@ -46,20 +48,28 @@ return require('packer').startup(function(use)
 					variables = 'none'
 				},
 
-				-- Custom Highlights --
-				-- colors = {}, -- Override default colors
-				highlights = {
-					CursorLine = {bg = '$bg0'},
-					Visual = {bg = '$bg0'},
-				}, -- Override highlight groups
-
 				-- Plugins Config --
 				diagnostics = {
-					darker = true, -- darker colors for diagnostic
 					undercurl = true,   -- use undercurl for diagnostics
 					background = true,    -- use background color for virtual text
 				},
 			}
+			if vim.g.theme_style == "light" then
+				cfg.diagnostics.darker = false
+				cfg.highlights = {
+					CursorLine = {bg = '$bg1'},
+					Visual = {bg = '$bg3'},
+				}
+				vim.o.background = 'light'
+			else
+				cfg.diagnostics.darker = true
+				cfg.highlights = {
+					CursorLine = {bg = '$bg2'},
+					Visual = {bg = '$bg0'},
+				}
+				vim.o.background = 'dark'
+			end
+
 			require('onedark').setup(cfg)
 			require('onedark').load()
 		end,
@@ -95,12 +105,6 @@ return require('packer').startup(function(use)
 			require("file-explorer")
 		end
 	}
-
-	-- use {
-		-- "ms-jpq/chadtree",
-		-- branch = "chad",
-		-- run = ":CHADdeps",
-	-- }
 
 	use {
 		'nvim-telescope/telescope.nvim',
@@ -146,20 +150,8 @@ return require('packer').startup(function(use)
 
 	-- LSP stuff
 	use 'neovim/nvim-lspconfig'
-	-- Lua
-	-- use {
-		-- "folke/trouble.nvim",
-		-- requires = "kyazdani42/nvim-web-devicons",
-		-- config = function()
-			-- require("trouble").setup {
-				-- -- your configuration comes here
-				-- -- or leave it empty to use the default settings
-				-- -- refer to the configuration section below
-			-- }
-		-- end
-	-- }
 
-	-- conf for nvim-cmp
+	-- Config for nvim-cmp
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/cmp-path'
@@ -178,16 +170,6 @@ return require('packer').startup(function(use)
 	}
 
 	-- GO stuff
-	-- not needed anymore?
-	-- GoCoverage, snippets are used
-	-- use {
-		-- 'fatih/vim-go',
-		-- config = function()
-			-- vim.g.go_def_mapping_enabled = 0
-			-- vim.g.go_doc_keywordprg_enabled = 0
-			-- vim.g.go_textobj_enabled = 0
-		-- end,
-	-- }
 	use { "kyoh86/vim-go-coverage", ft="go" }
 
 	use 'scrooloose/nerdcommenter'

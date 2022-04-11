@@ -10,8 +10,7 @@ local HOME = vim.env.HOME
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
 	fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
-	execute 'packadd packer.nvim'
-end
+	execute 'packadd packer.nvim' end
 
 function _G.put(...)
 	local objects = {}
@@ -95,4 +94,3 @@ cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
 -- TODO port to lua
 cmd'source ~/.config/nvim/legacy.vim'
 require('lsp')
-require('treesitting')

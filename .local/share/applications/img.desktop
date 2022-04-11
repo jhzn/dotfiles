@@ -2,3 +2,5 @@
 Type=Application
 Name=Image viewer
 Exec=imv %u
+MimeType=image/gif;image/jpeg;image/jpg;image/png;
+

@@ -67,4 +67,9 @@ function M.ts_function_surrounding_cursor()
     return prev_function_name
 end
 
+function M.file_exists(name)
+   local f = io.open(name, "r")
+   return f ~= nil and io.close(f)
+end
+
 return M

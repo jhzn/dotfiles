@@ -30,8 +30,15 @@
 	"JSON print variable": {
 		"prefix": "pjson",
 		"body": [
-			"jsonbanan, _ := json.MarshalIndent($1, \"\",\"\\t\")\nfmt.Printf(\"BANAN JSON print var \\n%s\\n\", jsonbanan)"
+			"gurkaTempLog, _ := json.MarshalIndent($1, \"\",\"\\t\")\nfmt.Printf(\"gurka \\n%s\\n\", gurkaTempLog)"
 		],
 		"description": "Print JSON to console"
+	},
+	"JSON log variable": {
+		"prefix": "ljson",
+		"body": [
+			"gurkaTempLog, _ := json.MarshalIndent($1, \"\",\"\\t\")\nlog.Infof(\"gurka \\n%s\\n\", gurkaTempLog)"
+		],
+		"description": "Log JSON to console"
 	}
 }

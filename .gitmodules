@@ -1,6 +1,6 @@
 [submodule ".config/tmux/tmux-onedark-theme"]
 	path = .config/tmux/tmux-onedark-theme
-	url = https://github.com/odedlaz/tmux-onedark-theme.git
+	url = https://github.com/jhzn/tmux-onedark-theme.git
 [submodule "bin/scripts/vimv"]
 	path = bin/scripts/vimv
 	url = https://github.com/thameera/vimv

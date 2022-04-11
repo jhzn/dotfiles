@@ -1,3 +1,8 @@
+
+""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""" Autocmds """""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""
+
 " Set custom settings based on file extension
 autocmd FileType dart setlocal shiftwidth=2 softtabstop=2 expandtab
 " Automatically deletes all trailing whitespace on save.
@@ -5,25 +10,106 @@ autocmd BufWritePre * %s/\s\+$//e
 
 " Autosave, doesnt work perfectly with go auto format. TODO fix
 " autocmd InsertLeave * write
+" Cursor is always in the middle of the screen
+" Must be done with a autocmd because ChadTree behaves weird otherwise
+autocmd BufEnter * setlocal scrolloff=999
+" set scrolloff=999
+"
+" Setup easier bindings for help/man pages
+autocmd FileType help nnoremap <buffer> gd <C-]>
+autocmd FileType man nnoremap <buffer> gd <C-]>
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""" Misc stuff """"""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""
 
 syntax on
+
+filetype on "detect files bases on type
+filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
+filetype indent on "maintain indentation
+"
+" Nerdcommenter (commenter plugin)
+" remove default mappings
+let g:NERDCreateDefaultMappings = 0
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+"
+" Some sweet macros!
+" PHP
+"replace PHP array() to []
+let @p='/\<array\>(dema%r]``ar['
+
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""" Commands """""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""
+
+" :W sudo saves the file
+" (useful for handling the permission-denied error)
+command! W w !sudo tee % > /dev/null
+
+" Search literally!
+" use :S .....
+com! -nargs=1 S :let @/='\V'.escape(<q-args>, '\\')| normal! n
+
+" TODO these are not perfect, find a better solution
+" Return indent (all whitespace at start of a line), converted from
+" tabs to spaces if what = 1, or from spaces to tabs otherwise.
+" When converting to tabs, result has no redundant spaces.
+function! Indenting(indent, what, cols)
+	let spccol = repeat(' ', a:cols)
+	let result = substitute(a:indent, spccol, '\t', 'g')
+	let result = substitute(result, ' \+\ze\t', '', 'g')
+	if a:what == 1
+		let result = substitute(result, '\t', spccol, 'g')
+	endif
+	return result
+endfunction
+
+" Convert whitespace used for indenting (before first non-whitespace).
+" what = 0 (convert spaces to tabs), or 1 (convert tabs to spaces).
+" cols = string with number of columns per tab, or empty to use 'tabstop'.
+" The cursor position is restored, but the cursor will be in a different
+" column when the number of characters in the indent of the line is changed.
+function! IndentConvert(line1, line2, what, cols)
+	let savepos = getpos('.')
+	let cols = empty(a:cols) ? &tabstop : a:cols
+	execute a:line1 . ',' . a:line2 . 's/^\s\+/\=Indenting(submatch(0), a:what, cols)/e'
+	call histdel('search', -1)
+	call setpos('.', savepos)
+endfunction
+
+command! -nargs=? -range=% Space2Tab call IndentConvert(<line1>,<line2>,0,<q-args>)
+command! -nargs=? -range=% Tab2Space call IndentConvert(<line1>,<line2>,1,<q-args>)
+command! -nargs=? -range=% RetabIndent call IndentConvert(<line1>,<line2>,&et,<q-args>)
+
+
+
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""" Key mappings """""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""
 
 " Nvim-tree.lua
 nnoremap ,m :NvimTreeToggle<CR>
 nnoremap ,n :NvimTreeRefresh<CR>
 
-" Cursor is always in the middle of the screen
-" Must be done with a autocmd because ChadTree behaves weird otherwise
-autocmd BufEnter * setlocal scrolloff=999
-" set scrolloff=999
-
-" Useful when for example wanting to run dlv with a break point
-function FileAndLineNumber()
-	let file_and_line_number=execute('echo @% . ":" . line(".")')
-	"remove \n from begining of string
-	let @+=substitute(file_and_line_number, "\n", "", "")
-endfunction
-nnoremap <leader>y <cmd>call FileAndLineNumber()<CR>
+" Yarn $file:$line_number
+nnoremap <leader>yl <cmd>lua vim.fn.setreg("+", string.format("%s:%s", vim.api.nvim_buf_get_name(0), vim.fn.line(".")))<CR>
+" Yank '$MyFunctionName^'
+nnoremap <leader>yf <cmd>lua vim.fn.setreg("+", string.format("'^%s$'", require("utils").ts_function_surrounding_cursor()))<cr>
 
 " Telescope(fuzzy picker for file names and file content)
 nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>
@@ -36,13 +122,6 @@ nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
 nnoremap <A-f> :lua require('spectre').open()<CR>
 nnoremap <A-r> :lua require('spectre.actions').run_replace()<CR>
 
-" Nerdcommenter (commenter plugin)
-" remove default mappings
-let g:NERDCreateDefaultMappings = 0
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
 nnoremap <C-c> :call nerdcommenter#Comment("n", "Toggle")<CR>
 vnoremap <C-c> :call nerdcommenter#Comment("n", "Toggle")<CR>
 
@@ -64,10 +143,6 @@ imap <up> <nop>
 imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
-
-filetype on "detect files bases on type
-filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
-filetype indent on "maintain indentation
 
 " Shortcutting split navigation, saving a keypress:
 nnoremap <C-h> <C-w>h
@@ -130,10 +205,6 @@ nnoremap J mzJ`z
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-" :W sudo saves the file
-" (useful for handling the permission-denied error)
-command! W w !sudo tee % > /dev/null
-
 " Maximize a window
 nnoremap <leader>m :tabedit %<CR>
 
@@ -151,47 +222,3 @@ vnoremap <c-s> <Esc>:w<CR>
 " ability to insert newline. Should work without shortcut, but something is
 " affecting it. TODO What is?
 inoremap <CR> <CR>
-
-" Some sweet macros!
-" PHP
-"replace PHP array() to []
-let @p='/\<array\>(dema%r]``ar['
-
-" Setup easier bindings for help/man pages
-autocmd FileType help nnoremap <buffer> gd <C-]>
-autocmd FileType man nnoremap <buffer> gd <C-]>
-
-" Search literally!
-" use :S .....
-com! -nargs=1 S :let @/='\V'.escape(<q-args>, '\\')| normal! n
-
-" TODO these are not perfect, find a better solution
-" Return indent (all whitespace at start of a line), converted from
-" tabs to spaces if what = 1, or from spaces to tabs otherwise.
-" When converting to tabs, result has no redundant spaces.
-function! Indenting(indent, what, cols)
-	let spccol = repeat(' ', a:cols)
-	let result = substitute(a:indent, spccol, '\t', 'g')
-	let result = substitute(result, ' \+\ze\t', '', 'g')
-	if a:what == 1
-		let result = substitute(result, '\t', spccol, 'g')
-	endif
-	return result
-endfunction
-
-" Convert whitespace used for indenting (before first non-whitespace).
-" what = 0 (convert spaces to tabs), or 1 (convert tabs to spaces).
-" cols = string with number of columns per tab, or empty to use 'tabstop'.
-" The cursor position is restored, but the cursor will be in a different
-" column when the number of characters in the indent of the line is changed.
-function! IndentConvert(line1, line2, what, cols)
-	let savepos = getpos('.')
-	let cols = empty(a:cols) ? &tabstop : a:cols
-	execute a:line1 . ',' . a:line2 . 's/^\s\+/\=Indenting(submatch(0), a:what, cols)/e'
-	call histdel('search', -1)
-	call setpos('.', savepos)
-endfunction
-
-command! -nargs=? -range=% Space2Tab call IndentConvert(<line1>,<line2>,0,<q-args>)
-command! -nargs=? -range=% Tab2Space call IndentConvert(<line1>,<line2>,1,<q-args>)
-command! -nargs=? -range=% RetabIndent call IndentConvert(<line1>,<line2>,&et,<q-args>)

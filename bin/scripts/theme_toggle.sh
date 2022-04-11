@@ -22,9 +22,9 @@ tmux_theme() {
 			export onedark_highlights="#dcdcdc"
 			EOF
 		)
-		echo "$cfg" > $theme_file
+		echo "$cfg" > "$theme_file"
 	else
-		> $theme_file
+		echo "unset onedark_background onedark_comment_grey onedark_foreground onedark_highlights" > "$theme_file"
 	fi
 }
 
