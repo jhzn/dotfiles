@@ -17,4 +17,4 @@ cp ~/.config/dotfiles/nvm/default-packages ~/.config/nvm/default-packages
 cd ~/.config/dotfiles/Layan-cursors
 ./install.sh
 
-ln -s ~/.config/chromium-flags.conf ~/.config/brave-flags.conf
+ln -sf ~/.config/chromium-flags.conf ~/.config/brave-flags.conf

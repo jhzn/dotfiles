@@ -8,6 +8,10 @@ vim.cmd([[
 	augroup end
 ]])
 
+require("theme")
+if not vim.g.theme_style then
+	vim.g.theme_style = "darker"
+end
 
 return require('packer').startup(function(use)
 	-- Packer can manage itself
@@ -17,10 +21,6 @@ return require('packer').startup(function(use)
 		'navarasu/onedark.nvim',
 		config = function()
 
-			require("theme")
-			if not vim.g.theme_style then
-				vim.g.theme_style = "darker"
-			end
 
 			-- Flashy transparency :) make sure you terminal follows along
 			vim.cmd([[
@@ -130,7 +130,7 @@ return require('packer').startup(function(use)
 		run = ':TSUpdate',
 		config = function()
 			require'nvim-treesitter.configs'.setup {
-				ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+				ensure_installed = "all", -- one of "all or a list of languages
 				--ignore_install = { "javascript" }, -- List of parsers to ignore installing
 				highlight = {
 					enable = true,              -- false will disable the whole extension

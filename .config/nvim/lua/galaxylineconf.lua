@@ -8,7 +8,6 @@ gl.short_line_list = {" "}
 local colors = require('onedark.palette')[vim.g.theme_style]
 colors.statusline_bg = colors.bg0
 colors.lightbg = colors.bg1
--- put(colors)
 
 local checkwidth = function()
 	local squeeze_width = vim.fn.winwidth(0) / 2

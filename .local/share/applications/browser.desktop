@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Web Browser
-Exec=bash -ic "$BROWSER"
+Exec=browser
 Terminal=false
 X-MultipleArgs=false
 Type=Application

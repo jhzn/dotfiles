@@ -57,7 +57,7 @@ pacman -S --needed noto-fonts ttf-joypixels ttf-font-awesome adapta-gtk-theme pa
 #images
 pacman -S --needed imv gimp swappy imagemagick
 #document handling/natural language
-pacman -S --needed zathura zathura-pdf-poppler sdcv
+pacman -S --needed zathura zathura-pdf-poppler sdcv texlive-core
 #misc
 pacman -S --needed fzf ripgrep jq \
 	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui mpv tealdeer
