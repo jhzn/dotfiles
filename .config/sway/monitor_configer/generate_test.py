@@ -578,7 +578,7 @@ def test_parse_sway_output():
     assert got_disabled == disabled_mock_data, f"failed got: {got}"
 
 
-def test_generate():
+def test_generate_1_monitor():
     got = "\n".join(lib.generate([mock_data[0]], disabled_mock_data, 0))
     expected = """#!/bin/bash
 
@@ -614,9 +614,11 @@ prim_waybar_persistent_workspaces=$(cat << EOF
 EOF
 )
 
-jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config"""
+jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
     assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
 
+
+def test_generate_2_monitors():
     got = "\n".join(lib.generate(mock_data[0:2], disabled_mock_data, 2))
     expected = """#!/bin/bash
 
@@ -668,6 +670,8 @@ echo -e ']' >> ~/.config/waybar/config"""
 
     assert got == expected, "test with 2 monitors failed\n{}".format(diff_strings(expected, got))
 
+
+def test_generate_3_monitors():
     got = "\n".join(lib.generate(mock_data,[], 2))
     expected = """#!/bin/bash
 
@@ -723,5 +727,7 @@ echo -e ']' >> ~/.config/waybar/config"""
 if __name__ == "__main__":
     test_get_workspaces_divided_per_monitor()
     test_parse_sway_output()
-    test_generate()
+    test_generate_1_monitor()
+    test_generate_2_monitors()
+    test_generate_3_monitors()
     print("Everything passed")

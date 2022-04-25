@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source ~/.profile
+source ~/.host_specific_settings.sh
 
 exec "$BROWSER" "$@"

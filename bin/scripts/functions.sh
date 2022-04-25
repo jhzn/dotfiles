@@ -69,12 +69,19 @@ echo_and_run() {
 
 # TODO figure out how dedup the "echo" and the actual command, very prone to errors
 gotest() {
-	# set -x
 	echo "Running: time go test -cover -failfast -race -count=1 -v $@ | go_test_color"
-	output=$(time go test -cover -failfast -race -count=1 -v $@)
-	result="$?"
-	printf $output | go_test_color
-	notify-send --urgency=low -t 10000 "Test done!" "Result = $([ "$result" -eq 0 ] && echo "👍" || echo "👎")"
+
+	set -o pipefail
+	time go test -cover -failfast -race -count=1 -v $@ | go_test_color
+
+	if [ "$?" -eq 0 ]; then
+		notify-send --urgency=low -t 10000 "Test done!" "Result = 👍"
+		spd-say "Test ok"
+	else
+		notify-send --urgency=low -t 10000 "Test done!" "Result = 👎"
+		spd-say "Test fail"
+	fi
+	set +o pipefail
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
@@ -101,7 +108,7 @@ create_branch() {
 
 	branch_name="$1"
 	if [ -z "$branch_name" ]; then
-		branch_name="$(git branch | fzf | tr -d '[:space:]')"
+		branch_name="$(git branch | fzf | tr -d '[:space:]' | tr -d '*')"
 	else
 		git branch "$branch_name"
 	fi
@@ -109,9 +116,20 @@ create_branch() {
 		echo "Missing first arg for branch name. Aborting..."; return 1
 	fi
 
-	mkdir -p code
-	dir="code/${branch_name##*/}"
+	# Removes everything before the last forward slash(/)
+	# example "some/branch/name" will be "name"
+	dir="branches/${branch_name##*/}"
 	git worktree add "$dir" "$branch_name"
 	echo "Created dir: $dir"
 	cd "$dir"
+}
+
+retry() {
+	for i in {1..20}; do
+		eval "$@"
+		sleep 1
+	done
+}
+tmux_delve() {
+	tmux split-window -h -t sc "zsh -ic 'retry dlv connect localhost:2345'"
 }

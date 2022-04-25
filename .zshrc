@@ -134,6 +134,7 @@ src ~/.cache/tmux_theme
 FZF_DEFAULT_OPTS="--bind 'tab:toggle-down,btab:toggle-up'"
 src /usr/share/fzf/key-bindings.zsh # ArchLinux
 src /usr/share/doc/fzf/examples/key-bindings.zsh # Debian
+src ~/.nix-profile/share/fzf/key-bindings.zsh # nix
 
 #overwrite exinting function to change "fc" to include timestampt as well.
 #TODO make pull request to FZF github repo
@@ -155,6 +156,7 @@ fzf-history-widget() {
 }
 src /usr/share/fzf/completion.zsh # Arch linux
 src /usr/share/doc/fzf/examples/completion.zsh # Debian
+src ~/.nix-profile/share/fzf/completion.zsh # nix
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -171,6 +173,7 @@ bindkey -s "^q" " exit\n"  # exit shell
 
 src /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Archlinux
 src /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # Debian
+src ~/.nix-profile/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [ -z "$SSH_AUTH_SOCK" ]; then
 	eval $(/usr/bin/gnome-keyring-daemon)
@@ -179,6 +182,7 @@ fi
 
 src /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh # Archlinux
 src /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh # Debian
+src ~/.nix-profile/share/zsh-autosuggestions/zsh-autosuggestions.zsh # Nix
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 #ZSH_AUTOSUGGEST_COMPLETION_IGNORE="git *"
 bindkey '^ ' autosuggest-accept

@@ -10,3 +10,6 @@
 [submodule ".config/dotfiles/fzf-tab-completion"]
 	path = .config/dotfiles/fzf-tab-completion
 	url = https://github.com/lincheney/fzf-tab-completion.git
+[submodule "bin/scripts/notify-send.sh"]
+	path = bin/scripts/notify-send.sh
+	url = https://github.com/vlevit/notify-send.sh

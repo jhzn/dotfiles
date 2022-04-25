@@ -32,6 +32,7 @@ PATH=~/bin:$PATH
 PATH=~/bin/scripts:$PATH
 PATH=~/bin/scripts/emoji_finder.sh:$PATH
 PATH=~/bin/scripts/vimv:$PATH
+PATH=~/bin/scripts/notify-send.sh:$PATH
 PATH=/usr/share/sway/scripts:$PATH
 
 export GOPATH=~/go

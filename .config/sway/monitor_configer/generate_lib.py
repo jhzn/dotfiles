@@ -152,7 +152,7 @@ echo -e ',' >> {WAYBAR_CONFIG_FILE}
 jq '."sway\/workspaces".persistent_workspaces = '"${aux_workspaces_var_name}"' | ."output"= [ "'"{'''"'","'"'''.join(aux_mon_vars)}"'" ]' {WAYBAR_AUX_TEMPLATE} >> {WAYBAR_CONFIG_FILE}
 echo -e ']' >> {WAYBAR_CONFIG_FILE}""")
     else:
-        out.append(f"""jq '."sway\/workspaces".persistent_workspaces = '"${primary_workspaces_var_name}"' | ."output"= [ "'"{primary_mon_variable}"'" ]' {WAYBAR_PRIMARY_TEMPLATE} >> {WAYBAR_CONFIG_FILE}""")
+        out.append(f"""jq '."sway\/workspaces".persistent_workspaces = '"${primary_workspaces_var_name}"' | ."output"= [ "'"{primary_mon_variable}"'" ]' {WAYBAR_PRIMARY_TEMPLATE} > {WAYBAR_CONFIG_FILE}""")
 
     return out
 

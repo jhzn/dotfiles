@@ -72,3 +72,6 @@ alias dic="STARDICT_DATA_DIR=~/.config/stardict/dic sdcv"
 alias cal="cal -3 --monday --week --color=always"
 alias ne="nix-env"
 alias p="python3"
+
+alias tmux_dlv="tmux split-window -v -t sc \"zsh -ic 'dlv connect localhost:2345'\""
+
