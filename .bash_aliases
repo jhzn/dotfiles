@@ -43,6 +43,8 @@ alias l='ls --color=auto --group-directories-first --classify'
 alias ll='ls --color=auto --group-directories-first --classify -l'
 alias lla='ls --color=auto --group-directories-first --classify -la'
 
+alias ..="cd .."
+
 #Allows moving the config file
 alias tmux="tmux -2 -f ~/.config/tmux/tmux.conf"
 #Easier to remember/type

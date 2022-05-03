@@ -7,6 +7,7 @@ class Monitor(NamedTuple):
     # Like $MON_1
     variable_name: str
     is_primary: bool
+    model: str
 
 
 # Keyed on monitor interface like DP-1
@@ -27,14 +28,17 @@ class Rect(NamedTuple):
 
 
 class Swayoutput(NamedTuple):
+    # e.g DP-1
     name: str
+    # e.g HP E27q G4
     model: str
     current_mode: Current_mode
-    # Example 2
+    # e.g 2
     scale: float
-    # Like normal
+    # e.g normal, 270, 90
     transform: str
     rect: Rect
+
 
 class SwayoutputDisabled(NamedTuple):
     name: str

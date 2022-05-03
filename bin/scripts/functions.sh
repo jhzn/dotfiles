@@ -108,7 +108,7 @@ create_branch() {
 
 	branch_name="$1"
 	if [ -z "$branch_name" ]; then
-		branch_name="$(git branch | fzf | tr -d '[:space:]' | tr -d '*')"
+		branch_name="$(git branch | fzf | tr -d '[:space:]' | tr -d '*' | tr -d '+')"
 	else
 		git branch "$branch_name"
 	fi

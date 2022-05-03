@@ -1,5 +1,11 @@
 -- following options are the default
 -- each of these are documented in `:help nvim-tree.OPTION_NAME`
+
+local grep_dir = function(node)
+	local search_dir = node.absolute_path
+	vim.api.nvim_command(string.format("lua require('telescope.builtin').live_grep( { search_dirs = { '%s' } } )", search_dir))
+end
+
 require'nvim-tree'.setup {
 	disable_netrw       = true,
 	hijack_netrw        = true,
@@ -48,7 +54,9 @@ require'nvim-tree'.setup {
 		auto_resize = true,
 		mappings = {
 			custom_only = false,
-			list = {}
+			list = {
+				{ key = "f", action = "Live grep dir", action_cb = grep_dir },
+			},
 		},
 		number = false,
 		relativenumber = false,

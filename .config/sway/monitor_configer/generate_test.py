@@ -5,18 +5,44 @@ import models
 
 
 def diff_strings(expected: str, got: str) -> str:
-    return "\n".join(difflib.unified_diff(expected.split('\n'), got.split('\n'), fromfile='expected', tofile='got'))
+    return "\n".join(
+        difflib.unified_diff(
+            expected.split("\n"), got.split("\n"), fromfile="expected", tofile="got"
+        )
+    )
 
 
 mock_data = [
-    models.Swayoutput(name='eDP-1', model='0x08DA', current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0), scale=1.0, transform='normal', rect=models.Rect(x=0, y=1080)),
-    models.Swayoutput(name='HDMI-A-1', model='U2777B', current_mode=models.Current_mode(width=3840, height=2160, refresh=59.997), scale=1.5, transform='normal', rect=models.Rect(x=1920, y=0)),
-    models.Swayoutput(name='DP-8', model='BenQ GL2240', current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0), scale=1.0, transform='normal', rect=models.Rect(x=0, y=0))
+    models.Swayoutput(
+        name="eDP-1",
+        model="0x08DA",
+        current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0),
+        scale=1.0,
+        transform="normal",
+        rect=models.Rect(x=0, y=1080),
+    ),
+    models.Swayoutput(
+        name="HDMI-A-1",
+        model="U2777B",
+        current_mode=models.Current_mode(width=3840, height=2160, refresh=59.997),
+        scale=1.5,
+        transform="normal",
+        rect=models.Rect(x=1920, y=0),
+    ),
+    models.Swayoutput(
+        name="DP-8",
+        model="BenQ GL2240",
+        current_mode=models.Current_mode(width=1920, height=1080, refresh=60.0),
+        scale=1.0,
+        transform="normal",
+        rect=models.Rect(x=0, y=0),
+    ),
 ]
 disabled_mock_data = [
-    models.SwayoutputDisabled(name='DP-1', model='SOMETHING'),
+    models.SwayoutputDisabled(name="DP-1", model="SOMETHING"),
 ]
-mock_swaymsg_data = json.loads("""[
+mock_swaymsg_data = json.loads(
+    """[
   {
     "id": 3,
     "name": "eDP-1",
@@ -559,17 +585,23 @@ mock_swaymsg_data = json.loads("""[
     },
     "percent": null
   }
-]""")
+]"""
+)
+
 
 def test_get_workspaces_divided_per_monitor():
     got = lib.get_workspaces_divided_per_monitor(2)
     assert got == [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]], "failed expected: {}".format(got)
 
     got = lib.get_workspaces_divided_per_monitor(3)
-    assert got == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]], "failed expected: {}".format(got)
+    assert got == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]], "failed expected: {}".format(
+        got
+    )
 
     got = lib.get_workspaces_divided_per_monitor(4)
-    assert got == [[1, 2, 3, 4], [5, 6], [7, 8], [9, 10]], "failed expected: {}".format(got)
+    assert got == [[1, 2, 3, 4], [5, 6], [7, 8], [9, 10]], "failed expected: {}".format(
+        got
+    )
 
 
 def test_parse_sway_output():
@@ -582,7 +614,7 @@ def test_generate_1_monitor():
     got = "\n".join(lib.generate([mock_data[0]], disabled_mock_data, 0))
     expected = """#!/bin/bash
 
-MON_0=eDP-1 #This is your 'primary' monitor
+MON_0=eDP-1 # Model: '0x08DA' This is your 'primary' monitor
 
 swaymsg "workspace 10 output $MON_0; workspace number 10; move workspace to $MON_0"
 swaymsg "workspace 9 output $MON_0; workspace number 9; move workspace to $MON_0"
@@ -615,15 +647,17 @@ EOF
 )
 
 jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
-    assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
+    assert got == expected, "test with 1 monitor failed\n{}".format(
+        diff_strings(expected, got)
+    )
 
 
 def test_generate_2_monitors():
     got = "\n".join(lib.generate(mock_data[0:2], disabled_mock_data, 2))
     expected = """#!/bin/bash
 
-MON_0=HDMI-A-1 #This is your 'primary' monitor
-MON_1=eDP-1
+MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
+MON_1=eDP-1 # Model: '0x08DA'
 
 swaymsg "workspace 10 output $MON_1; workspace number 10; move workspace to $MON_1"
 swaymsg "workspace 9 output $MON_1; workspace number 9; move workspace to $MON_1"
@@ -668,16 +702,18 @@ echo -e ',' >> ~/.config/waybar/config
 jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
 echo -e ']' >> ~/.config/waybar/config"""
 
-    assert got == expected, "test with 2 monitors failed\n{}".format(diff_strings(expected, got))
+    assert got == expected, "test with 2 monitors failed\n{}".format(
+        diff_strings(expected, got)
+    )
 
 
 def test_generate_3_monitors():
-    got = "\n".join(lib.generate(mock_data,[], 2))
+    got = "\n".join(lib.generate(mock_data, [], 2))
     expected = """#!/bin/bash
 
-MON_0=HDMI-A-1 #This is your 'primary' monitor
-MON_1=eDP-1
-MON_2=DP-8
+MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
+MON_1=eDP-1 # Model: '0x08DA'
+MON_2=DP-8 # Model: 'BenQ GL2240'
 
 swaymsg "workspace 10 output $MON_2; workspace number 10; move workspace to $MON_2"
 swaymsg "workspace 9 output $MON_2; workspace number 9; move workspace to $MON_2"
@@ -722,7 +758,10 @@ echo -e ',' >> ~/.config/waybar/config
 jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'","'"$MON_2"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
 echo -e ']' >> ~/.config/waybar/config"""
 
-    assert got == expected, "test with 3 monitors failed\n{}".format(diff_strings(expected, got))
+    assert got == expected, "test with 3 monitors failed\n{}".format(
+        diff_strings(expected, got)
+    )
+
 
 if __name__ == "__main__":
     test_get_workspaces_divided_per_monitor()
