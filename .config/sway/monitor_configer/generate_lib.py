@@ -16,9 +16,7 @@ def get_monitor_names(sway_outputs: Sequence[models.Swayoutput]) -> List[str]:
 
 
 def list_monitors(sway_outputs: Sequence[models.Swayoutput]):
-    print(
-        "Use the number of your desired primary monitor as argument to the --generate command\n"
-    )
+    print("Use the number of your desired primary monitor as argument to the --generate command\n")
     counter = 1
     for monitor in sway_outputs:
         print("{}: {} ({})".format(counter, monitor.name, monitor.model))
@@ -49,9 +47,7 @@ def get_workspaces_divided_per_monitor(monitor_count: int) -> List[List[int]]:
         return monitor_desktop_chunks
 
 
-def monitor_assignments(
-    monitors_map: models.MonitorMap, primary_monitor: str
-) -> List[str]:
+def monitor_assignments(monitors_map: models.MonitorMap, primary_monitor: str) -> List[str]:
     out = []
     for monitor_name, monitor in monitors_map.items():
         if monitor_name is primary_monitor:
@@ -84,9 +80,7 @@ def conf_outputs(
         out.append(
             " ".join(
                 [
-                    "swaymsg output {}".format(
-                        monitor_variables_map[monitor.name].variable_name
-                    ),
+                    "swaymsg output {}".format(monitor_variables_map[monitor.name].variable_name),
                     "res {}x{}@{}hz".format(
                         monitor.current_mode.width,
                         monitor.current_mode.height,
@@ -124,13 +118,9 @@ def waybar_monitors(monitor_map: models.MonitorMap) -> Tuple[List[str], List[str
     for monitor_name, monitor in monitor_map.items():
         for workspace in monitor.assigned_workspaces:
             if monitor.is_primary:
-                out_primary_monitor.append(
-                    '"{}": ["{}"],'.format(workspace, monitor.variable_name)
-                )
+                out_primary_monitor.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
             else:
-                out_aux_monitor.append(
-                    '"{}": ["{}"],'.format(workspace, monitor.variable_name)
-                )
+                out_aux_monitor.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
 
     return (out_primary_monitor, out_aux_monitor)
 
@@ -169,15 +159,11 @@ def waybar(monitor_map: models.MonitorMap) -> List[str]:
 
     out = []
     primary_workspaces_var_name = "prim_waybar_persistent_workspaces"
-    out.append(
-        create_shell_variable(primary_workspaces_var_name, primary_monitor_waybar_cfg)
-    )
+    out.append(create_shell_variable(primary_workspaces_var_name, primary_monitor_waybar_cfg))
 
     if len(aux_mon_vars) > 0:
         aux_workspaces_var_name = "aux_waybar_persistent_workspaces"
-        out.append(
-            create_shell_variable(aux_workspaces_var_name, aux_monitor_waybar_cfg)
-        )
+        out.append(create_shell_variable(aux_workspaces_var_name, aux_monitor_waybar_cfg))
 
         out.append(
             f"""echo -e '[' > {WAYBAR_CONFIG_FILE}
@@ -194,9 +180,7 @@ echo -e ']' >> {WAYBAR_CONFIG_FILE}"""
     return out
 
 
-def create_monitor_map(
-    sway_outputs: Sequence[models.Swayoutput], primary_monitor: str
-) -> models.MonitorMap:
+def create_monitor_map(sway_outputs: Sequence[models.Swayoutput], primary_monitor: str) -> models.MonitorMap:
     monitor_names = get_monitor_names(sway_outputs)
 
     monitor_desktop_chunks = get_workspaces_divided_per_monitor(len(monitor_names))
@@ -267,7 +251,7 @@ def generate(
     sway_outputs: Sequence[models.Swayoutput],
     sway_outputs_disabled: Sequence[models.SwayoutputDisabled],
     primary_monitor_number: int,
-) -> List[str]:
+) -> str:
     monitor_names = get_monitor_names(sway_outputs)
     primary_monitor = monitor_names[primary_monitor_number - 1]
     monitor_map = create_monitor_map(sway_outputs, primary_monitor)
@@ -278,10 +262,8 @@ def generate(
     out.append("")
     out.append("\n".join(arrange_workspacess(monitor_map)))
     out.append("")
-    out.append(
-        "\n".join(conf_outputs(sway_outputs, sway_outputs_disabled, monitor_map))
-    )
+    out.append("\n".join(conf_outputs(sway_outputs, sway_outputs_disabled, monitor_map)))
     out.append("")
     out.append("\n".join(waybar(monitor_map)))
 
-    return out
+    return "\n".join(out)

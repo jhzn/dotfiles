@@ -26,7 +26,7 @@ if args.list:
     generate_lib.list_monitors(sway_outputs)
     exit(0)
 if args.generate is not None:
-    print("\n".join(generate_lib.generate(sway_outputs, disabled_outputs, args.generate)))
+    print(generate_lib.generate(sway_outputs, disabled_outputs, args.generate))
     exit(0)
 
 # no option was chosen, print helpful info

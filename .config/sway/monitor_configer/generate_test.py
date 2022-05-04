@@ -5,11 +5,7 @@ import models
 
 
 def diff_strings(expected: str, got: str) -> str:
-    return "\n".join(
-        difflib.unified_diff(
-            expected.split("\n"), got.split("\n"), fromfile="expected", tofile="got"
-        )
-    )
+    return "\n".join(difflib.unified_diff(expected.split("\n"), got.split("\n"), fromfile="expected", tofile="got"))
 
 
 mock_data = [
@@ -594,14 +590,10 @@ def test_get_workspaces_divided_per_monitor():
     assert got == [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]], "failed expected: {}".format(got)
 
     got = lib.get_workspaces_divided_per_monitor(3)
-    assert got == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]], "failed expected: {}".format(
-        got
-    )
+    assert got == [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]], "failed expected: {}".format(got)
 
     got = lib.get_workspaces_divided_per_monitor(4)
-    assert got == [[1, 2, 3, 4], [5, 6], [7, 8], [9, 10]], "failed expected: {}".format(
-        got
-    )
+    assert got == [[1, 2, 3, 4], [5, 6], [7, 8], [9, 10]], "failed expected: {}".format(got)
 
 
 def test_parse_sway_output():
@@ -611,7 +603,7 @@ def test_parse_sway_output():
 
 
 def test_generate_1_monitor():
-    got = "\n".join(lib.generate([mock_data[0]], disabled_mock_data, 0))
+    got = lib.generate([mock_data[0]], disabled_mock_data, 0)
     expected = """#!/bin/bash
 
 MON_0=eDP-1 # Model: '0x08DA' This is your 'primary' monitor
@@ -647,13 +639,11 @@ EOF
 )
 
 jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
-    assert got == expected, "test with 1 monitor failed\n{}".format(
-        diff_strings(expected, got)
-    )
+    assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
 
 
 def test_generate_2_monitors():
-    got = "\n".join(lib.generate(mock_data[0:2], disabled_mock_data, 2))
+    got = lib.generate(mock_data[0:2], disabled_mock_data, 2)
     expected = """#!/bin/bash
 
 MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
@@ -702,13 +692,11 @@ echo -e ',' >> ~/.config/waybar/config
 jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
 echo -e ']' >> ~/.config/waybar/config"""
 
-    assert got == expected, "test with 2 monitors failed\n{}".format(
-        diff_strings(expected, got)
-    )
+    assert got == expected, "test with 2 monitors failed\n{}".format(diff_strings(expected, got))
 
 
 def test_generate_3_monitors():
-    got = "\n".join(lib.generate(mock_data, [], 2))
+    got = lib.generate(mock_data, [], 2)
     expected = """#!/bin/bash
 
 MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
@@ -758,9 +746,7 @@ echo -e ',' >> ~/.config/waybar/config
 jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'","'"$MON_2"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
 echo -e ']' >> ~/.config/waybar/config"""
 
-    assert got == expected, "test with 3 monitors failed\n{}".format(
-        diff_strings(expected, got)
-    )
+    assert got == expected, "test with 3 monitors failed\n{}".format(diff_strings(expected, got))
 
 
 if __name__ == "__main__":
