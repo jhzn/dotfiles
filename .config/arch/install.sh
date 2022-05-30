@@ -42,7 +42,7 @@ pacman -S --needed python3 python-pip go nodejs npm yarn rustup \
 if [ ! "$(which rustc)" ]; then
 	rustup default stable
 fi
-pip3 install requests
+pip3 install requests i3ipc
 yarn global add bash-language-server
 
 #shell

@@ -46,8 +46,8 @@ client.focused              #61AFEF #61AFEF #61AFEF #61AFEF #61AFEF
 # resumed. It will also lock your screen before your computer goes to sleep.
 # A note on the timeout commands below: it's a neat way to block the screen from locking or turning the monitors off, when we're watching video
  exec swayidle -d -w \
-	timeout 300 'playerctl status | grep Playing || ~/.config/sway/blurry_swaylock.sh' \
-	timeout 600 'playerctl status | grep Playing || swaymsg "output * dpms off"' \
+	timeout 300 '~/.config/sway/check_inactive.sh ~/.config/sway/blurry_swaylock.sh' \
+	timeout 600 '~/.config/sway/check_inactive.sh swaymsg "output \* dpms off"' \
 	resume 'swaymsg "output * dpms on"' \
 	before-sleep '~/.config/sway/blurry_swaylock.sh' \
 	lock '~/.config/sway/blurry_swaylock.sh'

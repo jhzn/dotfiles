@@ -42,6 +42,7 @@ PATH=~/.cargo/bin:$PATH
 PATH=~/.yarn/bin:$PATH
 PATH=~/.local/bin:$PATH
 PATH=/usr/lib:$PATH
+PATH=/usr/share/sway/scripts:$PATH
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # This is the list for lf icons:
