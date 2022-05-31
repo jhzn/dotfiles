@@ -4,6 +4,28 @@ source ~/.config/dotfiles/bash_strict_mode.sh
 
 increment=5
 
+if [[ -d /sys/class/power_supply/BAT0 ]]; then
+	#just a minor wrapper around brightnessctl to reach 1% when we hit 5% and want to decrease brightness further down
+
+	#TODO fix inefficiency
+	current_level=$(brightnessctl | grep Current | awk '{print $4}' | sed -e 's/(//' -e 's/)//' -e 's/%//')
+
+	case "$1" in
+		up)
+			[ "$current_level" -eq 1 ] && increment=4
+			brightnessctl set +"$increment"%;;
+		down )
+			[ "$current_level" -eq 5 ] && increment=4
+			brightnessctl set "$increment"%-;;
+	esac
+
+
+	# ddcutil doesn't work on laptop displays
+	if [[ $(swaymsg -t get_outputs -p | grep Output | wc -l) -eq 1 ]]; then
+		exit 0
+	fi
+fi
+
 if [[ $(command -v ddcutil detect) ]]; then
 
 	# If we're connected to monitors, go faster, ddcutil is slow
@@ -32,20 +54,4 @@ if [[ $(command -v ddcutil detect) ]]; then
 		ddcutil --display="$d" setvcp 10 "$new_level"
 		echo "Setting display $d to brightness of $new_level% with ddcutil"
 	done
-fi
-
-if [[ -d /sys/class/power_supply/BAT0 ]]; then
-	#just a minor wrapper around brightnessctl to reach 1% when we hit 5% and want to decrease brightness further down
-
-	#TODO fix inefficiency
-	current_level=$(brightnessctl | grep Current | awk '{print $4}' | sed -e 's/(//' -e 's/)//' -e 's/%//')
-
-	case "$1" in
-		up)
-			[ "$current_level" -eq 1 ] && increment=4
-			brightnessctl set +"$increment"%;;
-		down )
-			[ "$current_level" -eq 5 ] && increment=4
-			brightnessctl set "$increment"%-;;
-	esac
 fi

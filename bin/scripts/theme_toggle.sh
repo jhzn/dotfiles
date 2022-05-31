@@ -28,6 +28,18 @@ tmux_theme() {
 	fi
 }
 
+glow_theme() {
+	theme_file=~/.config/glow/glow.yml
+	defaults_theme_file=~/.config/glow/defaults.yml
+	touch $theme_file
+	cp $defaults_theme_file $theme_file
+	if [ "$1" == "light" ]; then
+		echo 'style: "light"' >> $theme_file
+	else
+		echo 'style: "dark"' >> $theme_file
+	fi
+}
+
 
 dark_theme_name="dark"
 light_theme_name="light"
@@ -41,6 +53,7 @@ set_dark_theme() {
 	nvim_theme "darker"
 	alacritty_theme "dark"
 	tmux_theme "dark"
+	glow_theme "dark"
 	printf "$dark_theme_name" > "$current_theme_cache"
 }
 
@@ -49,6 +62,7 @@ set_light_theme() {
 	nvim_theme "light"
 	alacritty_theme "light"
 	tmux_theme "light"
+	glow_theme "light"
 	printf "$light_theme_name" > "$current_theme_cache"
 }
 
