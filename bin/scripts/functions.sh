@@ -42,21 +42,31 @@ mime() {
 	xdg-mime query default $(xdg-mime query filetype "$1")
 }
 
-#colorize "go test" output to make it easier to parse for the eyes
-#Example "go test | go_test_color"
+# colorize "go test" output to make it easier to parse for the eyes
+# Example "go test . | go_test_color"
 go_test_color() {
-	awk '{
-		sub("FAIL","\033[31mFAIL\033[0m", $0); # Prints it in RED
-		sub("ERROR","\033[31mERROR\033[0m", $0); # Prints it in RED
-		sub("WARN","\033[33mWARN\033[0m", $0); # Prints it in YELLOW
-		sub("PASS","\033[32mPASS\033[0m", $0); # Prints it in GREEN
+	awk \
+		-v ESC='\033' \
+		-v COLOR_RED='[31m' \
+		-v COLOR_YELLOW='[33m' \
+		-v COLOR_GREEN='[32m' \
+		-v COLOR_MAGENTA='[35m' \
+		-v COLOR_CYAN='[34m' \
+		-v COLOR_BLUE_BG='[104m' \
+		-v RESET='[0m' \
+		'{
+		sub("FAIL", ESC COLOR_RED "FAIL" ESC RESET, $0);
+		sub("ERROR",ESC COLOR_RED "ERROR" ESC RESET, $0);
+		sub("WARN", ESC COLOR_YELLOW "WARN" ESC RESET, $0);
+		sub("PASS", ESC COLOR_GREEN "PASS" ESC RESET, $0); #
+		sub(/=== RUN.+$/, ESC COLOR_BLUE_BG "&" ESC RESET, $0);
 
 		# When t.Errorf("MyMessage") or t.Logf("MyMessage") is called it outputs for example: "    /a/path/to/testfile.go:12 MyMessage". This case catches that and highlights it
 		# & is a special character in awk.
 		# Source: https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html
 		# "If the special character ‘&’ appears in replacement, it stands for the precise substring that was matched by regexp"
 		sub(/( ){4}(.+)\/?([^\/]+).go:[0-9]+:/,
-			"\033[35mTest case outputted @: \033[34m&\033[0m",
+			ESC COLOR_MAGENTA "Test case outputted @:" ESC COLOR_CYAN "&" ESC RESET,
 			$0);
 		print
 	}'
@@ -69,10 +79,10 @@ echo_and_run() {
 
 # TODO figure out how dedup the "echo" and the actual command, very prone to errors
 gotest() {
-	echo "Running: time go test -cover -failfast -race -count=1 -v $@ | go_test_color"
+	echo "Running: time go test -cover -failfast -race -v $@ | go_test_color"
 
 	set -o pipefail
-	time go test -cover -failfast -race -count=1 -v $@ | go_test_color
+	time go test -cover -failfast -race -v $@ | go_test_color
 
 	if [ "$?" -eq 0 ]; then
 		notify-send --urgency=low -t 10000 "Test done!" "Result = 👍"
@@ -86,7 +96,7 @@ gotest() {
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
 # `tm` will allow you to select your tmux session via fzf.
-# `tm irc` will attach to the irc session (if it exists), else it will create it.
+# `tm x` will attach to the irc session (if it exists), else it will create it.
 tm() {
 	[[ -n "$TMUX" ]] && change="switch-client" || change="attach-session"
 	if [ "$1" ]; then
