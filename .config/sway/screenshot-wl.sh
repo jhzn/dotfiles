@@ -1,7 +1,8 @@
 #!/bin/bash
 
-#sweet ergonomic GUI-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in swappy
-set -euo pipefail
+# This is sweet ergonomic GUI-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in swappy
+
+source ~/.config/dotfiles/bash_strict_mode.sh
 
 trim() {
 	local var="$*"
@@ -34,7 +35,6 @@ grimshot_cmd="grimshot"
 [ ! -x "$(command -v $grimshot_cmd)" ] && echo "grimshot script was not found in \$PATH " && exit 1
 [ ! -x "$(command -v swappy)" ] && echo "swappy was not found in \$PATH" && exit 2
 
-grimshot_cmd+=" save"
 
 opt1="Current window"
 opt2="Current monitor"
@@ -44,11 +44,8 @@ opt5="Select window"
 
 opts=$(join_by  $'\n' "$opt1" "$opt2" "$opt3" "$opt4" "$opt5")
 target=$(prompt "Which target?" "$opts")
-save_option=$(prompt "Destination?" "Clipboard\nFile")
-edit_option=$(prompt "Edit screenshot?" "No\nYes")
 
-tmp_filename="$screenshot_dir/tmp-screenshot.png"
-
+grimshot_cmd+=" save"
 case $target in
 	"$opt1") grimshot_cmd+=" active";;
 	"$opt2") grimshot_cmd+=" output";;
@@ -58,10 +55,14 @@ case $target in
 	*) echo "Invalid option" && exit 3;;
 esac
 
-delay_options=$(prompt "Delay of 5 seconds" "No\nYes")
-if [ "$delay_options" = "Yes" ]; then
+save_option=$(prompt "Destination?" "Clipboard\nFile")
+edit_option=$(prompt "Edit screenshot?" "No\nYes")
+delay_option=$(prompt "Delay of 5 seconds" "No\nYes")
+if [ "$delay_option" = "Yes" ]; then
 	sleep 5
 fi
+
+tmp_filename="$screenshot_dir/tmp-screenshot.png"
 
 final_command="$grimshot_cmd $tmp_filename"
 echo "Running command: $final_command"
@@ -73,9 +74,9 @@ fi
 
 case $save_option in
 	"Clipboard")
-		cat "$tmp_filename" | wl-copy --type image/png && \
+		cat "$tmp_filename" | wl-copy --type image/png
 		#clean up
-		rm "$tmp_filename" && \
+		rm "$tmp_filename"
 		notify-send "Screenshot" "Copied screenshot to clipboard!"
 		;;
 	"File")
@@ -85,7 +86,7 @@ case $save_option in
 			"Save to $screenshot_dir/") filename="$screenshot_dir/$(date --iso-8601=s).png";;
 			*) echo "Invalid option" && exit 4;;
 		esac
-		mv "$tmp_filename" "$filename" && \
+		mv "$tmp_filename" "$filename"
 		notify-send "Screenshot" "Saved screenshot to file: $filename!"
 		;;
 	*) echo "Invalid option" && exit 5;;
