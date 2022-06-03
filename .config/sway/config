@@ -8,10 +8,9 @@ set $up k
 set $right l
 set $term $TERMINAL
 
-# Replaces wofi for app launcher
+# Enables using $TERMINAL as an app launcher
 for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10
-
-# Replaces wofi for clipman etc
+# Enables using $TERMINAL as a picker
 for_window [app_id="^picker$"] floating enable, sticky enable, resize set 80 ppt 35 ppt, border pixel 10
 
 set $menu exec $term -o font.size=16 --class=launcher -e sway-launcher-desktop
@@ -115,7 +114,7 @@ input type:keyboard {
 	bindsym $mod+e exec $term -o font.size=14 --class=picker -e zsh -c "clipman pick --tool=CUSTOM --tool-args=fzf"
 
 	#password manager
-	bindsym $mod+w exec wofipass.sh
+	bindsym $mod+w exec passmenu.sh
 
 	#fast way to execute scripts from my scripts directory
 	bindsym $mod+Shift+Space exec $term -e browse_scripts.sh

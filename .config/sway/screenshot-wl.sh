@@ -1,10 +1,24 @@
 #!/bin/bash
 
-#sweet ergonomic wofi-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in swappy
+#sweet ergonomic GUI-wrapper around grimshot(provided by sway), with the added feature of being able to edit the screenshot in swappy
 set -euo pipefail
-#prompt user for a decision
-function prompt {
-	wofi -m -i -p "$1" --show dmenu
+
+trim() {
+	local var="$*"
+	# remove leading whitespace characters
+	var="${var#"${var%%[![:space:]]*}"}"
+	# remove trailing whitespace characters
+	var="${var%"${var##*[![:space:]]}"}"
+	printf '%s' "$var"
+}
+prompt() {
+	title="$1"
+	choices="${@:2}"
+	choice=$(printf "$choices" | fzfmenu --header \'"$1"\' --header-first --reverse --print-query)
+	if [[ "$choice" == "" ]]; then
+		exit 1
+	fi
+	printf "$(trim $choice)"
 }
 
 # String Util func
@@ -27,11 +41,11 @@ opt2="Current monitor"
 opt3="All monitors"
 opt4="Select area"
 opt5="Select window"
-opt6="Select area(timer 5 sec)"
 
-target=$(printf "$(join_by  $'\n' "$opt1" "$opt2" "$opt3" "$opt4" "$opt5" "$opt6")"  | prompt "Which target?")
-save_option=$(printf "Clipboard\nFile" | prompt "Destination?")
-edit_option=$(printf "No\nYes" | prompt "Edit screenshot?")
+opts=$(join_by  $'\n' "$opt1" "$opt2" "$opt3" "$opt4" "$opt5")
+target=$(prompt "Which target?" "$opts")
+save_option=$(prompt "Destination?" "Clipboard\nFile")
+edit_option=$(prompt "Edit screenshot?" "No\nYes")
 
 tmp_filename="$screenshot_dir/tmp-screenshot.png"
 
@@ -41,9 +55,13 @@ case $target in
 	"$opt3") grimshot_cmd+=" screen";;
 	"$opt4") grimshot_cmd+=" area";;
 	"$opt5") grimshot_cmd+=" window";;
-	"$opt6") grimshot_cmd+=" area"; sleep 5;;
 	*) echo "Invalid option" && exit 3;;
 esac
+
+delay_options=$(prompt "Delay of 5 seconds" "No\nYes")
+if [ "$delay_options" = "Yes" ]; then
+	sleep 5
+fi
 
 final_command="$grimshot_cmd $tmp_filename"
 echo "Running command: $final_command"
@@ -61,7 +79,7 @@ case $save_option in
 		notify-send "Screenshot" "Copied screenshot to clipboard!"
 		;;
 	"File")
-		file_option=$(printf "Save to $screenshot_dir/\nInput filename" | prompt "File destination?")
+		file_option=$(prompt "File destination?" "Save to $screenshot_dir/\nInput filename")
 		case $file_option in
 			"Input filename") filename="$(prompt "File name?")";;
 			"Save to $screenshot_dir/") filename="$screenshot_dir/$(date --iso-8601=s).png";;

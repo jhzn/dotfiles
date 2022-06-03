@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Debug tip: add --hold to keep alacritty open in case of error
+
+$TERMINAL -o font.size=14 --class=picker -e bash -c "fzf $* < /proc/$$/fd/0 > /proc/$$/fd/1"

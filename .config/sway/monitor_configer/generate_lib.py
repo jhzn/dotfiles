@@ -100,7 +100,7 @@ def conf_outputs(
     return out
 
 
-def arrange_workspacess(monitor_map: models.MonitorMap) -> List[str]:
+def arrange_workspaces(monitor_map: models.MonitorMap) -> List[str]:
     out = []
     for monitor_name, monitor in monitor_map.items():
         for workspace in monitor.assigned_workspaces:
@@ -260,7 +260,7 @@ def generate(
     out.append("#!/bin/bash\n")
     out.append("\n".join(monitor_assignments(monitor_map, primary_monitor)))
     out.append("")
-    out.append("\n".join(arrange_workspacess(monitor_map)))
+    out.append("\n".join(arrange_workspaces(monitor_map)))
     out.append("")
     out.append("\n".join(conf_outputs(sway_outputs, sway_outputs_disabled, monitor_map)))
     out.append("")
