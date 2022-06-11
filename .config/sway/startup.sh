@@ -12,7 +12,7 @@ nm-applet --indicator &
 udiskie --tray --appindicator &
 lxpolkit &
 #clipboard manager
-wl-paste -t text --watch clipman store &
+wl-paste -t text --watch clipman store --max-items=30 &
 #homemade cron
 ~/bin/scripts/cron.sh &
 [[ $(which kdeconnect-indicator) ]] && kdeconnect-indicator &

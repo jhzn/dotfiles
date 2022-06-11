@@ -11,7 +11,10 @@ set $term $TERMINAL
 # Enables using $TERMINAL as an app launcher
 for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10
 # Enables using $TERMINAL as a picker
-for_window [app_id="^picker$"] floating enable, sticky enable, resize set 80 ppt 35 ppt, border pixel 10
+for_window [app_id="^picker$"] floating enable, sticky enable, resize set 60 ppt 80 ppt, border pixel 10
+# Custom ones for specific purpose
+for_window [app_id="^password_picker$"] floating enable, sticky enable, resize set 30 ppt 80 ppt, border pixel 10
+for_window [app_id="^clipboard_picker$"] floating enable, sticky enable, resize set 90 ppt 40 ppt, border pixel 10
 
 set $menu exec $term -o font.size=16 --class=launcher -e sway-launcher-desktop
 
@@ -111,10 +114,10 @@ input type:keyboard {
 	bindsym ctrl+alt+l exec powermenu.sh
 
 	#clipboard history
-	bindsym $mod+e exec $term -o font.size=14 --class=picker -e zsh -c "clipman pick --tool=CUSTOM --tool-args=fzf"
+	bindsym $mod+e exec clipman pick --tool=CUSTOM --tool-args='env PICKER_CLASS=clipboard_picker fzfmenu --header "Clipboard\ history" --header-first --reverse'
 
 	#password manager
-	bindsym $mod+w exec passmenu.sh
+	bindsym $mod+w exec PICKER_CLASS=password_picker passmenu.sh
 
 	#fast way to execute scripts from my scripts directory
 	bindsym $mod+Shift+Space exec $term -e browse_scripts.sh
