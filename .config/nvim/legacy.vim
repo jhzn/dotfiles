@@ -109,7 +109,7 @@ nnoremap ,n :NvimTreeRefresh<CR>
 " Yarn $file:$line_number
 nnoremap <leader>yl <cmd>lua vim.fn.setreg("+", string.format("%s:%s", vim.api.nvim_buf_get_name(0), vim.fn.line(".")))<CR>
 " Yank '$MyFunctionName^'
-nnoremap <leader>yf <cmd>lua vim.fn.setreg("+", string.format("'^%s$'", require("utils").ts_function_surrounding_cursor()))<cr>
+nnoremap <leader>yf <cmd>lua vim.fn.setreg("+", string.format("'^%s$'", require("utils").ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor()))) <cr>
 
 " Telescope(fuzzy picker for file names and file content)
 nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>

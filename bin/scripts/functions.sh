@@ -143,3 +143,12 @@ retry() {
 tmux_delve() {
 	tmux split-window -h -t sc "zsh -ic 'retry dlv connect localhost:2345'"
 }
+
+mac() {
+	printf "$1" | sed 's/://g' | tr '[:lower:]' '[:upper:]'
+}
+
+# Count columns in to more easily map {print $x}
+awk_columns() {
+	awk 'BEGIN {FS=" "} END {print NF}'
+}

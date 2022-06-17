@@ -27,3 +27,6 @@ video/mp4=mpv.desktop
 video/webm=mpv.desktop
 audio/mpegapplication/octet-stream=mpv.desktop
 applcation/pdf=zathura.desktop
+
+[Added Associations]
+text/plain=text.desktop;

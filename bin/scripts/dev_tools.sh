@@ -9,3 +9,12 @@ go install github.com/go-delve/delve/cmd/dlv@latest
 go install github.com/jhzn/delver@latest
 go install github.com/cweill/gotests/gotests@latest
 go install honnef.co/go/tools/cmd/staticcheck@latest
+
+# Python
+pip install --upgrade \
+	black \
+	flake8\
+	mypy\
+	python-lsp-server[all] \
+	pylsp-mypy\
+	python-lsp-black

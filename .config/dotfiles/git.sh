@@ -6,6 +6,7 @@
 git config --global url."ssh://git@github.com/jhzn/".insteadOf "https://github.com/jhzn/"
 git config --global user.user "Johan Håkansson"
 git config --global user.name "Johan Håkansson"
+git config --global blame.date 'format:%Y-%m-%d %H:%M:%S'
 
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date-order"
 git config --global alias.st "status"
