@@ -18,3 +18,6 @@ pip install --upgrade \
 	python-lsp-server[all] \
 	pylsp-mypy\
 	python-lsp-black
+
+npm install -g yaml-language-server
+

@@ -7,25 +7,41 @@ function M.merge(a, b)
 	return a
 end
 
-
 -- Retrieve the name of the function the cursor is in.
 -- Inspired by https://old.reddit.com/r/neovim/comments/pd8f07/using_treesitter_to_efficiently_show_the_function/hao7zl5/
 function M.ts_function_surrounding_cursor(current_node)
+	local res = M.get_function_name(current_node, 'function_declaration')
+	if res == "" then
+		return M.get_function_name(current_node, 'method_declaration')
+	end
+	return res
+end
+
+function M.get_function_name(current_node, obj_name)
 	if not current_node then
 		return ""
 	end
-	if current_node:type() ~= 'function_declaration' then
-		return M.ts_function_surrounding_cursor(current_node:parent())
+	if current_node:type() ~= obj_name then
+		return M.banan(current_node:parent(), obj_name)
 	end
 
 	local function find_name (node)
 		for i = 0, node:named_child_count() - 1, 1 do
 			local child = node:named_child(i)
 			local type = child:type()
-
-			if type == 'identifier' or type == 'operator_name' then
-				return vim.treesitter.query.get_node_text(child, vim.api.nvim_get_current_buf())
+			if obj_name == 'method_declaration' then
+				-- put(obj_name)
+				-- put(type .. vim.treesitter.query.get_node_text(child, vim.api.nvim_get_current_buf()))
+				if type == 'field_identifier' then
+					return vim.treesitter.query.get_node_text(child, vim.api.nvim_get_current_buf())
+				end
+			else
+				if type == 'identifier' or type == 'operator_name' then
+					return vim.treesitter.query.get_node_text(child, vim.api.nvim_get_current_buf())
+				end
 			end
+
+
 			local name = find_name(child)
 			if name then
 				return name

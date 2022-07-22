@@ -35,9 +35,12 @@ PATH=~/bin/scripts/vimv:$PATH
 PATH=~/bin/scripts/notify-send.sh:$PATH
 PATH=/usr/share/sway/scripts:$PATH
 
+# GO stuff
+export GORACE=history_size=7
 export GOPATH=~/go
 export GOBIN=~/go/bin
 PATH=~/go/bin:$PATH
+
 PATH=~/.cargo/bin:$PATH
 PATH=~/.yarn/bin:$PATH
 PATH=~/.local/bin:$PATH

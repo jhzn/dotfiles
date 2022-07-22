@@ -13,13 +13,6 @@
 		],
 		"description": "Log output to console"
 	},
-	"if err != nil": {
-		"prefix": "iferr",
-		"body": [
-			"if err != nil {\n\treturn err\n}"
-		],
-		"description": "Log output to console"
-	},
 	"new error": {
 		"prefix": "tne",
 		"body": [

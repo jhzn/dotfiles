@@ -31,7 +31,7 @@ syntax on
 filetype on "detect files bases on type
 filetype plugin on "when a file is edited its plugin file is loaded(if there is one)
 filetype indent on "maintain indentation
-"
+
 " Nerdcommenter (commenter plugin)
 " remove default mappings
 let g:NERDCreateDefaultMappings = 0
@@ -110,6 +110,7 @@ nnoremap ,n :NvimTreeRefresh<CR>
 nnoremap <leader>yl <cmd>lua vim.fn.setreg("+", string.format("%s:%s", vim.api.nvim_buf_get_name(0), vim.fn.line(".")))<CR>
 " Yank '$MyFunctionName^'
 nnoremap <leader>yf <cmd>lua vim.fn.setreg("+", string.format("'^%s$'", require("utils").ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor()))) <cr>
+nnoremap <leader>l <cmd>lua vim.fn.setreg("+", string.format("%s", require("utils").ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor()))) <cr>
 
 " Telescope(fuzzy picker for file names and file content)
 nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>
@@ -133,16 +134,27 @@ vnoremap <A-h> :lua require'hop'.hint_words()<cr>
 nnoremap q: <nop>
 nnoremap Q <nop>
 
-" Disable Arrow keys in Normal mode
+" Disable keys normal mode
 map <up> <nop>
 map <down> <nop>
 map <left> <nop>
 map <right> <nop>
-" Disable Arrow keys in Insert mode
+
+map <home> <nop>
+map <end> <nop>
+map <pageup> <nop>
+map <pagedown> <nop>
+
+" Disable keys keys in Insert mode
 imap <up> <nop>
 imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
+
+imap <home> <nop>
+imap <end> <nop>
+imap <pageup> <nop>
+imap <pagedown> <nop>
 
 " Shortcutting split navigation, saving a keypress:
 nnoremap <C-h> <C-w>h
@@ -160,7 +172,9 @@ vnoremap <leader>D "_d$
 "without yanking it
 "vnoremap <leader>p _dP
 "replace with Register 0
-map <leader>rr ciw<C-r>0<Esc>
+map <leader>ww ciw<C-r>0<Esc>
+map <leader>,, ct,<C-r>0<Esc>
+map <leader>(( ci(<C-r>0<Esc>
 
 map <C-q> :x<CR>
 

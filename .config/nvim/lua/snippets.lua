@@ -3,6 +3,9 @@ local ls = require("luasnip")
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
+local newline = function ()
+	return t({"",""})
+end
 
 local function char_count_same(c1, c2)
 	local line = vim.api.nvim_get_current_line()
@@ -50,6 +53,22 @@ ls.add_snippets("all", {
 	pair("`", "`", neg, even_count),
 })
 
+ls.add_snippets("go", {
+	s("iferrp", {
+		t("if err != nil {"),
+		newline(),
+		t("\tpanic(err)"),
+		newline(),
+		t("}"),
+	}),
+	s("iferr", {
+		t("if err != nil {"),
+		newline(),
+		t("\treturn err"),
+		newline(),
+		t("}"),
+	})
+})
 ls.add_snippets("sh", {
 	s("set", {
 		t("set -euo pipefail")

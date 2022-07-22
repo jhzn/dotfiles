@@ -32,7 +32,7 @@ local left = {
 				return "  "
 			end,
 			highlight = {colors.statusline_bg, colors.blue},
-			separator = "  ",
+			separator = " ",
 			separator_highlight = {colors.blue, colors.lightbg}
 		}
 	},
@@ -41,7 +41,7 @@ local left = {
 			provider = {"FileName"},
 			condition = condition.buffer_not_empty,
 			highlight = {colors.white, colors.lightbg},
-			separator = " ",
+			separator = " ",
 			separator_highlight = {colors.lightbg, colors.lightbg2}
 		}
 	},
@@ -52,7 +52,7 @@ local left = {
 				return "  " .. dir_name .. " "
 			end,
 			highlight = {colors.grey, colors.lightbg2},
-			separator = " ",
+			separator = " ",
 			separator_highlight = {colors.lightbg2, colors.statusline_bg}
 		}
 	},
@@ -94,17 +94,7 @@ local left = {
 			highlight = {colors.yellow, colors.statusline_bg}
 		}
 	},
-	--{
-		--DiagnosticInfo = {
-			--provider = function()
-				--return PrintDiagnostics()
-				--end,
-				--icon = "  ",
-				--highlight = {colors.yellow, colors.statusline_bg}
-				--}
-				--}
 }
---vim.cmd [[ autocmd CursorHold * lua PrintDiagnostics() ]]
 
 local i = 0
 for _, r in pairs(left) do
@@ -115,20 +105,20 @@ end
 local right = {
 	{
 		FileFormat = {
-			provider = 'FileFormat',
+			provider = function ()
+				return " " .. vim.bo.fileformat:upper() .. " "
+			end,
 			condition = condition.hide_in_width,
-			-- separator = ' ',
-			separator_highlight = {colors.statusline_bg, colors.statusline_bg},
-			highlight = {colors.blue,colors.statusline_bg}
+			separator = ' ',
+			highlight = {colors.blue, colors.lightbg}
 		}
 	},
 	{
 		FileEncode = {
 			provider = 'FileEncode',
 			condition = condition.hide_in_width,
-			separator = ' ',
-			separator_highlight = {colors.statusline_bg, colors.statusline_bg},
-			highlight = {colors.blue, colors.statusline_bg}
+			separator_highlight = {colors.lightbg},
+			highlight = {colors.blue, colors.lightbg}
 		}
 	},
 	{
@@ -136,12 +126,12 @@ local right = {
 			provider = function()
 				local clients = vim.lsp.get_active_clients()
 				if next(clients) ~= nil then
-					return " " .. "  " .. " LSP "
+					return " " .. "  " .. "LSP "
 				else
 					return ""
 				end
 			end,
-			highlight = {colors.grey, colors.statusline_bg}
+			highlight = {colors.purple, colors.lightbg}
 		}
 	},
 	{
@@ -160,16 +150,6 @@ local right = {
 			provider = "GitBranch",
 			condition = require("galaxyline.condition").check_git_workspace,
 			highlight = {colors.grey, colors.statusline_bg}
-		}
-	},
-	{
-		viMode_icon = {
-			provider = function()
-				return " "
-			end,
-			highlight = {colors.statusline_bg, colors.red},
-			separator = " ",
-			separator_highlight = {colors.red, colors.statusline_bg}
 		}
 	},
 	{
@@ -193,16 +173,6 @@ local right = {
 				end
 			end,
 			highlight = {colors.red, colors.lightbg}
-		}
-	},
-	{
-		some_icon = {
-			provider = function()
-				return " "
-			end,
-			separator = "",
-			separator_highlight = {colors.green, colors.lightbg},
-			highlight = {colors.lightbg, colors.green}
 		}
 	},
 	{

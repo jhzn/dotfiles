@@ -99,8 +99,14 @@ gotest() {
 # `tm x` will attach to the irc session (if it exists), else it will create it.
 tm() {
 	[[ -n "$TMUX" ]] && change="switch-client" || change="attach-session"
-	if [ "$1" ]; then
-		tmux $change -t "$1" 2>/dev/null || (tmux new-session -d -s $1 && tmux $change -t "$1"); return
+	session_name="$1"
+	if [[ "$session_name" == "n" ]]; then
+		git_branch=$(git branch --show-current)
+		[ -z "$git_branch" ] && echo "No Git branch found!" && return
+		session_name="$git_branch"
+	fi
+	if [ "$session_name" ]; then
+		tmux $change -t "$session_name" 2>/dev/null || (tmux new-session -d -s $session_name && tmux $change -t "$session_name"); return
 	fi
 	session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf --exit-0) &&  tmux $change -t "$session" || echo "No sessions found."
 }
@@ -151,4 +157,16 @@ mac() {
 # Count columns in to more easily map {print $x}
 awk_columns() {
 	awk 'BEGIN {FS=" "} END {print NF}'
+}
+
+
+git_file() {
+	branch="$(git branch | fzf --header 'Branch?' | tr -d '[:space:]' | tr -d '*' | tr -d '+')"
+	[ -z "$branch" ] && return
+
+	file=$(fzf --header 'File path?')
+	[ -z "$file" ] && return
+
+	file_extension="${file##*.}"
+	git show "$branch:$file" | nvim -R -c "set ft=$file_extension"
 }

@@ -146,6 +146,9 @@ local go_lsp_conf = function()
 		if not result or next(result) == nil then
 			return
 		end
+		if not result then
+			return
+		end
 		local actions = result[1].result
 		if not actions then
 			return
@@ -420,17 +423,17 @@ for _, server in pairs(servers) do
 		config = utils.merge(config, lua_lsp_conf())
 	end
 	if server == "efm" then
-		local format_config = efm_conf()
+		local efm_config = efm_conf()
 		local cfg = {
+			-- root_dir = lspconfig.util.root_pattern("."),
 			init_options = { documentFormatting = true },
-			cmd = { "efm-langserver", "-logfile", "/tmp/efm.log", "-loglevel", "4" },
-			filetypes = vim.tbl_keys(format_config),
+			filetypes = vim.tbl_keys(efm_config),
 			settings = {
-				lintDebounce = "5s",
+				-- lintDebounce = "5s",
 				-- rootMarkers = { "." },
-				languages = format_config,
-				-- log_level = 4,
-				-- log_file = "/home/johha/efm.log",
+				languages = efm_config,
+				log_level = 4,
+				log_file = '/tmp/efm.log'
 			},
 		}
 		config = utils.merge(config, cfg)
@@ -441,6 +444,8 @@ for _, server in pairs(servers) do
 				-- ... -- other settings. note this overrides the lspconfig defaults.
 				schemas = {
 					["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+					["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "docker-compose.yml",
+					["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = ".gitlab-ci.yml",
 					-- ["../path/relative/to/file.yml"] = "/.github/workflows/*",
 					-- ["/path/from/root/of/project"] = "/.github/workflows/*",
 				},

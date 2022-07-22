@@ -131,7 +131,7 @@ src ~/.cache/tmux_theme
 
 
 # begin FZF config
-FZF_DEFAULT_OPTS="--bind 'tab:toggle-down,btab:toggle-up'"
+FZF_DEFAULT_OPTS="--bind 'tab:toggle-down,btab:toggle-up' --header-first --reverse"
 src /usr/share/fzf/key-bindings.zsh # ArchLinux
 src /usr/share/doc/fzf/examples/key-bindings.zsh # Debian
 src ~/.nix-profile/share/fzf/key-bindings.zsh # nix
