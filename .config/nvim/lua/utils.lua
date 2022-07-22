@@ -22,7 +22,7 @@ function M.get_function_name(current_node, obj_name)
 		return ""
 	end
 	if current_node:type() ~= obj_name then
-		return M.banan(current_node:parent(), obj_name)
+		return M.get_function_name(current_node:parent(), obj_name)
 	end
 
 	local function find_name (node)

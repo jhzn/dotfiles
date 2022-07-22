@@ -363,26 +363,26 @@ local function efm_conf()
 	}
 
 	local prettier = { formatStdin = true }
-	if utils.file_exists("node_modules/prettier/bin-prettier.js") then
-		prettier.formatCommand = "node_modules/prettier/bin-prettier.js --stdin-filepath ${INPUT}"
+	local prettier_bin = "node_modules/prettier/bin-prettier.js"
+	if utils.file_exists(prettier_bin) then
+		prettier.formatCommand = "./" .. prettier_bin .. " --stdin-filepath ${INPUT}"
 	else
 		prettier.formatCommand = "prettier --stdin-filepath ${INPUT}"
 	end
 
 	return {
-		css = { prettier },
-		html = { prettier },
-		javascript = { prettier, eslint },
-		javascriptreact = { prettier, eslint },
-		json = { prettier },
-		lua = { formatCommand = "stylua" },
+		-- css = { prettier },
+		-- html = { prettier },
+		-- javascript = { prettier, eslint },
+		-- javascriptreact = { prettier, eslint },
+		-- json = { prettier },
+		-- lua = { formatCommand = "stylua" },
 		markdown = { prettier },
-		scss = { prettier },
-		typescript = { prettier, eslint },
-		-- typescriptreact = { prettier, eslint },
+		-- scss = { prettier },
+		typescript = { prettier },
 		typescriptreact = { prettier },
 		yaml = { prettier },
-		graphql = { prettier },
+		-- graphql = { prettier },
 	}
 end
 
