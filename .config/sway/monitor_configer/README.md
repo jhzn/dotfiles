@@ -8,3 +8,15 @@ Note: setting up you monitors is not done here. See for example https://github.c
 This is essentially a code generator for swaymsg.
 
 See `./generate_test.py` for example output of the script.
+
+## Usage
+```bash
+./generate -h
+usage: generate [-h] [-l] [-g monitor number]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l, --list            List monitors to pick as primary monitor
+  -g monitor number, --generate monitor number
+                        Pick primary monitor and the layout will be generated
+```
