@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-NETWORK="192.168.1"
+NETWORK="192.168.0"
 
 is_home() {
 	if [[ $(ip route | grep default | awk '{print $3}' | grep $NETWORK) ]]; then

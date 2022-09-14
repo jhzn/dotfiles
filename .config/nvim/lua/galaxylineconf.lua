@@ -1,6 +1,7 @@
 local gl = require("galaxyline")
 local gls = gl.section
 local condition = require("galaxyline.condition")
+local fileinfo = require("galaxyline.condition")
 local utils = require("utils")
 
 gl.short_line_list = {" "}

@@ -92,10 +92,8 @@ cmp.setup({
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-Space>"] = cmp.mapping.complete(),
 		["<C-e>"] = cmp.mapping.close(),
-		["<CR>"] = cmp.mapping.confirm({
-			behavior = cmp.ConfirmBehavior.Insert,
-			select = true,
-		}),
+		["<CR>"] = cmp.mapping.confirm( { behavior = cmp.ConfirmBehavior.Insert, select = true }),
+		-- ["<C-CR>"] = cmp.mapping.confirm( { behavior = cmp.ConfirmBehavior.Replace, select = true }),
 	},
 	sources = {
 		{ name = "nvim_lsp" },
@@ -146,7 +144,7 @@ local go_lsp_conf = function()
 		if not result or next(result) == nil then
 			return
 		end
-		if not result then
+		if not result or not result[1] then
 			return
 		end
 		local actions = result[1].result
@@ -386,8 +384,17 @@ local function efm_conf()
 	}
 end
 
-local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm", "bicep", "yamlls" }
--- local servers = { "rust_analyzer", "gopls", "pylsp", "bashls", "sumneko_lua", "tsserver", "efm" }
+local servers = {
+	"rust_analyzer",
+	"gopls",
+	"pylsp",
+	"bashls",
+	"sumneko_lua",
+	"tsserver",
+	"efm",
+	"bicep",
+	"yamlls"
+}
 for _, server in pairs(servers) do
 	local config = make_config()
 	-- language specific config
@@ -400,6 +407,7 @@ for _, server in pairs(servers) do
 					nilness = true,
 					shadow = true,
 					unusedwrite = true,
+					-- useany = true,
 				},
 				staticcheck = true,
 			},

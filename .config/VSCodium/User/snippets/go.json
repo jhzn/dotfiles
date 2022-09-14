@@ -23,14 +23,14 @@
 	"JSON print variable": {
 		"prefix": "pjson",
 		"body": [
-			"gurkaTempLog, _ := json.MarshalIndent($1, \"\",\"\\t\")\nfmt.Printf(\"gurka \\n%s\\n\", gurkaTempLog)"
+			"{\ngurkaTempLog, _ := json.MarshalIndent($1, \"\",\"\\t\")\nfmt.Printf(\"gurka \\n%s\\n\", gurkaTempLog)\n}"
 		],
 		"description": "Print JSON to console"
 	},
 	"JSON log variable": {
 		"prefix": "ljson",
 		"body": [
-			"gurkaTempLog, _ := json.MarshalIndent($1, \"\",\"\\t\")\nlog.Infof(\"gurka \\n%s\\n\", gurkaTempLog)"
+			"{\ngurkaTempLog, _ := json.MarshalIndent($1, \"\",\"\\t\")\nlog.Infof(\"gurka \\n%s\\n\", gurkaTempLog)\n}"
 		],
 		"description": "Log JSON to console"
 	}

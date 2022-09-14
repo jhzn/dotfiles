@@ -38,7 +38,7 @@ require'nvim-tree'.setup {
 	},
 	git = {
 		enable = true,
-		ignore = true,
+		ignore = false,
 		timeout = 500,
 	},
 	-- actions = { open_file = { } },
@@ -60,5 +60,19 @@ require'nvim-tree'.setup {
 	trash = {
 		cmd = "trash",
 		require_confirm = true
+	},
+	renderer = {
+		indent_width = 2,
+		indent_markers = {
+			enable = true,
+			inline_arrows = true,
+			icons = {
+				corner = "└",
+				edge = "│",
+				item = "│",
+				bottom = "─",
+				none = " ",
+			},
+		},
 	}
 }
