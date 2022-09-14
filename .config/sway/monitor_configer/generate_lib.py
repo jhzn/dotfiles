@@ -114,15 +114,15 @@ def arrange_workspaces(monitor_map: models.MonitorMap) -> List[str]:
 
 def waybar_monitors(monitor_map: models.MonitorMap) -> Tuple[List[str], List[str]]:
     out_primary_monitor = []
-    out_aux_monitor = []
+    out_aux_monitors = []
     for monitor_name, monitor in monitor_map.items():
         for workspace in monitor.assigned_workspaces:
             if monitor.is_primary:
                 out_primary_monitor.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
             else:
-                out_aux_monitor.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
+                out_aux_monitors.append('"{}": ["{}"],'.format(workspace, monitor.variable_name))
 
-    return (out_primary_monitor, out_aux_monitor)
+    return (out_primary_monitor, out_aux_monitors)
 
 
 def create_shell_variable(name: str, value: List[str]) -> str:
@@ -147,7 +147,7 @@ def waybar(monitor_map: models.MonitorMap) -> List[str]:
     # Now we setup things for waybar
     # I want Waybar to have one type of bar layout for the primary monitor and another for the non-primary monitors(called aux monitors in the script)
     # We have ~/.config/waybar/primary_conf_template and ~/.config/waybar/aux_conf_template which are templates to create our final waybar config file
-    primary_monitor_waybar_cfg, aux_monitor_waybar_cfg = waybar_monitors(monitor_map)
+    primary_monitor_waybar_cfg, aux_monitors_waybar_cfg = waybar_monitors(monitor_map)
 
     primary_mon_variable = ""
     aux_mon_vars = []
@@ -163,7 +163,7 @@ def waybar(monitor_map: models.MonitorMap) -> List[str]:
 
     if len(aux_mon_vars) > 0:
         aux_workspaces_var_name = "aux_waybar_persistent_workspaces"
-        out.append(create_shell_variable(aux_workspaces_var_name, aux_monitor_waybar_cfg))
+        out.append(create_shell_variable(aux_workspaces_var_name, aux_monitors_waybar_cfg))
 
         out.append(
             f"""echo -e '[' > {WAYBAR_CONFIG_FILE}

@@ -585,6 +585,28 @@ mock_swaymsg_data = json.loads(
 )
 
 
+def test_create_shell_variable():
+    got = lib.create_shell_variable("var_a", ["value_1"])
+    expected = """var_a=$(cat << EOF
+{
+value_1
+}
+EOF
+)
+"""
+    assert got == expected, "failed diff: {}".format(diff_strings(expected, got))
+    got = lib.create_shell_variable("var_b", ["value_1", "value_2"])
+    expected = """var_b=$(cat << EOF
+{
+value_1
+value_2
+}
+EOF
+)
+"""
+    assert got == expected, "failed diff: {}".format(diff_strings(expected, got))
+
+
 def test_get_workspaces_divided_per_monitor():
     got = lib.get_workspaces_divided_per_monitor(2)
     assert got == [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]], "failed expected: {}".format(got)
@@ -750,6 +772,7 @@ echo -e ']' >> ~/.config/waybar/config"""
 
 
 if __name__ == "__main__":
+    test_create_shell_variable()
     test_get_workspaces_divided_per_monitor()
     test_parse_sway_output()
     test_generate_1_monitor()
