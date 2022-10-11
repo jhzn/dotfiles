@@ -7,10 +7,14 @@ shopt -u nullglob # Turn off nullglob to make sure it doesn't interfere with any
 wallpapers_count="${#wallpapers[@]}"
 [ "$wallpapers_count" -eq 0 ] && echo "No wallpapers found in ~/Pictures/wallpapers. Exiting.." && exit 0
 
-random_wallpaper=${wallpapers[$RANDOM % $wallpapers_count ]}
-
-echo "Setting wallpaper to: $random_wallpaper"
+displays=($(swaymsg -t get_outputs -r | jq -r '.[] | select(.active == true) | .name'))
 
 pkill swaybg
-swaybg --image "$random_wallpaper" --mode fill --output "*" &
+for display in "${displays[@]}"
+do
+	random_wallpaper=${wallpapers[$RANDOM % $wallpapers_count ]}
 
+	echo "Setting wallpaper to: $random_wallpaper for display $display"
+
+	swaybg --image "$random_wallpaper" --mode fill --output "$display" &
+done

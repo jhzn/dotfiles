@@ -184,16 +184,21 @@ local go_lsp_conf = function()
 				vim.api.nvim_buf_get_name(0),
 			}
 		else
+			local function_name = require("utils").ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor())
+			if function_name == "" then
+				print("Failed to get function name.. Not continuing")
+				return
+			end
 			cmd = {
 				binary,
 				"-w",
 				"-only",
-				string.format("^%s$", require("utils").ts_function_surrounding_cursor()), -- Regex looks like '^MyFunction$'
+				string.format("^%s$", function_name), -- Regex looks like '^MyFunction$'
 				vim.api.nvim_buf_get_name(0), -- Current absolute filename
 			}
 		end
-
-		print(vim.fn.system(cmd))
+		put(cmd)
+		put(vim.fn.system(cmd))
 	end
 	vim.cmd([[
 		command! GoTestCreate :lua Go_tests(false)
@@ -234,13 +239,13 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
 
 	if client.name == "tsserver" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
 	end
 
 	-- Set some keybinds conditional on server capabilities
-	if client.resolved_capabilities.document_formatting then
+	if client.server_capabilities.documentFormattingProvider then
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-	elseif client.resolved_capabilities.document_range_formatting then
+	elseif client.server_capabilities.document_range_formatting then
 		vim.api.nvim_set_keymap("n", "gm", "<cmd>lua format_range_operator()<CR>", { noremap = true })
 		vim.api.nvim_set_keymap("v", "gm", "<cmd>lua format_range_operator()<CR>", { noremap = true })
 	end
@@ -266,17 +271,17 @@ local on_attach = function(client, bufnr)
 	if client.name == "gopls" then
 		go_lsp_conf()
 	end
-	if client.name == "pylsp" then
-		vim.api.nvim_exec(
-			[[
-			autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 2000)
-			]],
-			false
-		)
-	end
+	-- if client.name == "pylsp" then
+		-- vim.api.nvim_exec(
+			-- [[
+			-- autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 2000)
+			-- ]],
+			-- false
+		-- )
+	-- end
 
 	-- Set autocommands conditional on server_capabilities
-	if client.resolved_capabilities.document_highlight then
+	if client.server_capabilities.document_highlight then
 		vim.api.nvim_exec(
 			[[
 			augroup lsp_document_highlight
@@ -454,6 +459,7 @@ for _, server in pairs(servers) do
 					["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
 					["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "docker-compose.yml",
 					["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = ".gitlab-ci.yml",
+					["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = "deploy/cloudformation/*",
 					-- ["../path/relative/to/file.yml"] = "/.github/workflows/*",
 					-- ["/path/from/root/of/project"] = "/.github/workflows/*",
 				},

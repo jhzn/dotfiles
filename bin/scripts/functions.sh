@@ -5,11 +5,11 @@
 fix_cwd() { cd $(pwd -P); }
 
 #Generate a password
-gen_pass() {
+pass_gen() {
 	head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '';
 }
 
-gen_uuid() {
+uuid_gen() {
 	cat /proc/sys/kernel/random/uuid
 }
 
@@ -21,11 +21,17 @@ base64_encoded_to_png() {
 	echo "Created file named out.png";
 }
 
-json_pretty() {
+jsonp() {
 	#xp is an alias to paste from clipboard
 	xp | jq;
 }
-alias jsonp=json_pretty
+
+# Convert a printed python object to json
+py_json() {
+	# TODO optimize
+	xp | sed "s/'/\"/g" | sed "s/False/false/g" | sed "s/True/true/g" | jq
+}
+
 # restart services in docker-compose
 dc-restart(){
 	[ -z $@ ] && echo "No containers args given" && return 1
@@ -45,6 +51,10 @@ mime() {
 # colorize "go test" output to make it easier to parse for the eyes
 # Example "go test . | go_test_color"
 go_test_color() {
+	forground_color='[97;' # White
+	if [[ "$ZSH_THEME" == "light" ]]; then
+		forground_color='[30;' # black
+	fi
 	awk \
 		-v ESC='\033' \
 		-v COLOR_RED='[31m' \
@@ -52,14 +62,15 @@ go_test_color() {
 		-v COLOR_GREEN='[32m' \
 		-v COLOR_MAGENTA='[35m' \
 		-v COLOR_CYAN='[34m' \
-		-v COLOR_BLUE_BG='[104m' \
+		-v COLOR_BLUE_BG='104m' \
+		-v COLOR_FOREGROUND="$forground_color" \
 		-v RESET='[0m' \
 		'{
 		sub("FAIL", ESC COLOR_RED "FAIL" ESC RESET, $0);
 		sub("ERROR",ESC COLOR_RED "ERROR" ESC RESET, $0);
 		sub("WARN", ESC COLOR_YELLOW "WARN" ESC RESET, $0);
 		sub("PASS", ESC COLOR_GREEN "PASS" ESC RESET, $0); #
-		sub(/=== RUN.+$/, ESC COLOR_BLUE_BG "&" ESC RESET, $0);
+		sub(/=== RUN.+$/, ESC COLOR_FOREGROUND COLOR_BLUE_BG "&" ESC RESET, $0);
 
 		# When t.Errorf("MyMessage") or t.Logf("MyMessage") is called it outputs for example: "    /a/path/to/testfile.go:12 MyMessage". This case catches that and highlights it
 		# & is a special character in awk.
@@ -103,7 +114,14 @@ tm() {
 	if [[ "$session_name" == "n" ]]; then
 		git_branch=$(git branch --show-current)
 		[ -z "$git_branch" ] && echo "No Git branch found!" && return
-		session_name="$git_branch"
+
+		if [[ "$git_branch" == "master" || "$git_branch" == "main" ]]; then
+			session_name="$PWD"'@'"$git_branch"
+		else
+			session_name="$git_branch"
+		fi
+		tmux new-session -s $session_name
+		return
 	fi
 	if [ "$session_name" ]; then
 		tmux $change -t "$session_name" 2>/dev/null || (tmux new-session -d -s $session_name && tmux $change -t "$session_name"); return
@@ -124,7 +142,7 @@ create_branch() {
 
 	branch_name="$1"
 	if [ -z "$branch_name" ]; then
-		branch_name="$(git branch | fzf | tr -d '[:space:]' | tr -d '*' | tr -d '+')"
+		branch_name="$(git branch -a | fzf | tr -d '[:space:]' | tr -d '*' | tr -d '+' | sed 's/remotes\/origin\///')"
 	else
 		git branch "$branch_name"
 	fi
@@ -170,3 +188,4 @@ git_file() {
 	file_extension="${file##*.}"
 	git show "$branch:$file" | nvim -R -c "set ft=$file_extension"
 }
+

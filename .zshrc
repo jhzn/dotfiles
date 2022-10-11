@@ -36,6 +36,8 @@ zstyle ':completion::complete:*' gain-privileges 1
 
 #end of history config
 
+# More advanced globbing pattern like negation
+setopt extendedglob
 
 
 
@@ -128,6 +130,7 @@ source ~/bin/scripts/functions.sh
 #Make sure to never add this file to git!
 src ~/.host_specific_settings.sh
 src ~/.cache/tmux_theme
+src ~/.cache/zsh_theme
 
 
 # begin FZF config

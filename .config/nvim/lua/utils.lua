@@ -10,7 +10,9 @@ end
 -- Retrieve the name of the function the cursor is in.
 -- Inspired by https://old.reddit.com/r/neovim/comments/pd8f07/using_treesitter_to_efficiently_show_the_function/hao7zl5/
 function M.ts_function_surrounding_cursor(current_node)
+	-- First attempt to find a function_declaration
 	local res = M.get_function_name(current_node, 'function_declaration')
+	-- If that fails try finding a method_declaration
 	if res == "" then
 		return M.get_function_name(current_node, 'method_declaration')
 	end

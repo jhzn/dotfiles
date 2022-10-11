@@ -44,7 +44,6 @@ require'nvim-tree'.setup {
 	-- actions = { open_file = { } },
 	view = {
 		width = 50,
-		height = 30,
 		hide_root_folder = false,
 		side = 'left',
 		mappings = {

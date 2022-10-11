@@ -5,7 +5,7 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 	DIR="$HOME/bin/swaylayout"
 fi
 
-CHOICE=$(ls "$DIR"  | fzf)
+CHOICE=$(ls "$DIR"  | fzfmenu)
 [ -z "$CHOICE" ] && echo "You chose nothing... doing nothing" && exit 1
 
 sh "$DIR/$CHOICE"

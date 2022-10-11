@@ -16,6 +16,7 @@ tmux_theme() {
 	theme_file=~/.cache/tmux_theme
 	if [ "$1" == "light" ]; then
 		cfg=$(cat <<- EOF
+			# Light theme
 			export onedark_background="#fafafa"
 			export onedark_comment_grey="#f0f0f0"
 			export onedark_foreground="#101012"
@@ -39,6 +40,15 @@ glow_theme() {
 		echo 'style: "dark"' >> $theme_file
 	fi
 }
+zsh_theme() {
+	theme_file=~/.cache/zsh_theme
+	cfg=$(cat <<- EOF
+		# Light $1
+		export ZSH_THEME=$1
+		EOF
+	)
+	echo "$cfg" > "$theme_file"
+}
 
 
 dark_theme_name="dark"
@@ -54,6 +64,7 @@ set_dark_theme() {
 	alacritty_theme "dark"
 	tmux_theme "dark"
 	glow_theme "dark"
+	zsh_theme "dark"
 	printf "$dark_theme_name" > "$current_theme_cache"
 }
 
@@ -63,6 +74,7 @@ set_light_theme() {
 	alacritty_theme "light"
 	tmux_theme "light"
 	glow_theme "light"
+	zsh_theme "light"
 	printf "$light_theme_name" > "$current_theme_cache"
 }
 

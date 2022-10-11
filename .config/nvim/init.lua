@@ -67,6 +67,7 @@ opt.ignorecase = true
 opt.wildignore:append { '**/node_modules/**', '**/vendor/**' }
 opt.mouse = "nv"
 opt.autowrite = true
+opt.ch = 0 -- Hides the command prompt when not in it
 
 -- increment to 2 because the format changed in some version of neovim
 opt.undodir = HOME .. '/.cache/nvim_undo2'

@@ -92,9 +92,8 @@ command! -nargs=? -range=% Space2Tab call IndentConvert(<line1>,<line2>,0,<q-arg
 command! -nargs=? -range=% Tab2Space call IndentConvert(<line1>,<line2>,1,<q-args>)
 command! -nargs=? -range=% RetabIndent call IndentConvert(<line1>,<line2>,&et,<q-args>)
 
-
-
-
+" Winbar to the left, with info if file is modified and its relative file path
+set winbar=%=%m\ %f
 
 
 
