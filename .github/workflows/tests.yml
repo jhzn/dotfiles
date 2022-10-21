@@ -13,5 +13,8 @@ jobs:
 
     - name: Run tests
       shell: bash
-      run: ~/.config/dotfiles/unit_test.sh
+      run: |
+        # Simulate the same directory structure as when the dotfiles are installed locally
+        export HOME="$(pwd)"
+        ~/.config/dotfiles/unit_test.sh
 
