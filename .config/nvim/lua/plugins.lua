@@ -1,6 +1,5 @@
 vim.cmd [[packadd packer.nvim]]
 vim.cmd [[packadd vimball]]
-
 vim.cmd([[
 	augroup packer_user_config
 		autocmd!

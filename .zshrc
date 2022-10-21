@@ -1,7 +1,6 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-
 src() {
 	[ -f "$1" ] && source "$1"
 }

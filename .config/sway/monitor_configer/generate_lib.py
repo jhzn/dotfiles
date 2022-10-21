@@ -258,6 +258,7 @@ def generate(
 
     out = []
     out.append("#!/bin/bash\n")
+    out.append("set -euo pipefail\n")
     out.append("\n".join(monitor_assignments(monitor_map, primary_monitor)))
     out.append("")
     out.append("\n".join(arrange_workspaces(monitor_map)))

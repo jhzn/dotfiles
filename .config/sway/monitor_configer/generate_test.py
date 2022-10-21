@@ -628,6 +628,8 @@ def test_generate_1_monitor():
     got = lib.generate([mock_data[0]], disabled_mock_data, 0)
     expected = """#!/bin/bash
 
+set -euo pipefail
+
 MON_0=eDP-1 # Model: '0x08DA' This is your 'primary' monitor
 
 swaymsg "workspace 10 output $MON_0; workspace number 10; move workspace to $MON_0"
@@ -667,6 +669,8 @@ jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_worksp
 def test_generate_2_monitors():
     got = lib.generate(mock_data[0:2], disabled_mock_data, 2)
     expected = """#!/bin/bash
+
+set -euo pipefail
 
 MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
 MON_1=eDP-1 # Model: '0x08DA'
@@ -720,6 +724,8 @@ echo -e ']' >> ~/.config/waybar/config"""
 def test_generate_3_monitors():
     got = lib.generate(mock_data, [], 2)
     expected = """#!/bin/bash
+
+set -euo pipefail
 
 MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
 MON_1=eDP-1 # Model: '0x08DA'

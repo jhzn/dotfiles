@@ -93,7 +93,7 @@ command! -nargs=? -range=% Tab2Space call IndentConvert(<line1>,<line2>,1,<q-arg
 command! -nargs=? -range=% RetabIndent call IndentConvert(<line1>,<line2>,&et,<q-args>)
 
 " Winbar to the left, with info if file is modified and its relative file path
-set winbar=%=%m\ %f
+" set winbar=%=%m\ %f
 
 
 
@@ -116,6 +116,7 @@ nnoremap <C-P> <cmd>lua require("telescope.builtin").find_files()<cr>
 nnoremap <A-p> <cmd>lua require('telescope.builtin').find_files({no_ignore=true, hidden=true})<cr>
 nnoremap <C-F> <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <F1> <cmd>lua require('telescope.builtin').buffers()<cr>
+" nnoremap <C-R> <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>h <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 " Spectre(project wide search and replace)

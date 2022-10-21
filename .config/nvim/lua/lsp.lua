@@ -152,20 +152,20 @@ local go_lsp_conf = function()
 			return
 		end
 		local action = actions[1]
+		-- put(action)
 
 		-- textDocument/codeAction can return either Command[] or CodeAction[]. If it
 		-- is a CodeAction, it can have either an edit, a command or both. Edits
 		-- should be executed first.
-		if action.edit or type(action.command) == "table" then
-			if action.edit then
-				vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
-			end
-			if type(action.command) == "table" then
-				vim.lsp.buf.execute_command(action.command)
-			end
-		else
-			vim.lsp.buf.execute_command(action)
+		if action.edit then
+			vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
+			return
 		end
+		if type(action.command) == "table" then
+			vim.lsp.buf.execute_command(action.command)
+			return
+		end
+		vim.lsp.buf.execute_command(action)
 	end
 
 	vim.cmd([[ autocmd BufWritePre *.go lua Goimports(1000) ]])
@@ -271,14 +271,14 @@ local on_attach = function(client, bufnr)
 	if client.name == "gopls" then
 		go_lsp_conf()
 	end
-	-- if client.name == "pylsp" then
-		-- vim.api.nvim_exec(
-			-- [[
-			-- autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 2000)
-			-- ]],
-			-- false
-		-- )
-	-- end
+	if client.name == "pylsp" then
+		vim.api.nvim_exec(
+			[[
+			autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 2000)
+			]],
+			false
+		)
+	end
 
 	-- Set autocommands conditional on server_capabilities
 	if client.server_capabilities.document_highlight then
@@ -341,7 +341,7 @@ end
 
 -- config that activates keymaps and enables snippet support
 local function make_config()
-	local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+	local capabilities = require("cmp_nvim_lsp").default_capabilities()
 	return {
 		-- enable snippet support
 		capabilities = capabilities,

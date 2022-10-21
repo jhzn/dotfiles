@@ -26,6 +26,8 @@ alias paruu="paru --sudo=doas -Syu"
 
 alias code="codium"
 alias dc="docker-compose"
+alias dc_start="dc down --remove-orphans && dc build && dc up"
+
 alias lad="lazydocker"
 alias g="git"
 

@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+set -euo pipefail
 
 DIR="$HOME/.screenlayout"
 if [ -n "$WAYLAND_DISPLAY" ]; then
