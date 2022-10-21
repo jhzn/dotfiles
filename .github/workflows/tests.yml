@@ -1,0 +1,17 @@
+name: Run Unittests
+
+
+on: [ push ]
+
+jobs:
+
+  run_test:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v3
+
+    - name: Run tests
+      shell: bash
+      run: ~/.config/dotfiles/unit_test.sh
+
