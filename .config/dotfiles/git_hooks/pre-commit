@@ -1,0 +1,3 @@
+#!/bin/bash
+
+~/.config/dotfiles/unit_test.sh

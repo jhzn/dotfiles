@@ -13,10 +13,8 @@ exit 1
 cd ~ && \
 git clone --separate-git-dir=$HOME/.dotfiles https://github.com/jhzn/dotfiles $HOME/dotfiles-tmp
 
-#make aliases work in scripts
-shopt -s expand_aliases
-#We define the alias "config" here
-source $HOME/dotfiles-tmp/.bash_aliases
+#We define the function "config" here
+source $HOME/dotfiles-tmp/bin/scripts/functions.sh
 
 #places base files in their correct position
 config reset --hard

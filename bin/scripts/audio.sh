@@ -61,5 +61,5 @@ case $1 in
 
 	previous ) playerctl previous && notifiy "Player change" "Previous" "player";;
 
-  *) echo "Invalid argument" && exit 1;;
+	*) echo "Invalid argument" && exit 1;;
 esac

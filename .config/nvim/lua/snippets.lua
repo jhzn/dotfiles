@@ -3,6 +3,7 @@ local ls = require("luasnip")
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
+local fmt = require("luasnip.extras.fmt").fmt
 local newline = function ()
 	return t({"",""})
 end
@@ -51,6 +52,28 @@ ls.add_snippets("all", {
 	pair("'", "'", neg, even_count),
 	pair('"', '"', neg, even_count),
 	pair("`", "`", neg, even_count),
+
+	s("mitl", fmt([[
+	The MIT License (MIT)
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+	]], {}))
 })
 
 ls.add_snippets("go", {
@@ -67,12 +90,16 @@ ls.add_snippets("go", {
 		t("\treturn err"),
 		newline(),
 		t("}"),
-	})
+	}),
 })
+
 ls.add_snippets("sh", {
-	s("set", {
-		t("set -euo pipefail")
-	})
+	s("set", fmt([[
+			# Bash strict mode
+			set -euo pipefail
+			# Neat way to show the line and program which caused the error in a pipeline
+			trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+	]], {})),
 })
 
 require("luasnip/loaders/from_vscode").lazy_load({ paths = { vim.env.HOME .. "/.config/nvim/snippets" } })

@@ -1,8 +1,8 @@
 #!/bin/sh
 
-#Run this script to apply git settings
+# Run this script to apply git settings
 
-#this makes it so that I only use SSH for my own repos
+# This makes it so that I only use SSH for my own repos
 git config --global url."ssh://git@github.com/jhzn/".insteadOf "https://github.com/jhzn/"
 git config --global user.user "Johan Håkansson"
 git config --global user.name "Johan Håkansson"

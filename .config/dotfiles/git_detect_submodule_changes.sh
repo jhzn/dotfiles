@@ -1,12 +1,11 @@
 #!/bin/bash
 
-#used to get "config" alias
-shopt -s expand_aliases
-source ~/.bash_aliases
+# Used to get "config" function
+source ~/bin/scripts/functions.sh
 
-cfg submodule foreach git checkout master
-cfg submodule foreach git remote update
+config submodule foreach git checkout master
+config submodule foreach git remote update
 
 echo "----------------------------------"
 
-cfg submodule foreach git status -uno
+config submodule foreach git status -uno

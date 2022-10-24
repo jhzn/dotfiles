@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+source ~/.config/dotfiles/bash_strict_mode.sh
 
 echo "Running Unittests for the dotfiles"
 

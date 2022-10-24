@@ -1,10 +1,25 @@
-#A collection of small functions which do not deserve being placed in a separate file
-#These are sourced by the shell process
+# A collection of small functions which do not deserve being placed in a separate file
+# These are sourced by the shell process
 
-#Useful when you've cd'ed into a symlink to get the real path
+# Allows running "config" as a way to always refer to my dotfiles git instance globally
+# Also defines a git alias which can be used to update my dotfiles to the latest version
+config() {
+	git \
+		--git-dir="$HOME/.dotfiles/" \
+		--work-tree="$HOME" \
+		-c status.showUntrackedFiles=no \
+		-c submodule.recurse=true \
+		-c core.hooksPath="$HOME/.config/dotfiles/git_hooks/" \
+		-c alias.update="!bash $HOME/.config/dotfiles/update_dotfiles.sh" \
+		"$@"
+}
+alias cfg="config"
+alias c="config"
+
+# Useful when you've cd'ed into a symlink to get the real path
 fix_cwd() { cd $(pwd -P); }
 
-#Generate a password
+# Generate a password
 pass_gen() {
 	head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '';
 }
@@ -22,7 +37,7 @@ base64_encoded_to_png() {
 }
 
 jsonp() {
-	#xp is an alias to paste from clipboard
+	# xp is an alias to paste from clipboard
 	xp | jq;
 }
 
@@ -129,7 +144,7 @@ tm() {
 	session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf --exit-0) &&  tmux $change -t "$session" || echo "No sessions found."
 }
 
-#Watch a youtube video
+# Watch a youtube video
 wv() {
 	mpv --ytdl-format="$YT_DL_FORMAT" "$1"
 }
