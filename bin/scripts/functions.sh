@@ -24,6 +24,7 @@ pass_gen() {
 	head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '';
 }
 
+# Get a random UUID
 uuid_gen() {
 	cat /proc/sys/kernel/random/uuid
 }
@@ -36,6 +37,7 @@ base64_encoded_to_png() {
 	echo "Created file named out.png";
 }
 
+# Pretty print JSON from the clipboard
 jsonp() {
 	# xp is an alias to paste from clipboard
 	xp | jq;
@@ -98,25 +100,34 @@ go_test_color() {
 	}'
 }
 
+# Prints and runs a command
 echo_and_run() {
-	echo "Running:" "$@"
-	eval $(printf '%q ' "$@") < /dev/tty
+	echo "Running: '$@'"
+	eval $(printf '"%q" ' "$@") < /dev/tty
 }
 
-# TODO figure out how dedup the "echo" and the actual command, very prone to errors
-gotest() {
-	echo "Running: time go test -cover -failfast -race -v $@ | go_test_color"
+# Notifies via pop up and sound
+# Very useful in a pipeline
+notify_done() {
+	code=$?
+	action=${1:-"Action"}
 
-	set -o pipefail
-	time go test -cover -failfast -race -v $@ | go_test_color
-
-	if [ "$?" -eq 0 ]; then
-		notify-send --urgency=low -t 10000 "Test done!" "Result = 👍"
-		spd-say "Test ok"
+	if [ "$code" -eq 0 ]; then
+		notify-send --urgency=low -t 10000 "$action done!" "Result = 👍"
+		spd-say "$action ok"
 	else
-		notify-send --urgency=low -t 10000 "Test done!" "Result = 👎"
-		spd-say "Test fail"
+		notify-send --urgency=low -t 10000 "$action done!" "Result = 👎"
+		spd-say "$action fail"
 	fi
+}
+
+# Better defaults for running "go test ..."
+gotest() {
+	set -o pipefail
+	echo_and_run \
+		time go test -cover -failfast -race -v $@ | go_test_color
+	# Notifies us via pop up and sound in case the shell is not currently focused
+	notify_done "Test"
 	set +o pipefail
 }
 
@@ -149,7 +160,7 @@ wv() {
 	mpv --ytdl-format="$YT_DL_FORMAT" "$1"
 }
 
-# Better branch creation ergonmics when using git worktrees
+# Better branch creation ergonomics when using git worktrees
 create_branch() {
 	if [ ! -f "HEAD" ]; then
 		echo "You're not in the root of the bare repo. Aborting..."; return 1
@@ -179,22 +190,25 @@ retry() {
 		sleep 1
 	done
 }
+
+# Open a new pane while in a tmux session which tries to connect to a running dlv server
 tmux_delve() {
 	tmux split-window -h -t sc "zsh -ic 'retry dlv connect localhost:2345'"
 }
 
-mac() {
+# Changes a MAC address from ac:cc:8f:01:0e:45 -> ACCC8F010E45
+clean_mac() {
 	printf "$1" | sed 's/://g' | tr '[:lower:]' '[:upper:]'
 }
 
-# Count columns in to more easily map {print $x}
+# Count columns in the output of a command to more easily map {print $x} when writing a awk command
 awk_columns() {
 	awk 'BEGIN {FS=" "} END {print NF}'
 }
 
-
+# Show a file from the git history
 git_file() {
-	branch="$(git branch | fzf --header 'Branch?' | tr -d '[:space:]' | tr -d '*' | tr -d '+')"
+	branch="$(git branch | fzf --header 'Pick a branch or paste a commit SHA' | tr -d '[:space:]' | tr -d '*' | tr -d '+')"
 	[ -z "$branch" ] && return
 
 	file=$(fzf --header 'File path?')
@@ -203,4 +217,3 @@ git_file() {
 	file_extension="${file##*.}"
 	git show "$branch:$file" | nvim -R -c "set ft=$file_extension"
 }
-

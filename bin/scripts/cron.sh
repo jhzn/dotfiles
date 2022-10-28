@@ -2,13 +2,16 @@
 
 #Home made crontab good enough :=)
 
+minute=60
+hour=$(($minute*60))
+
 while true; do
 	~/bin/scripts/battery_notification.sh
-	sleep 120
+	sleep $(($minute*2))
 done &
 
 
 while true; do
 	~/.config/sway/wallpaper.sh
-	sleep 3600
+	sleep $hour
 done &
