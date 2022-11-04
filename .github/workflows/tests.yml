@@ -15,6 +15,10 @@ jobs:
       shell: bash
       run: |
         # Simulate the same directory structure as when the dotfiles are installed locally
+        set -x
         export HOME="$(pwd)"
+        export OVERRIDE_DOTFILES_GIT_DIR="$(pwd)/.git"
+        source ~/bin/scripts/functions.sh
+        config update
         ~/.config/dotfiles/unit_test.sh
 

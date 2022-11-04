@@ -4,8 +4,11 @@
 # Allows running "config" as a way to always refer to my dotfiles git instance globally
 # Also defines a git alias which can be used to update my dotfiles to the latest version
 config() {
+	# This is only need for the Github CI to work properly
+	# There we don't use the bootstrap script
+	git_dir="${OVERRIDE_DOTFILES_GIT_DIR:-$HOME/.dotfiles/}"
 	git \
-		--git-dir="$HOME/.dotfiles/" \
+		--git-dir="$git_dir" \
 		--work-tree="$HOME" \
 		-c status.showUntrackedFiles=no \
 		-c submodule.recurse=true \

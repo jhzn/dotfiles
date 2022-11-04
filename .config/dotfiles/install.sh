@@ -9,7 +9,8 @@ source ~/.config/dotfiles/bash_strict_mode.sh
 #Make nemos 'Open in Terminal work'
 # gsettings set org.cinnamon.desktop.default-applications.terminal exec $TERMINAL
 
-nvim --headless +PackerUpdate +qa
+# TODO fix this, it doesnt work
+# nvim --headless +PackerUpdate +qa
 
 mkdir -p ~/.config/nvm/
 cp ~/.config/dotfiles/nvm/default-packages ~/.config/nvm/default-packages
