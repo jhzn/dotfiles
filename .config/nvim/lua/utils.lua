@@ -7,6 +7,10 @@ function M.merge(a, b)
 	return a
 end
 
+function M.ts_function_surrounding_current_cursor()
+	return M.ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor())
+end
+
 -- Retrieve the name of the function the cursor is in.
 -- Inspired by https://old.reddit.com/r/neovim/comments/pd8f07/using_treesitter_to_efficiently_show_the_function/hao7zl5/
 function M.ts_function_surrounding_cursor(current_node)

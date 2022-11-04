@@ -19,6 +19,11 @@ alias c="config"
 # Useful when you've cd'ed into a symlink to get the real path
 fix_cwd() { cd $(pwd -P); }
 
+# cd to git root
+cdr() {
+	cd "$(git rev-parse --show-toplevel)"
+}
+
 # Generate a password
 pass_gen() {
 	head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '';
@@ -112,21 +117,27 @@ notify_done() {
 	code=$?
 	action=${1:-"Action"}
 
+	say() {
+		volume="-70"
+		spd-say --volume "$volume" "$action $1"
+	}
+
 	if [ "$code" -eq 0 ]; then
 		notify-send --urgency=low -t 10000 "$action done!" "Result = 👍"
-		spd-say "$action ok"
+		say "ok"
 	else
 		notify-send --urgency=low -t 10000 "$action done!" "Result = 👎"
-		spd-say "$action fail"
+		say "fail"
 	fi
 }
 
 # Better defaults for running "go test ..."
 gotest() {
 	set -o pipefail
-	echo_and_run \
-		time go test -cover -failfast -race -v $@ | go_test_color
-	# Notifies us via pop up and sound in case the shell is not currently focused
+	time echo_and_run \
+		go test -cover -failfast -race -v $@ | go_test_color
+	# Notifies us via pop up and sound in case the shell's terminal is not currently focused
+	# Helpful when multitasking
 	notify_done "Test"
 	set +o pipefail
 }
@@ -208,12 +219,27 @@ awk_columns() {
 
 # Show a file from the git history
 git_file() {
-	branch="$(git branch | fzf --header 'Pick a branch or paste a commit SHA' | tr -d '[:space:]' | tr -d '*' | tr -d '+')"
-	[ -z "$branch" ] && return
+	set -x
+
+	option=$(printf "Branch\nCommit" | fzf)
+
+	if [[ "$option" == "Branch" ]]; then
+		ref="$(git branch | \
+			fzf --header 'Pick a branch' | \
+			tr -d '[:space:]' | tr -d '*' | tr -d '+')"
+	fi
+	if [[ "$option" == "Commit" ]]; then
+		ref="$(git log --color --abbrev-commit --date-order \
+			--pretty=format:'%Cred%H%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' | \
+			fzf --ansi --header 'Pick a commit' | awk '{print $1}')"
+	fi
+
+	[ -z "$ref" ] && echo "Branch or commit is empty" && return
 
 	file=$(fzf --header 'File path?')
 	[ -z "$file" ] && return
 
 	file_extension="${file##*.}"
-	git show "$branch:$file" | nvim -R -c "set ft=$file_extension"
+	git show "$ref:$file" | nvim -R -c "set ft=$file_extension"
+	set +x
 }

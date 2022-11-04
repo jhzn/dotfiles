@@ -94,6 +94,10 @@ ls.add_snippets("go", {
 })
 
 ls.add_snippets("sh", {
+	s("root", {
+		t("project_root_dir=$(git rev-parse --show-toplevel)"),
+		newline(),
+	}),
 	s("set", fmt([[
 			# Bash strict mode
 			set -euo pipefail

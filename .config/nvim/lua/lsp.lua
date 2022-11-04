@@ -131,46 +131,24 @@ cmp.setup.cmdline(":", {
 ---------------------------------------------
 
 local go_lsp_conf = function()
-	Goimports = function(timeout_ms)
-		local context = { only = { "source.organizeImports" } }
-		vim.validate({ context = { context, "t", true } })
 
+	Go_org_imports = function (wait_ms)
 		local params = vim.lsp.util.make_range_params()
-		params.context = context
-
-		-- See the implementation of the textDocument/codeAction callback
-		-- (lua/vim/lsp/handler.lua) for how to do this properly.
-		local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-		if not result or next(result) == nil then
-			return
+		params.context = {only = {"source.organizeImports"}}
+		local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
+		for cid, res in pairs(result or {}) do
+			for _, r in pairs(res.result or {}) do
+				if r.edit then
+					local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+					vim.lsp.util.apply_workspace_edit(r.edit, enc)
+				end
+			end
 		end
-		if not result or not result[1] then
-			return
-		end
-		local actions = result[1].result
-		if not actions then
-			return
-		end
-		local action = actions[1]
-		-- put(action)
-
-		-- textDocument/codeAction can return either Command[] or CodeAction[]. If it
-		-- is a CodeAction, it can have either an edit, a command or both. Edits
-		-- should be executed first.
-		if action.edit then
-			vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
-			return
-		end
-		if type(action.command) == "table" then
-			vim.lsp.buf.execute_command(action.command)
-			return
-		end
-		vim.lsp.buf.execute_command(action)
 	end
+	vim.cmd([[ autocmd BufWritePre *.go silent! lua Go_org_imports() ]])
 
-	vim.cmd([[ autocmd BufWritePre *.go lua Goimports(1000) ]])
 	-- Setup autoformatting on save
-	vim.cmd([[ autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 500) ]])
+	vim.cmd([[ autocmd BufWritePre *.go silent! lua vim.lsp.buf.formatting_sync(nil, 500) ]])
 
 	-- Implements command to run gotests binary from vim
 	Go_tests = function(all)
@@ -184,7 +162,7 @@ local go_lsp_conf = function()
 				vim.api.nvim_buf_get_name(0),
 			}
 		else
-			local function_name = require("utils").ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor())
+			local function_name = require("utils").ts_function_surrounding_current_cursor()
 			if function_name == "" then
 				print("Failed to get function name.. Not continuing")
 				return
@@ -388,7 +366,42 @@ local function efm_conf()
 		-- graphql = { prettier },
 	}
 end
+local function gopls_conf()
+	-- see if the file exists
+	function FileExists(file)
+	  local f = io.open(file, "rb")
+	  if f then f:close() end
+	  return f ~= nil
+	end
 
+	-- Get the value of the module name from go.mod in PWD
+	function GetGoModuleName()
+	  if not FileExists("go.mod") then return nil end
+	  for line in io.lines("go.mod") do
+		if vim.startswith(line, "module") then
+		  local items = vim.split(line, " ")
+		  local module_name = vim.trim(items[2])
+		  return module_name
+		end
+	  end
+	  return nil
+	end
+
+	local goModule = GetGoModuleName()
+	return {
+		analyses = {
+			unusedparams = true,
+			-- fieldalignment = true,
+			nilness = true,
+			shadow = true,
+			unusedwrite = true,
+			-- useany = true,
+		},
+		staticcheck = true,
+		['local'] = goModule,
+	}
+
+end
 local servers = {
 	"rust_analyzer",
 	"gopls",
@@ -405,17 +418,7 @@ for _, server in pairs(servers) do
 	-- language specific config
 	if server == "gopls" then
 		config.settings = {
-			gopls = {
-				analyses = {
-					unusedparams = true,
-					-- fieldalignment = true,
-					nilness = true,
-					shadow = true,
-					unusedwrite = true,
-					-- useany = true,
-				},
-				staticcheck = true,
-			},
+			gopls = gopls_conf()
 		}
 	end
 	if server == "pylsp" then
@@ -454,6 +457,11 @@ for _, server in pairs(servers) do
 	if server == "yamlls" then
 		config.settings = {
 			yaml = {
+				format = {
+					enable = true,
+				},
+				hover = true,
+				completion = true,
 				-- ... -- other settings. note this overrides the lspconfig defaults.
 				schemas = {
 					["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
@@ -462,6 +470,26 @@ for _, server in pairs(servers) do
 					["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = "deploy/cloudformation/*",
 					-- ["../path/relative/to/file.yml"] = "/.github/workflows/*",
 					-- ["/path/from/root/of/project"] = "/.github/workflows/*",
+				},
+				customTags = {
+					"!fn",
+					"!And",
+					"!If",
+					"!Not",
+					"!Equals",
+					"!Or",
+					"!FindInMap sequence",
+					"!Base64",
+					"!Cidr",
+					"!Ref",
+					"!Ref Scalar",
+					"!Sub",
+					"!GetAtt",
+					"!GetAZs",
+					"!ImportValue",
+					"!Select",
+					"!Split",
+					"!Join sequence",
 				},
 			},
 		}

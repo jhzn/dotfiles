@@ -26,7 +26,7 @@ pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmu
 cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json
 
 # wayland
-pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard
+pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wtype
 
 #networking
 pacman -S --needed iptables-nft
