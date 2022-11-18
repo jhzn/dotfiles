@@ -28,6 +28,7 @@ alias g="git"
 alias v="nvim"
 alias vim="nvim"
 alias j='nvim -R -c "set ft=json"'
+alias y='nvim -R -c "set ft=yaml"'
 alias pager="nvim -R"
 
 alias grep='grep --colour=auto'

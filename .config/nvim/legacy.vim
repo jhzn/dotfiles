@@ -166,8 +166,7 @@ nnoremap <C-l> <C-w>l
 " delete without yanking
 nnoremap <leader>d "_d
 nnoremap <leader>D "_d$
-vnoremap <leader>d "_d
-vnoremap <leader>D "_d$
+nnoremap <leader>dd 0"_d$
 
 "replace currently selected text with default register
 "without yanking it
@@ -178,8 +177,6 @@ map <leader>,, ct,<C-r>0<Esc>
 map <leader>(( ci(<C-r>0<Esc>
 
 map <C-q> :x<CR>
-
-nnoremap <leader>d "_d
 
 " Source: https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text
 vnoremap p "_dP

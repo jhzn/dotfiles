@@ -112,16 +112,15 @@ window#waybar.empty
 #mode,
 #idle_inhibitor,
 #mpd {
-	padding: 0
-		10px;
-	margin: 0
-		4px;
+	padding: 0 10px;
+	/* margin: 0 */
+		/* 4px; */
 	background-color: @color0;
 	opacity: 0.8;
-	border-radius: 10px
-		10px
-		10px
-		10px;
+	/* border-radius: 10px */
+		/* 10px */
+		/* 10px */
+		/* 10px; */
 }
 
 #mode {

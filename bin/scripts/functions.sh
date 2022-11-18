@@ -111,7 +111,7 @@ go_test_color() {
 # Prints and runs a command
 echo_and_run() {
 	echo "Running: '$@'"
-	eval $(printf '"%q" ' "$@") < /dev/tty
+	eval $(printf '"%b" ' "$@") < /dev/tty
 }
 
 # Notifies via pop up and sound
@@ -138,7 +138,7 @@ notify_done() {
 gotest() {
 	set -o pipefail
 	time echo_and_run \
-		go test -cover -failfast -race -v $@ | go_test_color
+		go test -cover -failfast -race -v "$@" | go_test_color
 	# Notifies us via pop up and sound in case the shell's terminal is not currently focused
 	# Helpful when multitasking
 	notify_done "Test"
@@ -182,7 +182,7 @@ create_branch() {
 
 	branch_name="$1"
 	if [ -z "$branch_name" ]; then
-		branch_name="$(git branch -a | fzf | tr -d '[:space:]' | tr -d '*' | tr -d '+' | sed 's/remotes\/origin\///')"
+		branch_name="$(git branch -a --format '%(refname:short)' | fzf)"
 	else
 		git branch "$branch_name"
 	fi
@@ -227,9 +227,7 @@ git_file() {
 	option=$(printf "Branch\nCommit" | fzf)
 
 	if [[ "$option" == "Branch" ]]; then
-		ref="$(git branch | \
-			fzf --header 'Pick a branch' | \
-			tr -d '[:space:]' | tr -d '*' | tr -d '+')"
+		ref="$(git branch -a --format '%(refname:short)' | fzf --header 'Pick a branch')"
 	fi
 	if [[ "$option" == "Commit" ]]; then
 		ref="$(git log --color --abbrev-commit --date-order \
