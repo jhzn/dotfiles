@@ -121,7 +121,7 @@ input type:keyboard {
 	bindsym $mod+w exec PICKER_CLASS=password_picker passmenu.sh
 
 	#fast way to execute scripts from my scripts directory
-	bindsym $mod+Shift+Space exec $term -e browse_scripts.sh
+	bindsym $mod+Shift+Space exec browse_scripts.sh
 
 	bindsym $mod+ctrl+s exec ~/.config/sway/wlsunset-toggle.sh
 

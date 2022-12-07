@@ -14,6 +14,10 @@ if [[ ! -d "$prefix" ]]; then
 	notify-send "Clipboard manager" "No password store found!"
 	exit 1
 fi
+if ! command -v wtype &> /dev/null; then
+	notify-send "Clipboard manager" "'wtype' is not installed!"
+	exit 2
+fi
 
 if [[ -d "/usr/share/icons/Papirus" ]]; then
 	unlock_icon="--icon=/usr/share/icons/Papirus/32x32/emblems/emblem-unlocked.svg"

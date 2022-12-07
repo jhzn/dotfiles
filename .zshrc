@@ -208,6 +208,10 @@ if command -v purs > /dev/null; then
 	autoload -Uz add-zsh-hook
 
 	function _prompt_purs_precmd() {
+		if [[ -n "$TMUX" ]]; then
+			last_cmd=${history[$(($HISTCMD-1))][1,30]}
+			echo -en "\033k$last_cmd\033]"
+		fi
 		purs precmd --git-detailed
 	}
 	add-zsh-hook precmd _prompt_purs_precmd
