@@ -92,7 +92,7 @@ cmp.setup({
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-Space>"] = cmp.mapping.complete(),
 		["<C-e>"] = cmp.mapping.close(),
-		["<CR>"] = cmp.mapping.confirm( { behavior = cmp.ConfirmBehavior.Insert, select = true }),
+		["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
 		-- ["<C-CR>"] = cmp.mapping.confirm( { behavior = cmp.ConfirmBehavior.Replace, select = true }),
 	},
 	sources = {
@@ -130,11 +130,11 @@ cmp.setup.cmdline(":", {
 ------------------ LSP ----------------------
 ---------------------------------------------
 
-local go_lsp_conf = function()
+local go_lsp_client_conf = function()
 
-	Go_org_imports = function (wait_ms)
+	Go_org_imports = function(wait_ms)
 		local params = vim.lsp.util.make_range_params()
-		params.context = {only = {"source.organizeImports"}}
+		params.context = { only = { "source.organizeImports" } }
 		local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
 		for cid, res in pairs(result or {}) do
 			for _, r in pairs(res.result or {}) do
@@ -145,11 +145,10 @@ local go_lsp_conf = function()
 			end
 		end
 	end
+	vim.cmd([[ autocmd BufWritePre *.go silent! lua Format_code() ]])
 	vim.cmd([[ autocmd BufWritePre *.go silent! lua Go_org_imports() ]])
 
 	-- Setup autoformatting on save
-	vim.cmd([[ autocmd BufWritePre *.go silent! lua vim.lsp.buf.formatting_sync(nil, 500) ]])
-
 	-- Implements command to run gotests binary from vim
 	Go_tests = function(all)
 		local cmd = {}
@@ -199,6 +198,50 @@ end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
+
+local get_clients_from_cmd_args = function(arg)
+	local result = {}
+	for id in (arg or ''):gmatch '(%d+)' do
+		result[id] = vim.lsp.get_client_by_id(tonumber(id))
+	end
+	if vim.tbl_isempty(result) then
+		return require('lspconfig.util').get_managed_clients()
+	end
+	return vim.tbl_values(result)
+end
+
+PylspAutoFormat = false
+
+TogglePylspAutoFormat = function()
+	put(PylspAutoFormat)
+	PylspAutoFormat = not PylspAutoFormat
+	put(PylspAutoFormat)
+
+
+	vim.api.nvim_exec([[ LspRestart ]], false)
+
+	-- TODO FIX
+	-- for _, client in ipairs(vim.lsp.get_active_clients()) do
+	-- put(client.name)
+	-- -- client.stop()
+	-- vim.defer_fn(function()
+	-- local config = require('lspconfig.configs')[client.name]
+	-- put(config.launch())
+	-- vim.lsp.start_client(client)
+	-- put("starting...")
+	-- end, 500)
+	-- end
+
+
+end
+
+
+Format_code = function()
+	vim.lsp.buf.format({
+		async = true
+	})
+end
+
 local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -222,7 +265,7 @@ local on_attach = function(client, bufnr)
 
 	-- Set some keybinds conditional on server capabilities
 	if client.server_capabilities.documentFormattingProvider then
-		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+		buf_set_keymap("n", "<space>f", "<cmd>lua Format_code()<CR>", opts)
 	elseif client.server_capabilities.document_range_formatting then
 		vim.api.nvim_set_keymap("n", "gm", "<cmd>lua format_range_operator()<CR>", { noremap = true })
 		vim.api.nvim_set_keymap("v", "gm", "<cmd>lua format_range_operator()<CR>", { noremap = true })
@@ -232,30 +275,20 @@ local on_attach = function(client, bufnr)
 		-- Setup autoformatting on save
 		vim.api.nvim_exec(
 			[[
-			autocmd BufWritePre *.ts lua vim.lsp.buf.formatting_sync(nil, 2000)
-			autocmd BufWritePre *.tsx lua vim.lsp.buf.formatting_sync(nil, 2000)
+			autocmd BufWritePre *.ts lua Format_code()
+			autocmd BufWritePre *.tsx lua Format_code()
 			]],
 			false
 		)
 	end
 	if client.name == "sumneko" then
-		vim.api.nvim_exec(
-			[[
-			autocmd BufWritePre *.lua lua vim.lsp.buf.formatting_sync(nil, 2000)
-			]],
-			false
-		)
+		vim.api.nvim_exec([[ autocmd BufWritePre *.lua lua Format_code() ]], false)
 	end
 	if client.name == "gopls" then
-		go_lsp_conf()
+		go_lsp_client_conf()
 	end
-	if client.name == "pylsp" then
-		vim.api.nvim_exec(
-			[[
-			autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 2000)
-			]],
-			false
-		)
+	if client.name == "pylsp" and PylspAutoFormat then
+		vim.api.nvim_exec([[ autocmd BufWritePre *.py silent! lua Format_code() ]], false)
 	end
 
 	-- Set autocommands conditional on server_capabilities
@@ -283,7 +316,7 @@ local on_attach = function(client, bufnr)
 	-- put("Starting LSP server: " .. client.name)
 end
 
-local function lua_lsp_conf()
+local function lua_lsp_server_conf()
 	local sumneko_root_path = vim.env.sumneko_root_path
 	if not sumneko_root_path then
 		return {}
@@ -318,7 +351,7 @@ local function lua_lsp_conf()
 end
 
 -- config that activates keymaps and enables snippet support
-local function make_config()
+local function default_server_conf()
 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
 	return {
 		-- enable snippet support
@@ -333,7 +366,7 @@ end
 
 local utils = require("utils")
 
-local function efm_conf()
+local function efm_server_conf()
 	local eslint = {
 		lintCommand = "eslint_d --cache -f unix --stdin --stdin-filename ${INPUT}",
 		lintIgnoreExitCode = true,
@@ -366,28 +399,29 @@ local function efm_conf()
 		-- graphql = { prettier },
 	}
 end
-local function gopls_conf()
+
+local function go_lsp_server_conf()
 	-- see if the file exists
 	function FileExists(file)
-	  local f = io.open(file, "rb")
-	  if f then f:close() end
-	  return f ~= nil
+		local f = io.open(file, "rb")
+		if f then f:close() end
+		return f ~= nil
 	end
 
 	-- Get the value of the module name from go.mod in PWD
 	function GetGoModuleName()
-	  if not FileExists("go.mod") then return nil end
-	  for line in io.lines("go.mod") do
-		if vim.startswith(line, "module") then
-		  local items = vim.split(line, " ")
-		  local module_name = vim.trim(items[2])
-		  return module_name
+		if not FileExists("go.mod") then return nil end
+		for line in io.lines("go.mod") do
+			if vim.startswith(line, "module") then
+				local items = vim.split(line, " ")
+				local module_name = vim.trim(items[2])
+				return module_name
+			end
 		end
-	  end
-	  return nil
+		return nil
 	end
 
-	local goModule = GetGoModuleName()
+	-- local goModule = GetGoModuleName()
 	return {
 		analyses = {
 			unusedparams = true,
@@ -395,13 +429,15 @@ local function gopls_conf()
 			nilness = true,
 			shadow = true,
 			unusedwrite = true,
-			-- useany = true,
+			useany = true,
+			unusedvariable = true,
 		},
 		staticcheck = true,
-		['local'] = goModule,
+		-- ['local'] = goModule,
 	}
 
 end
+
 local servers = {
 	"rust_analyzer",
 	"gopls",
@@ -414,11 +450,11 @@ local servers = {
 	"yamlls"
 }
 for _, server in pairs(servers) do
-	local config = make_config()
+	local config = default_server_conf()
 	-- language specific config
 	if server == "gopls" then
 		config.settings = {
-			gopls = gopls_conf()
+			gopls = go_lsp_server_conf()
 		}
 	end
 	if server == "pylsp" then
@@ -436,10 +472,10 @@ for _, server in pairs(servers) do
 		}
 	end
 	if server == "sumneko_lua" then
-		config = utils.merge(config, lua_lsp_conf())
+		config = utils.merge(config, lua_lsp_server_conf())
 	end
 	if server == "efm" then
-		local efm_config = efm_conf()
+		local efm_config = efm_server_conf()
 		local cfg = {
 			-- root_dir = lspconfig.util.root_pattern("."),
 			init_options = { documentFormatting = true },
@@ -468,6 +504,7 @@ for _, server in pairs(servers) do
 					["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "docker-compose.yml",
 					["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = ".gitlab-ci.yml",
 					["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = "deploy/cloudformation/*",
+					["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "api.yaml"
 					-- ["../path/relative/to/file.yml"] = "/.github/workflows/*",
 					-- ["/path/from/root/of/project"] = "/.github/workflows/*",
 				},
