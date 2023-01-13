@@ -1,3 +1,5 @@
+# zmodload zsh/zprof # For debugging zsh startup
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
@@ -39,18 +41,19 @@ zstyle ':completion::complete:*' gain-privileges 1
 setopt extendedglob
 
 
-
-# Basic auto/tab complete:
-autoload -U compinit
-src ~/.config/dotfiles/fzf-tab-completion/zsh/fzf-zsh-completion.sh
-# zstyle ':completion:*:*:*:default' menu yes select search interactive
+# Basic auto/tab completion
+# Speed up compinit. Source: https://gist.github.com/ctechols/ca1035271ad134841284?permalink_comment_id=3994613#gistcomment-3994613
+zmodload zsh/complist
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+	compinit
+done
+compinit -C
 # Auto complete with case insenstivity
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+source ~/.config/dotfiles/fzf-tab-completion/zsh/fzf-zsh-completion.sh
 
 
-zmodload zsh/complist
-compinit
-_comp_options+=(globdots)		# Include hidden files.
 
 
 
@@ -227,3 +230,5 @@ setopt interactivecomments #Allow comment when using zsh interactively
 ZSH_HIGHLIGHT_STYLES[comment]='none' # Fixes comment being a better color for visibility
 ZSH_HIGHLIGHT_STYLES[comment]=fg=245,standout
 ZSH_HIGHLIGHT_STYLES[comment]=fg=245,italic
+
+# zprof # For debugging zsh startup
