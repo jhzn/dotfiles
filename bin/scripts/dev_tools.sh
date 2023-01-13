@@ -23,4 +23,5 @@ pip install --upgrade \
 	python-lsp-black
 
 npm install -g yaml-language-server
+npm install -g prettier
 
