@@ -1,0 +1,25 @@
+#!/bin/bash
+
+only_update="$1"
+
+set -euo pipefail
+
+DIR="$HOME/.screenlayout"
+if [ -n "$WAYLAND_DISPLAY" ]; then
+	DIR="$HOME/bin/swaylayout"
+fi
+
+CHOICE=$(ls "$DIR"  | fzfmenu)
+[ -z "$CHOICE" ] && echo "You chose nothing... doing nothing" && exit 1
+
+# Useful before sway is launched to get the right layout before starting
+if [[ "$only_update" != "-u" ]]; then
+	"$DIR/$CHOICE"
+	notify-send "You chose screenlayout: $CHOICE"
+else
+	echo "Only updating"
+fi
+
+# Save layout so that it is started on next login
+echo "$DIR/$CHOICE" > "$MONITOR_LAYOUT_FILE"
+
