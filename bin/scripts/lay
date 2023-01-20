@@ -15,7 +15,7 @@ CHOICE=$(ls "$DIR"  | fzfmenu)
 # Useful before sway is launched to get the right layout before starting
 if [[ "$only_update" != "-u" ]]; then
 	"$DIR/$CHOICE"
-	notify-send "You chose screenlayout: $CHOICE"
+	echo "You chose screenlayout: $CHOICE"
 else
 	echo "Only updating"
 fi
