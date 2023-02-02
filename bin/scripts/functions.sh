@@ -244,3 +244,10 @@ git_file() {
 	git show "$ref:$file" | nvim -R -c "set ft=$file_extension"
 	set +x
 }
+
+urlencode() {
+	echo $(python3 -c "import urllib.parse; print(urllib.parse.quote('''$1'''))")
+}
+urldecode() {
+	echo $(python3 -c "import urllib.parse; print(urllib.parse.unquote('''$1'''))")
+}

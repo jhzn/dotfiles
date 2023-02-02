@@ -4,7 +4,7 @@ local condition = require("galaxyline.condition")
 local fileinfo = require("galaxyline.condition")
 local utils = require("utils")
 
-gl.short_line_list = {" "}
+gl.short_line_list = { " " }
 
 local colors = require('onedark.palette')[vim.g.theme_style]
 colors.statusline_bg = colors.bg0
@@ -24,7 +24,7 @@ local left = {
 			provider = function()
 				return "▋"
 			end,
-			highlight = {colors.blue, colors.blue}
+			highlight = { colors.blue, colors.blue }
 		}
 	},
 	{
@@ -32,18 +32,18 @@ local left = {
 			provider = function()
 				return "  "
 			end,
-			highlight = {colors.statusline_bg, colors.blue},
+			highlight = { colors.statusline_bg, colors.blue },
 			separator = " ",
-			separator_highlight = {colors.blue, colors.lightbg}
+			separator_highlight = { colors.blue, colors.lightbg }
 		}
 	},
 	{
 		FileName = {
-			provider = {"FileName"},
+			provider = { "FileName" },
 			condition = condition.buffer_not_empty,
-			highlight = {colors.white, colors.lightbg},
+			highlight = { colors.white, colors.lightbg },
 			separator = " ",
-			separator_highlight = {colors.lightbg, colors.lightbg2}
+			separator_highlight = { colors.lightbg, colors.lightbg2 }
 		}
 	},
 	{
@@ -52,9 +52,9 @@ local left = {
 				local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
 				return "  " .. dir_name .. " "
 			end,
-			highlight = {colors.grey, colors.lightbg2},
+			highlight = { colors.grey, colors.lightbg2 },
 			separator = " ",
-			separator_highlight = {colors.lightbg2, colors.statusline_bg}
+			separator_highlight = { colors.lightbg2, colors.statusline_bg }
 		}
 	},
 	{
@@ -62,7 +62,7 @@ local left = {
 			provider = "DiffAdd",
 			condition = checkwidth,
 			icon = "  ",
-			highlight = {colors.white, colors.statusline_bg}
+			highlight = { colors.white, colors.statusline_bg }
 		}
 	},
 	{
@@ -70,7 +70,7 @@ local left = {
 			provider = "DiffModified",
 			condition = checkwidth,
 			icon = "   ",
-			highlight = {colors.grey, colors.statusline_bg}
+			highlight = { colors.grey, colors.statusline_bg }
 		}
 	},
 	{
@@ -78,21 +78,21 @@ local left = {
 			provider = "DiffRemove",
 			condition = checkwidth,
 			icon = "  ",
-			highlight = {colors.grey, colors.statusline_bg}
+			highlight = { colors.grey, colors.statusline_bg }
 		}
 	},
 	{
 		DiagnosticError = {
 			provider = "DiagnosticError",
 			icon = "  ",
-			highlight = {colors.red, colors.statusline_bg}
+			highlight = { colors.red, colors.statusline_bg }
 		}
 	},
 	{
 		DiagnosticWarn = {
 			provider = "DiagnosticWarn",
 			icon = "  ",
-			highlight = {colors.yellow, colors.statusline_bg}
+			highlight = { colors.yellow, colors.statusline_bg }
 		}
 	},
 }
@@ -105,21 +105,37 @@ end
 
 local right = {
 	{
+		SearchCount = {
+			-- Source: https://github.com/glepnir/galaxyline.nvim/pull/205
+			provider = function()
+				local search_term = vim.fn.getreg('/')
+				local search_count = vim.fn.searchcount({recompute = 1, maxcount = -1})
+				local active = vim.v.hlsearch == 1 and search_count.total > 0
+				if active then
+					return '/' .. search_term .. '[' .. search_count.current .. '/' .. search_count.total .. ']'
+				end
+			end,
+			condition = condition.hide_in_width,
+			separator = ' ',
+			highlight = { colors.blue, colors.lightbg }
+		}
+	},
+	{
 		FileFormat = {
-			provider = function ()
+			provider = function()
 				return " " .. vim.bo.fileformat:upper() .. " "
 			end,
 			condition = condition.hide_in_width,
 			separator = ' ',
-			highlight = {colors.blue, colors.lightbg}
+			highlight = { colors.blue, colors.lightbg }
 		}
 	},
 	{
 		FileEncode = {
 			provider = 'FileEncode',
 			condition = condition.hide_in_width,
-			separator_highlight = {colors.lightbg},
-			highlight = {colors.blue, colors.lightbg}
+			separator_highlight = { colors.lightbg },
+			highlight = { colors.blue, colors.lightbg }
 		}
 	},
 	{
@@ -132,7 +148,7 @@ local right = {
 					return ""
 				end
 			end,
-			highlight = {colors.purple, colors.lightbg}
+			highlight = { colors.purple, colors.lightbg }
 		}
 	},
 	{
@@ -141,16 +157,16 @@ local right = {
 				return " "
 			end,
 			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = {colors.grey, colors.statusline_bg},
+			highlight = { colors.grey, colors.statusline_bg },
 			separator = " ",
-			separator_highlight = {colors.statusline_bg, colors.statusline_bg}
+			separator_highlight = { colors.statusline_bg, colors.statusline_bg }
 		}
 	},
 	{
 		GitBranch = {
 			provider = "GitBranch",
 			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = {colors.grey, colors.statusline_bg}
+			highlight = { colors.grey, colors.statusline_bg }
 		}
 	},
 	{
@@ -173,7 +189,7 @@ local right = {
 					return "  " .. current_Mode .. " "
 				end
 			end,
-			highlight = {colors.red, colors.lightbg}
+			highlight = { colors.red, colors.lightbg }
 		}
 	},
 	{
@@ -190,7 +206,7 @@ local right = {
 				local result, _ = math.modf((current_line / total_line) * 100)
 				return "  " .. result .. "% "
 			end,
-			highlight = {colors.green, colors.lightbg}
+			highlight = { colors.green, colors.lightbg }
 		}
 	}
 }

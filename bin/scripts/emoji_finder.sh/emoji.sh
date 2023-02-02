@@ -12,7 +12,8 @@ emoji="$(fzfmenu < "$SCRIPTPATH/emojis.txt" | awk '{print $1}')"
 
 # Because chromium browsers suck, we can't use wtype on them, so copy to clipboard as a workaround
 focused_window=$(swaymsg -t get_tree | jq -r '.. | select(.type?) | select(.focused==true).app_id')
-if [[ "$focused_window" ==  "brave-browser" ]]; then
+browsers=("brave-browser" "chromium" "google-chrome")
+if [[ "${browsers[*]}"  =~ "$focused_window" ]]; then
 	echo "$emoji" | wl-copy
 	notify-send "Clipboard" "Copied $emoji"
 else

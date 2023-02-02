@@ -4,12 +4,15 @@ only_update="$1"
 
 set -euo pipefail
 
-DIR="$HOME/.screenlayout"
-if [ -n "$WAYLAND_DISPLAY" ]; then
-	DIR="$HOME/bin/swaylayout"
-fi
+# DIR="$HOME/.screenlayout" # For bspwm
+DIR="$HOME/bin/swaylayout" # For sway
 
-CHOICE=$(ls "$DIR"  | fzfmenu)
+is_sway_active=$(pgrep sway)
+if [[ "$is_sway_active" ]]; then
+	CHOICE=$(ls "$DIR"  | fzfmenu)
+else
+	CHOICE=$(ls "$DIR"  | fzf)
+fi
 [ -z "$CHOICE" ] && echo "You chose nothing... doing nothing" && exit 1
 
 # Useful before sway is launched to get the right layout before starting

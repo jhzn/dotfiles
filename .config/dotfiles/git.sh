@@ -15,6 +15,7 @@ git config --global alias.cm "commit -m"
 git config --global alias.c "commit -v"
 git config --global alias.ca "commit -v -a"
 git config --global alias.cam "commit -a -m"
+git config --global alias.ap "add -p"
 git config --global alias.co "checkout"
 git config --global alias.cob '! git checkout $(git branch | fzf)'
 git config --global alias.br "branch"

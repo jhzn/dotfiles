@@ -12,6 +12,7 @@ go install honnef.co/go/tools/cmd/staticcheck@latest
 go install golang.org/x/tools/cmd/goimports@latest
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go install github.com/daixiang0/gci@latest
+go install golang.org/x/perf/cmd/benchstat@latest
 
 # Python
 pip install --upgrade \
@@ -24,4 +25,3 @@ pip install --upgrade \
 
 npm install -g yaml-language-server
 npm install -g prettier
-

@@ -234,3 +234,6 @@ vnoremap <c-s> <Esc>:w<CR>
 " ability to insert newline. Should work without shortcut, but something is
 " affecting it. TODO What is?
 inoremap <CR> <CR>
+
+
+nnoremap <leader>g :!git add %<CR>
