@@ -88,9 +88,7 @@ Detect_ft = function()
 		if mime == "application/xml" then set_ft("xml") end
 	end
 end
-cmd [[ autocmd BufEnter * lua Detect_ft() ]]
-
-cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
+-- cmd [[ autocmd BufEnter * lua Detect_ft() ]]
 
 -- TODO port to lua
 cmd'source ~/.config/nvim/legacy.vim'

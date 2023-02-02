@@ -13,7 +13,6 @@ autocmd BufWritePre * %s/\s\+$//e
 " Cursor is always in the middle of the screen
 " Must be done with a autocmd because ChadTree behaves weird otherwise
 autocmd BufEnter * setlocal scrolloff=999
-" set scrolloff=999
 "
 " Setup easier bindings for help/man pages
 autocmd FileType help nnoremap <buffer> gd <C-]>

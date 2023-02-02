@@ -238,7 +238,8 @@ end
 
 Format_code = function()
 	vim.lsp.buf.format({
-		async = true
+		async = true,
+		timeout_ms = 2000,
 	})
 end
 
@@ -367,14 +368,14 @@ end
 local utils = require("utils")
 
 local function efm_server_conf()
-	local eslint = {
-		lintCommand = "eslint_d --cache -f unix --stdin --stdin-filename ${INPUT}",
-		lintIgnoreExitCode = true,
-		lintStdin = true,
-		lintFormats = { "%f:%l:%c: %m" },
-		-- formatCommand = 'eslint --stdin --stdin-filename=${INPUT}',
-		-- formatStdin = true,
-	}
+	-- local eslint = {
+		-- lintCommand = "eslint_d --cache -f unix --stdin --stdin-filename ${INPUT}",
+		-- lintIgnoreExitCode = true,
+		-- lintStdin = true,
+		-- lintFormats = { "%f:%l:%c: %m" },
+		-- -- formatCommand = 'eslint --stdin --stdin-filename=${INPUT}',
+		-- -- formatStdin = true,
+	-- }
 
 	local prettier = { formatStdin = true }
 	local prettier_bin = "node_modules/prettier/bin-prettier.js"
