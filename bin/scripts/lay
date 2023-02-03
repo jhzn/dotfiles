@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/bin/bash -x
 
 only_update="$1"
+is_sway_active=$(pgrep sway)
 
 set -euo pipefail
 
 # DIR="$HOME/.screenlayout" # For bspwm
 DIR="$HOME/bin/swaylayout" # For sway
 
-is_sway_active=$(pgrep sway)
 if [[ "$is_sway_active" ]]; then
 	CHOICE=$(ls "$DIR"  | fzfmenu)
 else

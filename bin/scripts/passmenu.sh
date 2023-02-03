@@ -31,4 +31,3 @@ password_cleartext="$(pass show "$password" | head --lines=1)"
 
 wtype "$password_cleartext"
 notify-send "$unlock_icon"  "Clipboard manager" "Pasted\n$password\n"
-

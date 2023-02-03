@@ -20,3 +20,6 @@ if [ "$?" -eq 0 ]; then
 else
 	notify-send "Monitor Layout" "Recreation failed"
 fi
+
+# Restart waybar if active
+pkill waybar || true; waybar &

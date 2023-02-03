@@ -248,11 +248,6 @@ bindsym $mod+r mode "resize"
 
 exec_always ~/.config/sway/exec_always.sh
 
-bar {
-	swaybar_command waybar
-	position bottom
-}
-
 set $gnome-schema org.gnome.desktop.interface
 
 exec_always {
