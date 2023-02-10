@@ -22,15 +22,13 @@ usb_disable() {
 	echo "$1" | sudo tee /sys/bus/usb/drivers/usb/unbind
 }
 
-disable_patterns=('HP HD Camera')
+disable_patterns=('HP HD Camera' 'HP Truevision Full HD')
 
 for device in $(ls /sys/bus/usb/devices/*/product); do
-
 	device_name=$(cat $device)
+		# echo "Path: $device Name: $device_name"
 
-	# echo "Path: $device Name: $device_name"
-
-	for p in $disable_patterns; do
+	for p in ${disable_patterns[@]}; do
 		if [[ "$p" == "$device_name" ]]; then
 			# echo "match $p == $device_name"
 
@@ -45,7 +43,7 @@ for device in $(ls /sys/bus/usb/devices/*/product); do
 done
 
 if [ $? -eq 0 ]; then
-	notify-send "Success"
+	echo "Success"
 else
-	notify-send "Failure"
+	echo "Failure"
 fi

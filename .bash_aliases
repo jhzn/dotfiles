@@ -33,7 +33,7 @@ alias pager="nvim -R"
 
 alias grep='grep --colour=auto'
 alias egrep='egrep --colour=auto'
-alias fgrep="fgrep --color=auto"
+alias fgrep="grep -F --color=auto"
 
 #replace ls with exa
 alias ls='exa'

@@ -4,7 +4,7 @@ set -euo pipefail
 
 bluetoothctl power on
 
-choice=$(bluetoothctl paired-devices | sort | fzfmenu)
+choice=$(bluetoothctl devices | sort | fzfmenu)
 choice_mac=$(echo "$choice" | awk '{print $2}')
 choice_alias=$(echo "$choice" | awk '{print $3}')
 
