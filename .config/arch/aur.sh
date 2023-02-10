@@ -9,7 +9,7 @@ if [ ! $(which paru) ]; then
 	echo "AUR helper, paru is now installed!"
 fi
 
-paru -S --needed lf vscodium-bin \
-	nerd-fonts-jetbrains-mono zeal \
+paru -S --needed \
+	vscodium-bin zeal \
 	clipman wdisplays notify-send.sh \
 	pandoc-bin wlsunset sway-launcher-desktop

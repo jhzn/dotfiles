@@ -51,7 +51,8 @@ pacman -S --needed bash-completion zsh zsh-autosuggestions zsh-completions zsh-s
 #check /README.md
 pacman -S --needed python-pynvim
 #theme/fonts
-pacman -S --needed noto-fonts ttf-joypixels ttf-font-awesome adapta-gtk-theme papirus-icon-theme lxappearance
+pacman -S --needed noto-fonts ttf-joypixels ttf-font-awesome ttf-jetbrains-mono-nerd \
+	adapta-gtk-theme papirus-icon-theme lxappearance
 #intel
 #pacman -S --needed xf86-video-intel intel-ucode
 #images
@@ -64,14 +65,14 @@ pacman -S --needed fzf ripgrep jq \
 #security
 pacman -S --needed doas
 #files
-pacman -S --needed unzip zip nemo pcmanfm syncthing exa plocate
+pacman -S --needed unzip zip nemo pcmanfm syncthing exa plocate lf
 #disks
 pacman -S --needed gnome-disk-utility gparted udiskie ncdu
 #password manager
 pacman -S --needed pass
 #browser
 pacman -S --needed qutebrowser python-adblock chromium \
-	firefox-dark-reader firefox-ublock-origin firefox-tridactyl
+	firefox-dark-reader firefox-ublock-origin
 
 #laptop
 if [ -e /sys/class/power_supply/BAT0/capacity ]; then
@@ -79,8 +80,8 @@ if [ -e /sys/class/power_supply/BAT0/capacity ]; then
 	#systemctl enable tlp && systemctl start tlp
 fi
 
-mkdir -p /etc/pacman.d/hooks/
-cp ~/.config/arch/*.hook /etc/pacman.d/hooks/
+# mkdir -p /etc/pacman.d/hooks/
+# cp ~/.config/arch/*.hook /etc/pacman.d/hooks/
 
 #install AUR packages
 echo "Installing AUR packages.."
