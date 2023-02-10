@@ -12,4 +12,4 @@ fi
 paru -S --needed lf vscodium-bin \
 	nerd-fonts-jetbrains-mono zeal \
 	clipman wdisplays notify-send.sh \
-	autotiling-rs-git wlogout pandoc-bin wlsunset sway-launcher-desktop
+	pandoc-bin wlsunset sway-launcher-desktop

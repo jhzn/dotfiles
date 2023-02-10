@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 source ~/.config/dotfiles/bash_strict_mode.sh
 

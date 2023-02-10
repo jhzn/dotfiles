@@ -15,6 +15,7 @@ for_window [app_id="^picker$"] floating enable, sticky enable, resize set 60 ppt
 # Custom ones for specific purpose
 for_window [app_id="^password_picker$"] floating enable, sticky enable, resize set 30 ppt 80 ppt, border pixel 10
 for_window [app_id="^clipboard_picker$"] floating enable, sticky enable, resize set 90 ppt 40 ppt, border pixel 10
+for_window [app_id="^powermenu$"] floating enable, sticky enable, resize set 20 ppt 30 ppt, border pixel 10
 
 set $menu exec $term -o font.size=16 --class=launcher -e sway-launcher-desktop
 
