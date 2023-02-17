@@ -112,7 +112,7 @@ local right = {
 				local search_count = vim.fn.searchcount({recompute = 1, maxcount = -1})
 				local active = vim.v.hlsearch == 1 and search_count.total > 0
 				if active then
-					return '/' .. search_term .. '[' .. search_count.current .. '/' .. search_count.total .. ']'
+					return '/' .. search_term .. ' [' .. search_count.current .. '/' .. search_count.total .. ']'
 				end
 			end,
 			condition = condition.hide_in_width,

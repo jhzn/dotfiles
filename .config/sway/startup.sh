@@ -8,8 +8,8 @@ export SSH_AUTH_SOCK
 
 mako &
 ~/.config/sway/wlsunset-toggle.sh &
-nm-applet --indicator &
-udiskie --tray --appindicator &
+nm-applet --indicator > /dev/null &
+udiskie --tray --appindicator > /dev/null &
 lxpolkit &
 #clipboard manager
 wl-paste -t text --watch clipman store --max-items=30 &

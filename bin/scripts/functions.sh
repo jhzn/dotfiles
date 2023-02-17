@@ -53,8 +53,7 @@ jsonp() {
 
 # Convert a printed python object to json
 py_json() {
-	# TODO optimize
-	xp | sed "s/'/\"/g" | sed "s/False/false/g" | sed "s/True/true/g" | jq
+	python3 -c "import json; print(json.dumps($(xp), indent=2))"
 }
 
 # restart services in docker-compose
@@ -117,8 +116,9 @@ echo_and_run() {
 # Notifies via pop up and sound
 # Very useful in a pipeline
 notify_done() {
-	code=$?
 	action=${1:-"Action"}
+	code=${2:-"$?"}
+	echo "notify_done $code"
 
 	say() {
 		volume="-70"
@@ -139,10 +139,12 @@ gotest() {
 	set -o pipefail
 	time echo_and_run \
 		go test -cover -failfast -race -v "$@" | go_test_color
+	code=$?
 	# Notifies us via pop up and sound in case the shell's terminal is not currently focused
 	# Helpful when multitasking
-	notify_done "Test"
+	notify_done "Test" "$code"
 	set +o pipefail
+	return $code
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
