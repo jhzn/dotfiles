@@ -18,6 +18,10 @@ config() {
 }
 alias cfg="config"
 alias c="config"
+# A better name than config, should replace config
+# Removing when old aliases when muscle memory has adjusted :)
+alias dotfiles="config"
+alias d="config"
 
 # Useful when you've cd'ed into a symlink to get the real path
 fix_cwd() { cd $(pwd -P); }

@@ -3,6 +3,7 @@ local gls = gl.section
 local condition = require("galaxyline.condition")
 local fileinfo = require("galaxyline.condition")
 local utils = require("utils")
+local plenary_path = require("plenary.path")
 
 gl.short_line_list = { " " }
 
@@ -17,6 +18,10 @@ local checkwidth = function()
 	end
 	return false
 end
+
+-- TODO: Use this as the default programmatically
+local separator = " | "
+local separator_highlight = { colors.blue, colors.lightbg }
 
 local left = {
 	{
@@ -97,11 +102,62 @@ local left = {
 	},
 }
 
-local i = 0
-for _, r in pairs(left) do
-	gls.left[i] = r
-	i = i + 1
-end
+
+local mid = {
+	{
+		ViMode = {
+			provider = function()
+				local alias = {
+					n = "Normal",
+					i = "Insert",
+					c = "Command",
+					V = "Visual",
+					[""] = "Visual",
+					v = "Visual",
+					R = "Replace"
+				}
+				local current_Mode = alias[vim.fn.mode()]
+
+				if current_Mode == nil then
+					return "  Terminal "
+				else
+					return "  " .. current_Mode .. " "
+				end
+			end,
+			highlight = { colors.red, colors.lightbg }
+		}
+	},
+	{
+		GitIcon = {
+			provider = function()
+				return " "
+			end,
+			condition = require("galaxyline.condition").check_git_workspace,
+			highlight = { colors.grey, colors.statusline_bg },
+			separator = " ",
+			separator_highlight = { colors.statusline_bg, colors.statusline_bg }
+		}
+	},
+	{
+		GitBranch = {
+			provider = "GitBranch",
+			condition = require("galaxyline.condition").check_git_workspace,
+			highlight = { colors.grey, colors.statusline_bg }
+		}
+	},
+	{
+		AbsoluteFilePath = {
+			provider = function()
+				local filepath = vim.fn.fnamemodify(vim.fn.expand('%:p:h'), ':~:.')
+				return plenary_path.new(filepath):shorten(5)
+			end,
+			separator = " | ",
+			separator_highlight = { colors.blue, colors.lightbg },
+			condition = require("galaxyline.condition").check_git_workspace,
+			highlight = { colors.grey, colors.statusline_bg }
+		}
+	},
+}
 
 local right = {
 	{
@@ -152,47 +208,6 @@ local right = {
 		}
 	},
 	{
-		GitIcon = {
-			provider = function()
-				return " "
-			end,
-			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = { colors.grey, colors.statusline_bg },
-			separator = " ",
-			separator_highlight = { colors.statusline_bg, colors.statusline_bg }
-		}
-	},
-	{
-		GitBranch = {
-			provider = "GitBranch",
-			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = { colors.grey, colors.statusline_bg }
-		}
-	},
-	{
-		ViMode = {
-			provider = function()
-				local alias = {
-					n = "Normal",
-					i = "Insert",
-					c = "Command",
-					V = "Visual",
-					[""] = "Visual",
-					v = "Visual",
-					R = "Replace"
-				}
-				local current_Mode = alias[vim.fn.mode()]
-
-				if current_Mode == nil then
-					return "  Terminal "
-				else
-					return "  " .. current_Mode .. " "
-				end
-			end,
-			highlight = { colors.red, colors.lightbg }
-		}
-	},
-	{
 		line_percentage = {
 			provider = function()
 				local current_line = vim.fn.line(".")
@@ -210,9 +225,14 @@ local right = {
 		}
 	}
 }
-i = 0
-for _, r in pairs(right) do
-	gls.right[i] = r
-	i = i + 1
 
+local add_to_line = function(section, items)
+	local i = 0
+	for k, r in pairs(items) do
+		gls[section][i] = r
+		i = i + 1
+	end
 end
+add_to_line("left", left)
+add_to_line("mid", mid)
+add_to_line("right", right)
