@@ -243,7 +243,8 @@ git_file() {
 
 	[ -z "$ref" ] && echo "Branch or commit is empty" && return
 
-	file=$(fzf --header 'File path?')
+	project_root_dir=$(git rev-parse --show-toplevel)
+	file=$(cd "$project_root_dir" && fzf --header 'File path?')
 	[ -z "$file" ] && return
 
 	file_extension="${file##*.}"
@@ -256,4 +257,16 @@ urlencode() {
 }
 urldecode() {
 	echo $(python3 -c "import urllib.parse; print(urllib.parse.unquote('''$1'''))")
+}
+
+# Query for clipboard history
+# Example usage: delta <(xhist 0) <(xhist 1)
+# Diffs last and item before last in clipboard
+xhist() {
+	index=0
+	if [[ ! -z "$1" ]]; then
+		index="$1"
+	fi
+	index=$((index+1))
+	jq -r ".[-$index]" ~/.local/share/clipman.json
 }

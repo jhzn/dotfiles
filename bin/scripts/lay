@@ -1,26 +1,27 @@
-#!/bin/bash -x
+#!/bin/bash
 
 only_update="$1"
-is_sway_active=$(pgrep sway)
 
 set -euo pipefail
 
 # DIR="$HOME/.screenlayout" # For bspwm
 DIR="$HOME/bin/swaylayout" # For sway
 
-if [[ "$is_sway_active" ]]; then
-	CHOICE=$(ls "$DIR"  | fzfmenu)
-else
-	CHOICE=$(ls "$DIR"  | fzf)
-fi
-[ -z "$CHOICE" ] && echo "You chose nothing... doing nothing" && exit 1
+validate_choice() {
+	[ -z "$1" ] && echo "You chose nothing... doing nothing" && exit 1
+}
 
-# Useful before sway is launched to get the right layout before starting
-if [[ "$only_update" != "-u" ]]; then
+is_sway_active=$(pgrep sway)
+if [[ "$is_sway_active" ]]; then
+	CHOICE=$(ls "$DIR" | fzfmenu)
+	validate_choice "$CHOICE"
 	"$DIR/$CHOICE"
 	echo "You chose screenlayout: $CHOICE"
 else
-	echo "Only updating"
+	# Useful before sway is launched to get the right layout before starting
+	CHOICE=$(ls "$DIR"  | fzf)
+	validate_choice "$CHOICE"
+	echo "Only updating because Sway is not running"
 fi
 
 # Save layout so that it is started on next login
