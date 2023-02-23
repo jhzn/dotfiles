@@ -1,28 +1,27 @@
 #!/bin/bash
 
-only_update="$1"
-
-set -euo pipefail
+source ~/.config/dotfiles/bash_strict_mode.sh
 
 # DIR="$HOME/.screenlayout" # For bspwm
 DIR="$HOME/bin/swaylayout" # For sway
 
 validate_choice() {
-	[ -z "$1" ] && echo "You chose nothing... doing nothing" && exit 1
+	if [[ -z "$1" ]]; then
+		echo "You chose nothing... doing nothing" && exit 1
+	fi
 }
 
-is_sway_active=$(pgrep sway)
-if [[ "$is_sway_active" ]]; then
-	CHOICE=$(ls "$DIR" | fzfmenu)
+if [[ "$(pgrep sway)" ]]; then
+	CHOICE=$(ls "$DIR"  | fzfmenu)
 	validate_choice "$CHOICE"
 	"$DIR/$CHOICE"
-	echo "You chose screenlayout: $CHOICE"
 else
-	# Useful before sway is launched to get the right layout before starting
 	CHOICE=$(ls "$DIR"  | fzf)
 	validate_choice "$CHOICE"
-	echo "Only updating because Sway is not running"
+	echo "Only updating because sway is not active"
 fi
+
+echo "You chose screenlayout: $CHOICE"
 
 # Save layout so that it is started on next login
 echo "$DIR/$CHOICE" > "$MONITOR_LAYOUT_FILE"
