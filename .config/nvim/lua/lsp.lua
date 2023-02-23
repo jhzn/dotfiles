@@ -482,7 +482,7 @@ for _, server in pairs(servers) do
 			init_options = { documentFormatting = true },
 			filetypes = vim.tbl_keys(efm_config),
 			settings = {
-				-- lintDebounce = "5s",
+				lintDebounce = "5s",
 				-- rootMarkers = { "." },
 				languages = efm_config,
 				log_level = 4,

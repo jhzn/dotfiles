@@ -20,8 +20,11 @@ local checkwidth = function()
 end
 
 -- TODO: Use this as the default programmatically
-local separator = " | "
-local separator_highlight = { colors.blue, colors.lightbg }
+local separator = ""
+local separator_highlight = { colors.purple, colors.lightbg }
+local highlight = function(foreground)
+	return { foreground, colors.statusline_bg }
+end
 
 local left = {
 	{
@@ -39,27 +42,26 @@ local left = {
 			end,
 			highlight = { colors.statusline_bg, colors.blue },
 			separator = " ",
-			separator_highlight = { colors.blue, colors.lightbg }
+			separator_highlight = highlight(colors.blue),
 		}
 	},
 	{
 		FileName = {
 			provider = { "FileName" },
 			condition = condition.buffer_not_empty,
-			highlight = { colors.white, colors.lightbg },
-			separator = " ",
-			separator_highlight = { colors.lightbg, colors.lightbg2 }
+			highlight = { colors.white, colors.statusline_bg },
+			separator = separator,
+			separator_highlight = highlight(colors.lightbg),
 		}
 	},
 	{
 		current_dir = {
 			provider = function()
-				local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-				return "  " .. dir_name .. " "
+				local filepath = vim.fn.fnamemodify(vim.fn.expand('%:p:h'), ':~:.')
+				return "   " .. plenary_path.new(filepath):shorten(5) .. " "
 			end,
-			highlight = { colors.grey, colors.lightbg2 },
-			separator = " ",
-			separator_highlight = { colors.lightbg2, colors.statusline_bg }
+			highlight = highlight(colors.grey),
+			separator = separator,
 		}
 	},
 	{
@@ -67,7 +69,7 @@ local left = {
 			provider = "DiffAdd",
 			condition = checkwidth,
 			icon = "  ",
-			highlight = { colors.white, colors.statusline_bg }
+			highlight = highlight(colors.white),
 		}
 	},
 	{
@@ -75,7 +77,7 @@ local left = {
 			provider = "DiffModified",
 			condition = checkwidth,
 			icon = "   ",
-			highlight = { colors.grey, colors.statusline_bg }
+			highlight = highlight(colors.grey),
 		}
 	},
 	{
@@ -83,30 +85,53 @@ local left = {
 			provider = "DiffRemove",
 			condition = checkwidth,
 			icon = "  ",
-			highlight = { colors.grey, colors.statusline_bg }
+			highlight = highlight(colors.grey);
 		}
 	},
 	{
 		DiagnosticError = {
 			provider = "DiagnosticError",
 			icon = "  ",
-			highlight = { colors.red, colors.statusline_bg }
+			highlight = highlight(colors.red),
 		}
 	},
 	{
 		DiagnosticWarn = {
 			provider = "DiagnosticWarn",
 			icon = "  ",
-			highlight = { colors.yellow, colors.statusline_bg }
+			highlight = highlight(colors.yellow),
 		}
 	},
 }
-
 
 local mid = {
 	{
 		ViMode = {
 			provider = function()
+				local mode_color = {
+					n = colors.red,
+					i = colors.green,
+					v=colors.blue,
+					[''] = colors.blue,
+					V=colors.blue,
+					c = colors.magenta,
+					no = colors.red,
+					s = colors.orange,
+					S=colors.orange,
+					[''] = colors.orange,
+					ic = colors.yellow,
+					R = colors.violet,
+					Rv = colors.violet,
+					cv = colors.red,
+					ce=colors.red,
+					r = colors.cyan,
+					rm = colors.cyan,
+					['r?'] = colors.cyan,
+					['!']  = colors.red,
+					t = colors.red,
+				}
+				local mode = vim.fn.mode()
+				-- vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color[mode])
 				local alias = {
 					n = "Normal",
 					i = "Insert",
@@ -116,7 +141,7 @@ local mid = {
 					v = "Visual",
 					R = "Replace"
 				}
-				local current_Mode = alias[vim.fn.mode()]
+				local current_Mode = alias[mode]
 
 				if current_Mode == nil then
 					return "  Terminal "
@@ -124,37 +149,7 @@ local mid = {
 					return "  " .. current_Mode .. " "
 				end
 			end,
-			highlight = { colors.red, colors.lightbg }
-		}
-	},
-	{
-		GitIcon = {
-			provider = function()
-				return " "
-			end,
-			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = { colors.grey, colors.statusline_bg },
-			separator = " ",
-			separator_highlight = { colors.statusline_bg, colors.statusline_bg }
-		}
-	},
-	{
-		GitBranch = {
-			provider = "GitBranch",
-			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = { colors.grey, colors.statusline_bg }
-		}
-	},
-	{
-		AbsoluteFilePath = {
-			provider = function()
-				local filepath = vim.fn.fnamemodify(vim.fn.expand('%:p:h'), ':~:.')
-				return plenary_path.new(filepath):shorten(5)
-			end,
-			separator = " | ",
-			separator_highlight = { colors.blue, colors.lightbg },
-			condition = require("galaxyline.condition").check_git_workspace,
-			highlight = { colors.grey, colors.statusline_bg }
+			highlight = highlight(colors.red),
 		}
 	},
 }
@@ -172,8 +167,26 @@ local right = {
 				end
 			end,
 			condition = condition.hide_in_width,
-			separator = ' ',
-			highlight = { colors.blue, colors.lightbg }
+			separator = separator,
+			highlight = highlight(colors.blue),
+		}
+	},
+	{
+		GitIcon = {
+			provider = function()
+				return " "
+			end,
+			condition = require("galaxyline.condition").check_git_workspace,
+			highlight = { colors.grey, colors.statusline_bg },
+			separator = separator,
+			separator_highlight = highlight(colors.statusline_bg),
+		}
+	},
+	{
+		GitBranch = {
+			provider = "GitBranch",
+			condition = require("galaxyline.condition").check_git_workspace,
+			highlight = highlight(colors.grey),
 		}
 	},
 	{
@@ -181,9 +194,9 @@ local right = {
 			provider = function()
 				return " " .. vim.bo.fileformat:upper() .. " "
 			end,
+			separator = " ",
 			condition = condition.hide_in_width,
-			separator = ' ',
-			highlight = { colors.blue, colors.lightbg }
+			highlight = highlight(colors.blue),
 		}
 	},
 	{
@@ -191,7 +204,8 @@ local right = {
 			provider = 'FileEncode',
 			condition = condition.hide_in_width,
 			separator_highlight = { colors.lightbg },
-			highlight = { colors.blue, colors.lightbg }
+			-- separator = " ",
+			highlight = highlight(colors.blue),
 		}
 	},
 	{
@@ -204,7 +218,7 @@ local right = {
 					return ""
 				end
 			end,
-			highlight = { colors.purple, colors.lightbg }
+			highlight = highlight(colors.purple),
 		}
 	},
 	{
@@ -221,7 +235,7 @@ local right = {
 				local result, _ = math.modf((current_line / total_line) * 100)
 				return "  " .. result .. "% "
 			end,
-			highlight = { colors.green, colors.lightbg }
+			highlight = highlight(colors.green),
 		}
 	}
 }
@@ -229,6 +243,9 @@ local right = {
 local add_to_line = function(section, items)
 	local i = 0
 	for k, r in pairs(items) do
+		-- How to programmatically configure
+		-- local item_key, item = next(r)
+		-- local modded_item = {[item_key] = item}
 		gls[section][i] = r
 		i = i + 1
 	end

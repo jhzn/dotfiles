@@ -12,14 +12,14 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
 	execute 'packadd packer.nvim' end
 
+Objects = {}
 function _G.put(...)
-	local objects = {}
 	for i = 1, select('#', ...) do
 		local v = select(i, ...)
-		table.insert(objects, vim.inspect(v))
+		table.insert(Objects, vim.inspect(v))
 	end
 
-	print(table.concat(objects, '\n'))
+	print(table.concat(Objects, '\n'))
 	return ...
 end
 
