@@ -69,4 +69,19 @@ function M.clipboard_set(content)
 	vim.fn.setreg("+", content)
 end
 
+function M.is_big_file(filepath)
+	filepath = vim.fn.expand(filepath)
+	stat = vim.loop.fs_stat(filepath, function(_, stat)
+		return stat
+	end)
+	put(stat)
+	if not stat or not stat.size then
+		return
+	end
+	if stat.size > 10000 then
+		return true
+	end
+	return false
+end
+
 return M

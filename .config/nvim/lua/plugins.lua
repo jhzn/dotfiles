@@ -127,6 +127,9 @@ return require('packer').startup(function(use)
 		run = ':TSUpdate',
 		config = function()
 			require'nvim-treesitter.configs'.setup {
+				disable = function(lang, bufnr) -- Disable in large C++ buffers
+					return api.nvim_buf_line_count(bufnr) > 50000 or vim.fn.col('$')-1 > 10000
+				end,
 				ensure_installed = "all", -- one of "all or a list of languages
 				--ignore_install = { "javascript" }, -- List of parsers to ignore installing
 				highlight = {
