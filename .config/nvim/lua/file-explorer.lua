@@ -61,7 +61,7 @@ require'nvim-tree'.setup {
 		require_confirm = true
 	},
 	renderer = {
-		indent_width = 2,
+		indent_width = 4,
 		indent_markers = {
 			enable = true,
 			inline_arrows = true,
