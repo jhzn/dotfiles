@@ -17,6 +17,11 @@ menu_text=$(printf "'Power menu\n----------------------\nUptime: %s'" "$uptime")
 export PICKER_CLASS='powermenu'
 choice=$(echo -e "$options" | fzfmenu "--no-multi --cycle --header $menu_text")
 
+if [[ "$(timew | grep Started)" ]]; then
+	notify-send "Powermenu" "Timewarrior is tracking. Aborting"
+	exit 1
+fi
+
 case $choice in
 	$shutdown)
 		systemctl poweroff

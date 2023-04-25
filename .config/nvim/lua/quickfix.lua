@@ -1,7 +1,9 @@
+local M = {}
+
 is_locallist_open = false
 is_qflist_open = false
 
-function ToggleLL()
+function M.ToggleLL()
 	if is_locallist_open then
 		vim.cmd("lclose")
 		is_locallist_open = false
@@ -11,7 +13,7 @@ function ToggleLL()
 	end
 end
 
-function ToggleQF()
+function M.ToggleQF()
 	if is_qflist_open then
 		vim.cmd("cclose")
 		is_qflist_open = false
@@ -22,12 +24,4 @@ function ToggleQF()
 	end
 end
 
-vim.cmd[[
-	nnoremap <A-q> :lua ToggleQF()<CR>
-	nnoremap <A-j> :cnext<CR>zz
-	nnoremap <A-k> :cprev<CR>zz
-
-	nnoremap <leader>q :lua ToggleLL()<CR>
-	nnoremap <leader>j :lnext<CR>zz
-	nnoremap <leader>k :lprev<CR>zz
-]]
+return M

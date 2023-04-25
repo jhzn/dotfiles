@@ -6,11 +6,39 @@ local grep_dir = function(node)
 	vim.api.nvim_command(string.format("lua require('telescope.builtin').live_grep( { search_dirs = { '%s' } } )", search_dir))
 end
 
+-- Source: https://github.com/nvim-tree/nvim-tree.lua/wiki/Open-At-Startup
+local function open_nvim_tree(data)
+	local IGNORED_FT = {
+		"markdown",
+	}
+	-- buffer is a real file on the disk
+	local real_file = vim.fn.filereadable(data.file) == 1
+	-- buffer is a [No Name]
+	local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
+
+	local argc = vim.fn.argc() > 0
+	if argc  then
+		return
+	end
+	-- &ft
+	local filetype = vim.bo[data.buf].ft
+	-- only files please
+	if not real_file and not no_name then
+		return
+	end
+	-- skip ignored filetypes
+	if vim.tbl_contains(IGNORED_FT, filetype) then
+		return
+	end
+	-- open the tree but don't focus it
+	require("nvim-tree.api").tree.toggle({ focus = false })
+end
+
+vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+
 require'nvim-tree'.setup {
 	disable_netrw       = true,
 	hijack_netrw        = true,
-	open_on_setup       = false,
-	ignore_ft_on_setup  = {},
 	open_on_tab         = false,
 	hijack_cursor       = false,
 	update_cwd          = true,

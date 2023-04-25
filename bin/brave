@@ -10,7 +10,7 @@ fi
 export CHROME_VERSION_EXTRA="stable"
 
 if [ -z "$BRAVE_BIN" ]; then
-	exec /bin/brave-browser "$@" $USER_FLAGS
+	exec /usr/bin/brave "$@" $USER_FLAGS
 else
 	exec "$BRAVE_BIN" "$@" $USER_FLAGS
 fi

@@ -26,7 +26,7 @@ pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmu
 cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json
 
 # wayland
-pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wtype autotiling-rs
+pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wtype autotiling-rs qt5-wayland qt6-wayland
 
 #networking
 pacman -S --needed iptables-nft
@@ -38,7 +38,7 @@ pacman -S --needed bluez bluez-utils
 
 #development tools
 pacman -S --needed python3 python-pip go nodejs npm yarn rustup \
-	gnu-netcat openssh docker docker-compose git-delta
+	gnu-netcat openssh docker docker-compose git-delta wget tokei
 if [ ! "$(which rustc)" ]; then
 	rustup default stable
 fi
@@ -61,7 +61,7 @@ pacman -S --needed imv gimp swappy imagemagick
 pacman -S --needed zathura zathura-pdf-poppler sdcv texlive-core
 #misc
 pacman -S --needed fzf ripgrep jq \
-	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui mpv tealdeer
+	youtube-dl units gnome-calculator newsboat speedtest-cli bat bottom s-tui mpv tealdeer fd
 #security
 pacman -S --needed doas
 #files

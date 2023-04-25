@@ -6,6 +6,9 @@ set -e
 
 url="$1"
 name="${url##*/}"
+if [[ ! -z "$2" ]]; then
+	name="$2"
+fi
 
 git clone --bare "$url" "$name"
 cd "$name"

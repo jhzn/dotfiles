@@ -1,8 +1,9 @@
 local ls = require("luasnip")
+local utils = require("utils")
 -- some shorthands...
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
+local t = ls.text_node local i = ls.insert_node
+local f = ls.function_node
 local fmt = require("luasnip.extras.fmt").fmt
 local newline = function ()
 	return t({"",""})
@@ -91,7 +92,40 @@ ls.add_snippets("go", {
 		newline(),
 		t("}"),
 	}),
+	s("pjson", {
+		t("{"),
+		newline(),
+		t("\tgurkaTempLog, _ := json.MarshalIndent("),
+		i(1),
+		t(', "", "\\t")'),
+		newline(),
+		t('\tfmt.Printf("banan '),
+		f(function()
+			return { utils.ts_function_surrounding_current_cursor() }
+		end, {}),
+		t(' \\n%s\\n\", gurkaTempLog)'),
+		newline(),
+		t("}"),
+	}),
+	s("pprof_heap", fmt([[
+			go func() {{
+				label := "{label}"
+				for {{
+					f, err := os.Create(fmt.Sprintf("/tmp/%s_heap_pprof_%s", label, time.Now().Format(time.RFC3339)))
+					if err != nil {{
+						panic(err)
+					}}
+					if err := pprof.WriteHeapProfile(f); err != nil {{
+						panic(err)
+					}}
+					time.Sleep(1 * time.Second)
+				}}
+			}}()
+	]], {
+		label = i(1)
+	})),
 })
+-- })
 
 ls.add_snippets("sh", {
 	s("root", {

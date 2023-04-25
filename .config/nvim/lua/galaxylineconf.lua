@@ -46,15 +46,6 @@ local left = {
 		}
 	},
 	{
-		FileName = {
-			provider = { "FileName" },
-			condition = condition.buffer_not_empty,
-			highlight = { colors.white, colors.statusline_bg },
-			separator = separator,
-			separator_highlight = highlight(colors.lightbg),
-		}
-	},
-	{
 		current_dir = {
 			provider = function()
 				local filepath = vim.fn.fnamemodify(vim.fn.expand('%:p:h'), ':~:.')
@@ -62,6 +53,15 @@ local left = {
 			end,
 			highlight = highlight(colors.grey),
 			separator = separator,
+		}
+	},
+	{
+		FileName = {
+			provider = { "FileName" },
+			condition = condition.buffer_not_empty,
+			highlight = { colors.white, colors.statusline_bg },
+			separator = separator,
+			separator_highlight = highlight(colors.lightbg),
 		}
 	},
 	{
@@ -161,6 +161,9 @@ local right = {
 			provider = function()
 				local search_term = vim.fn.getreg('/')
 				local search_count = vim.fn.searchcount({recompute = 1, maxcount = -1})
+				if not search_count then
+					return
+				end
 				local active = vim.v.hlsearch == 1 and search_count.total > 0
 				if active then
 					return '/' .. search_term .. ' [' .. search_count.current .. '/' .. search_count.total .. ']'

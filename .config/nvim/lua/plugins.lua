@@ -56,7 +56,7 @@ return require('packer').startup(function(use)
 			if vim.g.theme_style == "light" then
 				cfg.diagnostics.darker = false
 				cfg.highlights = {
-					CursorLine = {bg = '$bg1'},
+					CursorLine = {bg = '$bg2'},
 					Visual = {bg = '$bg3'},
 				}
 				vim.o.background = 'light'

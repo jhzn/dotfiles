@@ -3,8 +3,8 @@
 source ~/.config/dotfiles/bash_strict_mode.sh
 
 if [ $EUID != 0 ]; then
-    exec sudo -E "$0" "$@"
-    exit $?
+	exec sudo -E "$0" "$@"
+	exit $?
 fi
 
 device_id() {
@@ -26,7 +26,7 @@ disable_patterns=('HP HD Camera' 'HP Truevision Full HD')
 
 for device in $(ls /sys/bus/usb/devices/*/product); do
 	device_name=$(cat $device)
-		# echo "Path: $device Name: $device_name"
+	echo "Path: $device Name: $device_name"
 
 	for p in ${disable_patterns[@]}; do
 		if [[ "$p" == "$device_name" ]]; then

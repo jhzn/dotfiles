@@ -33,7 +33,7 @@ export MOZ_DBUS_REMOTE=1
 
 export XDG_SESSION_TYPE=wayland
 export XDG_CURRENT_DESKTOP=sway
-
+HOST=$(cat /etc/hostname)
 if [ "$HOST" == "johan-laptop" ]; then
 	export VDPAU_DRIVER=va_gl
 	export LIBVA_DRIVER_NAME=i965

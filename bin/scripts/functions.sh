@@ -267,6 +267,23 @@ xhist() {
 	if [[ ! -z "$1" ]]; then
 		index="$1"
 	fi
+	# The public API uses 0 as the latest entry however that is not the internal index
 	index=$((index+1))
 	jq -r ".[-$index]" ~/.local/share/clipman.json
+}
+
+# Diff last clipboard entry with entry before last
+xdiff() {
+	delta <(xhist 0) <(xhist 1)
+}
+xdiff_json() {
+	delta <(xhist 0 | jq) <(xhist 1 | jq)
+}
+# Hexadecimal to decimal
+hex(){
+	if [[ ! $(echo "$1" | grep "0x") ]]; then
+		echo "'$1' is not a hex value"
+		return 1
+	fi
+	printf "%d\n" "$1"
 }

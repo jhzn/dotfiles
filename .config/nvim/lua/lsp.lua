@@ -306,8 +306,6 @@ local on_attach = function(client, bufnr)
 		)
 	end
 
-	require("quickfix")
-
 	vim.cmd([[autocmd CursorHoldI * silent! lua vim.lsp.buf.signature_help({ focusable = false })]])
 
 	-- show a window with the LSP diagnostic when moving cursor on the same line
@@ -435,6 +433,7 @@ local function go_lsp_server_conf()
 		},
 		staticcheck = true,
 		-- ['local'] = goModule,
+		['local'] = "",
 	}
 
 end
@@ -444,7 +443,7 @@ local servers = {
 	"gopls",
 	"pylsp",
 	"bashls",
-	"sumneko_lua",
+	-- "sumneko_lua",
 	"tsserver",
 	"efm",
 	"bicep",

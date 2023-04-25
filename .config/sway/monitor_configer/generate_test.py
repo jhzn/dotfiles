@@ -630,7 +630,9 @@ def test_generate_1_monitor():
 
 set -euo pipefail
 
-MON_0=eDP-1 # Model: '0x08DA' This is your 'primary' monitor
+# Thunderbolt docks makes display outputs like DP-6 are unreliable and might be DP-7 on reconnect.
+# This is why it's implemented like this. We don't store the output name and instead store the model name and do a lookup.
+MON_0="$(swaymsg -t get_outputs | jq -r '.[] | select(.model | contains("0x08DA")) | .name')" # Model: '0x08DA' This is your 'primary' monitor
 
 swaymsg "workspace 10 output $MON_0; workspace number 10; move workspace to $MON_0"
 swaymsg "workspace 9 output $MON_0; workspace number 9; move workspace to $MON_0"
@@ -643,7 +645,7 @@ swaymsg "workspace 3 output $MON_0; workspace number 3; move workspace to $MON_0
 swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0"
 swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
 
-swaymsg output $MON_0 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
+swaymsg output "$MON_0" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
 swaymsg output DP-1 disable
 
 prim_waybar_persistent_workspaces=$(cat << EOF
@@ -672,8 +674,10 @@ def test_generate_2_monitors():
 
 set -euo pipefail
 
-MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
-MON_1=eDP-1 # Model: '0x08DA'
+# Thunderbolt docks makes display outputs like DP-6 are unreliable and might be DP-7 on reconnect.
+# This is why it's implemented like this. We don't store the output name and instead store the model name and do a lookup.
+MON_0="$(swaymsg -t get_outputs | jq -r '.[] | select(.model | contains("U2777B")) | .name')" # Model: 'U2777B' This is your 'primary' monitor
+MON_1="$(swaymsg -t get_outputs | jq -r '.[] | select(.model | contains("0x08DA")) | .name')" # Model: '0x08DA'
 
 swaymsg "workspace 10 output $MON_1; workspace number 10; move workspace to $MON_1"
 swaymsg "workspace 9 output $MON_1; workspace number 9; move workspace to $MON_1"
@@ -686,8 +690,8 @@ swaymsg "workspace 3 output $MON_0; workspace number 3; move workspace to $MON_0
 swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0"
 swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
 
-swaymsg output $MON_1 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
-swaymsg output $MON_0 res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
+swaymsg output "$MON_1" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
+swaymsg output "$MON_0" res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
 swaymsg output DP-1 disable
 
 prim_waybar_persistent_workspaces=$(cat << EOF
@@ -712,11 +716,13 @@ aux_waybar_persistent_workspaces=$(cat << EOF
 EOF
 )
 
-echo -e '[' > ~/.config/waybar/config
-jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config
-echo -e ',' >> ~/.config/waybar/config
-jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
-echo -e ']' >> ~/.config/waybar/config"""
+{
+    echo -e '['
+    jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template
+    echo -e ','
+    jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'" ]' ~/.config/waybar/aux_conf_template
+    echo -e ']'
+} > ~/.config/waybar/config"""
 
     assert got == expected, "test with 2 monitors failed\n{}".format(diff_strings(expected, got))
 
@@ -727,9 +733,11 @@ def test_generate_3_monitors():
 
 set -euo pipefail
 
-MON_0=HDMI-A-1 # Model: 'U2777B' This is your 'primary' monitor
-MON_1=eDP-1 # Model: '0x08DA'
-MON_2=DP-8 # Model: 'BenQ GL2240'
+# Thunderbolt docks makes display outputs like DP-6 are unreliable and might be DP-7 on reconnect.
+# This is why it's implemented like this. We don't store the output name and instead store the model name and do a lookup.
+MON_0="$(swaymsg -t get_outputs | jq -r '.[] | select(.model | contains("U2777B")) | .name')" # Model: 'U2777B' This is your 'primary' monitor
+MON_1="$(swaymsg -t get_outputs | jq -r '.[] | select(.model | contains("0x08DA")) | .name')" # Model: '0x08DA'
+MON_2="$(swaymsg -t get_outputs | jq -r '.[] | select(.model | contains("BenQ GL2240")) | .name')" # Model: 'BenQ GL2240'
 
 swaymsg "workspace 10 output $MON_2; workspace number 10; move workspace to $MON_2"
 swaymsg "workspace 9 output $MON_2; workspace number 9; move workspace to $MON_2"
@@ -742,9 +750,9 @@ swaymsg "workspace 3 output $MON_0; workspace number 3; move workspace to $MON_0
 swaymsg "workspace 2 output $MON_0; workspace number 2; move workspace to $MON_0"
 swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0"
 
-swaymsg output $MON_1 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
-swaymsg output $MON_0 res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
-swaymsg output $MON_2 res 1920x1080@60.0hz scale 1.0 transform normal pos 0 0 enable
+swaymsg output "$MON_1" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
+swaymsg output "$MON_0" res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
+swaymsg output "$MON_2" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 0 enable
 
 prim_waybar_persistent_workspaces=$(cat << EOF
 {
@@ -768,11 +776,13 @@ aux_waybar_persistent_workspaces=$(cat << EOF
 EOF
 )
 
-echo -e '[' > ~/.config/waybar/config
-jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template >> ~/.config/waybar/config
-echo -e ',' >> ~/.config/waybar/config
-jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'","'"$MON_2"'" ]' ~/.config/waybar/aux_conf_template >> ~/.config/waybar/config
-echo -e ']' >> ~/.config/waybar/config"""
+{
+    echo -e '['
+    jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template
+    echo -e ','
+    jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'","'"$MON_2"'" ]' ~/.config/waybar/aux_conf_template
+    echo -e ']'
+} > ~/.config/waybar/config"""
 
     assert got == expected, "test with 3 monitors failed\n{}".format(diff_strings(expected, got))
 

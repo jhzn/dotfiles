@@ -100,6 +100,16 @@ command! -nargs=? -range=% RetabIndent call IndentConvert(<line1>,<line2>,&et,<q
 """"""""""""" Key mappings """""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""
 
+" quickfix
+nnoremap <A-q> :lua require("quickfix").ToggleQF()<CR>
+nnoremap <A-j> :cnext<CR>zz
+nnoremap <A-k> :cprev<CR>zz
+
+nnoremap <leader>q :lua require("quickfix").ToggleLL()<CR>
+nnoremap <leader>j :lnext<CR>zz
+nnoremap <leader>k :lprev<CR>zz
+
+
 " Nvim-tree.lua
 nnoremap ,m :NvimTreeToggle<CR>
 nnoremap ,n :NvimTreeRefresh<CR>

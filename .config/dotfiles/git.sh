@@ -29,6 +29,8 @@ git config --global alias.authors "shortlog -s -n -e"
 git config --global alias.filehist "log -p"
 git config --global alias.filerev '! git show'
 git config --global alias.emp '! git commit --allow-empty -m "Empty commit"'
+git config --global alias.cot '! file=$(git --no-pager diff --name-only --diff-filter=U | fzf); git checkout --theirs "$file" && git add "$file"'
+git config --global alias.coo '! file=$(git --no-pager diff --name-only --diff-filter=U | fzf); git checkout --ours "$file" && git add "$file"'
 
 # git config --global alias.filerev '! GIT_PAGER="nvim -c set ft="$(echo -e "go\npython" | fzf)"" git show'
 
