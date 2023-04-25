@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 source ~/.config/dotfiles/bash_strict_mode.sh
 
@@ -34,7 +34,7 @@ if [[ $(command -v ddcutil detect) ]]; then
 	displays=$(ddcutil detect | grep Display | awk '{print $2}')
 
 	# just get for 1 display, not pretty but simple
-	current_level=$(ddcutil --display=1 -t getvcp 10 | awk '{print $4}')
+	current_level=$(ddcutil --display=1 -t getvcp 10 | tail -n1 | awk '{print $4}')
 	case "$1" in
 		up)
 			new_level=$(( $current_level + $increment));;

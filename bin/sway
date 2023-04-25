@@ -4,9 +4,7 @@ swaybin="/bin/sway"
 [[ -n "$SWAY_BIN" ]] && swaybin="$SWAY_BIN"
 
 [[ -n "$@" ]] && exec "$swaybin" "$@"
-
-#truncate before launch of sway
-#>~/sway.log
+#truncate before launch of sway >~/sway.log
 
 # Open STDOUT as $LOG_FILE file for write.
 # Redirect STDERR to STDOUT
@@ -43,6 +41,50 @@ if [ "$HOST" == "johan-desktop" ]; then
 	export VDPAU_DRIVER=nouveau
 	export LIBVA_DRIVER_NAME=nouveau
 	# swaybin="$swaybin --unsupported-gpu"
+fi
+if [ "$HOST" == "T2johahaka" ]; then
+
+	export VDPAU_DRIVER=va_gl
+	export LIBVA_DRIVER_NAME=iHD
+	# open source drivers
+	# export VDPAU_DRIVER=nouveau
+	# export VDPAU_DRIVER=nouveau
+	#
+	#
+	#
+	#
+	#
+	#
+
+	# export WLR_DRM_DEVICES="/dev/dri/card0"
+	# Prop NVIDIA driver testing
+	# Only thing not working is vulkan rendering in chromium
+	# export LIBVA_DRIVER_NAME=nvidia
+	# export VDPAU_DRIVER=nvidia
+	# export LIBVA_DRIVERS_PATH=/usr/lib/dri
+	# export LIBGL_DRIVERS_PATH=/usr/lib/dri
+	# export GBM_BACKENDS_PATH=/usr/lib/gbm
+	# swaybin="$swaybin --unsupported-gpu"
+	# export WLR_DRM_DEVICES="/dev/dri/card1:/dev/dri/card0"
+	# unset WLR_DRM_NO_MODIFIERS
+	# export WLR_NO_HARDWARE_CURSORS=1
+	# # Set WLRoots renderer to Vulkan to avoid flickering
+	# export WLR_RENDERER=vulkan
+	# # General wayland environment variables
+	# export XDG_SESSION_TYPE=wayland
+	# export QT_QPA_PLATFORM=wayland
+	# export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+	# # Firefox wayland environment variable
+	# export MOZ_ENABLE_WAYLAND=1
+	# export MOZ_USE_XINPUT2=1
+	# # OpenGL Variables
+	# export GBM_BACKEND=nvidia-drm
+	# export __GL_GSYNC_ALLOWED=0
+	# export __GL_VRR_ALLOWED=0
+	# export __GLX_VENDOR_LIBRARY_NAME=nvidia
+
+
+	# export DRI_PRIME=1
 fi
 
 export QT_QPA_PLATFORM=wayland

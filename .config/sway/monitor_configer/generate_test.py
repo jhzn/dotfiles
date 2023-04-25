@@ -664,7 +664,7 @@ prim_waybar_persistent_workspaces=$(cat << EOF
 EOF
 )
 
-jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
+jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "$prim_waybar_persistent_workspaces" "$MON_0")" ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
     assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
 
 
@@ -718,9 +718,9 @@ EOF
 
 {
     echo -e '['
-    jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template
+    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "$prim_waybar_persistent_workspaces" "$MON_0")" ~/.config/waybar/primary_conf_template
     echo -e ','
-    jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'" ]' ~/.config/waybar/aux_conf_template
+    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "$aux_waybar_persistent_workspaces" "$MON_1")" ~/.config/waybar/aux_conf_template
     echo -e ']'
 } > ~/.config/waybar/config"""
 
@@ -778,9 +778,9 @@ EOF
 
 {
     echo -e '['
-    jq '."sway\/workspaces".persistent_workspaces = '"$prim_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_0"'" ]' ~/.config/waybar/primary_conf_template
+    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "$prim_waybar_persistent_workspaces" "$MON_0")" ~/.config/waybar/primary_conf_template
     echo -e ','
-    jq '."sway\/workspaces".persistent_workspaces = '"$aux_waybar_persistent_workspaces"' | ."output"= [ "'"$MON_1"'","'"$MON_2"'" ]' ~/.config/waybar/aux_conf_template
+    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "$aux_waybar_persistent_workspaces" "$MON_1,$MON_2")" ~/.config/waybar/aux_conf_template
     echo -e ']'
 } > ~/.config/waybar/config"""
 

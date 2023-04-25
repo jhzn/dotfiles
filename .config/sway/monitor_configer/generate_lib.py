@@ -52,7 +52,9 @@ def monitor_assignments(monitors_map: models.MonitorMap, primary_monitor: str) -
         return f"""\"$(swaymsg -t get_outputs | jq -r '.[] | select(.model | contains("{model}")) | .name')\""""
 
     out = []
-    out.append("# Thunderbolt docks makes display outputs like DP-6 are unreliable and might be DP-7 on reconnect.\n# This is why it's implemented like this. We don't store the output name and instead store the model name and do a lookup.")
+    out.append(
+        "# Thunderbolt docks makes display outputs like DP-6 are unreliable and might be DP-7 on reconnect.\n# This is why it's implemented like this. We don't store the output name and instead store the model name and do a lookup."
+    )
     for monitor_name, monitor in monitors_map.items():
         if monitor_name is primary_monitor:
             out.append(
@@ -84,7 +86,7 @@ def conf_outputs(
         out.append(
             " ".join(
                 [
-                    "swaymsg output \"{}\"".format(monitor_variables_map[monitor.name].variable_name),
+                    'swaymsg output "{}"'.format(monitor_variables_map[monitor.name].variable_name),
                     "res {}x{}@{}hz".format(
                         monitor.current_mode.width,
                         monitor.current_mode.height,
@@ -147,7 +149,6 @@ WAYBAR_AUX_TEMPLATE = "~/.config/waybar/aux_conf_template"
 
 
 def waybar(monitor_map: models.MonitorMap) -> List[str]:
-
     # Now we setup things for waybar
     # I want Waybar to have one type of bar layout for the primary monitor and another for the non-primary monitors(called aux monitors in the script)
     # We have ~/.config/waybar/primary_conf_template and ~/.config/waybar/aux_conf_template which are templates to create our final waybar config file
@@ -172,15 +173,15 @@ def waybar(monitor_map: models.MonitorMap) -> List[str]:
         out.append(
             f"""{{
     echo -e '['
-    jq '."sway\/workspaces".persistent_workspaces = '"${primary_workspaces_var_name}"' | ."output"= [ "'"{primary_mon_variable}"'" ]' {WAYBAR_PRIMARY_TEMPLATE}
+    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "${primary_workspaces_var_name}" "{primary_mon_variable}")" {WAYBAR_PRIMARY_TEMPLATE}
     echo -e ','
-    jq '."sway\/workspaces".persistent_workspaces = '"${aux_workspaces_var_name}"' | ."output"= [ "'"{'''"'","'"'''.join(aux_mon_vars)}"'" ]' {WAYBAR_AUX_TEMPLATE}
+    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "${aux_workspaces_var_name}" "{",".join(aux_mon_vars)}")" {WAYBAR_AUX_TEMPLATE}
     echo -e ']'
 }} > {WAYBAR_CONFIG_FILE}"""
         )
     else:
         out.append(
-            f"""jq '."sway\/workspaces".persistent_workspaces = '"${primary_workspaces_var_name}"' | ."output"= [ "'"{primary_mon_variable}"'" ]' {WAYBAR_PRIMARY_TEMPLATE} > {WAYBAR_CONFIG_FILE}"""
+            f"""jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "${primary_workspaces_var_name}" "{primary_mon_variable}")" {WAYBAR_PRIMARY_TEMPLATE} > {WAYBAR_CONFIG_FILE}"""
         )
 
     return out

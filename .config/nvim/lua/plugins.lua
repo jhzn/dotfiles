@@ -97,6 +97,7 @@ return require('packer').startup(function(use)
 	use {
 		'kyazdani42/nvim-tree.lua',
 		requires = {
+			'ryanoasis/vim-devicons',
 			'kyazdani42/nvim-web-devicons', -- optional, for file icon
 		},
 		-- config = function() require("file-explorer") end
@@ -221,5 +222,7 @@ return require('packer').startup(function(use)
 		end,
 	}
 	use "editorconfig/editorconfig-vim"
+
+	-- use "ustcyue/proto-number"
 
 end)

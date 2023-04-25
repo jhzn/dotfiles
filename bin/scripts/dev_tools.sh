@@ -28,5 +28,5 @@ pip install --upgrade \
 	pylsp-mypy\
 	python-lsp-black
 
-npm install -g yaml-language-server
-npm install -g prettier
+sudo npm install -g yaml-language-server
+sudo npm install -g prettier
