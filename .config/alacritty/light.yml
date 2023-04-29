@@ -19,4 +19,4 @@ colors:
     white:      '#a0a1a7' # mono-3
 
 window:
-  opacity: 0.95
+  opacity: 1

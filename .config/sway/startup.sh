@@ -19,6 +19,6 @@ wl-paste -t text --watch ~/bin/scripts/clip &
 
 
 #inactive windows are more transparent than focuses on
-inactive-windows-transparency.py &
+~/.config/sway/focus_flasher &
 
 autotiling-rs &

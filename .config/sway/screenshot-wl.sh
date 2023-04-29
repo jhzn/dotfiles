@@ -66,7 +66,10 @@ tmp_filename="$screenshot_dir/tmp-screenshot.png"
 
 final_command="$grimshot_cmd $tmp_filename"
 echo "Running command: $final_command"
+disable_focus_flasher="/tmp/disable_focus_flasher"
+touch "$disable_focus_flasher"
 eval "$final_command"
+rm "$disable_focus_flasher"
 
 if [ "$edit_option" = "Yes" ]; then
 	swappy --file "$tmp_filename" --output-file "$tmp_filename"

@@ -37,13 +37,14 @@ function M.get_function_name(current_node, obj_name)
 			local type = child:type()
 			if obj_name == 'method_declaration' then
 				-- put(obj_name)
-				-- put(type .. vim.treesitter.query.get_node_text(child, vim.api.nvim_get_current_buf()))
+				-- put(type .. vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf()))
 				if type == 'field_identifier' then
-					return vim.treesitter.query.get_node_text(child, vim.api.nvim_get_current_buf())
+					vim.treesitter.get_node_text()
+					return vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf())
 				end
 			else
 				if type == 'identifier' or type == 'operator_name' then
-					return vim.treesitter.query.get_node_text(child, vim.api.nvim_get_current_buf())
+					return vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf())
 				end
 			end
 
