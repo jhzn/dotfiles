@@ -26,6 +26,7 @@ git config --global alias.p "pull"
 git config --global alias.f "fetch"
 git config --global alias.sw "switch"
 git config --global alias.wip "! git add . && git commit -m 'WIP' && git push"
+git config --global alias.wipv "! git add . && git commit --no-verify -m 'WIP' && git push"
 git config --global alias.authors "shortlog -s -n -e"
 git config --global alias.filehist "log -p"
 git config --global alias.filerev '! git show'

@@ -97,8 +97,9 @@ go_test_color() {
 		sub("FAIL", ESC COLOR_RED "FAIL" ESC RESET, $0);
 		sub("ERROR",ESC COLOR_RED "ERROR" ESC RESET, $0);
 		sub("WARN", ESC COLOR_YELLOW "WARN" ESC RESET, $0);
-		sub("PASS", ESC COLOR_GREEN "PASS" ESC RESET, $0); #
+		sub("PASS", ESC COLOR_GREEN "PASS" ESC RESET, $0);
 		sub(/=== RUN.+$/, ESC COLOR_FOREGROUND COLOR_BLUE_BG "&" ESC RESET, $0);
+		sub("P_DEBUG", ESC COLOR_MAGENTA "P_DEBUG" ESC RESET, $0);
 
 		# When t.Errorf("MyMessage") or t.Logf("MyMessage") is called it outputs for example: "    /a/path/to/testfile.go:12 MyMessage". This case catches that and highlights it
 		# & is a special character in awk.
@@ -248,15 +249,15 @@ git_file() {
 	[ -z "$file" ] && return
 
 	file_extension="${file##*.}"
-	git show "$ref:$file" | nvim -R -c "set ft=$file_extension"
+	git show "$ref:$file" | nvim -R -c "setlocal buftype=nofile ft=$file_extension"
 	set +x
 }
 
 urlencode() {
-	echo $(python3 -c "import urllib.parse; print(urllib.parse.quote('''$1'''))")
+	python3 -c "import urllib.parse; print(urllib.parse.quote('''$1'''))"
 }
 urldecode() {
-	echo $(python3 -c "import urllib.parse; print(urllib.parse.unquote('''$1'''))")
+	python3 -c "import urllib.parse; print(urllib.parse.unquote('''$1'''))"
 }
 
 # Query for clipboard history
@@ -264,7 +265,7 @@ urldecode() {
 # Diffs last and item before last in clipboard
 xhist() {
 	index=0
-	if [[ ! -z "$1" ]]; then
+	if [[ -n "$1" ]]; then
 		index="$1"
 	fi
 	# The public API uses 0 as the latest entry however that is not the internal index

@@ -17,8 +17,7 @@ wl-paste -t text --watch ~/bin/scripts/clip &
 ~/bin/scripts/cron.sh &
 [[ $(which kdeconnect-indicator) ]] && kdeconnect-indicator &
 
-
-#inactive windows are more transparent than focuses on
+# Flash the window which is focused
 ~/.config/sway/focus_flasher &
 
 autotiling-rs &

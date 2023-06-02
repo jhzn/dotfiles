@@ -36,10 +36,7 @@ function M.get_function_name(current_node, obj_name)
 			local child = node:named_child(i)
 			local type = child:type()
 			if obj_name == 'method_declaration' then
-				-- put(obj_name)
-				-- put(type .. vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf()))
 				if type == 'field_identifier' then
-					vim.treesitter.get_node_text()
 					return vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf())
 				end
 			else
@@ -75,7 +72,6 @@ function M.is_big_file(filepath)
 	stat = vim.loop.fs_stat(filepath, function(_, stat)
 		return stat
 	end)
-	put(stat)
 	if not stat or not stat.size then
 		return
 	end

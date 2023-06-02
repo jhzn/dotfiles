@@ -99,13 +99,22 @@ ls.add_snippets("go", {
 		i(1),
 		t(', "", "\\t")'),
 		newline(),
-		t('\tfmt.Printf("banan '),
+		t('\tfmt.Printf("P_DEBUG '),
 		f(function()
 			return { utils.ts_function_surrounding_current_cursor() }
 		end, {}),
 		t(' \\n%s\\n\", gurkaTempLog)'),
 		newline(),
 		t("}"),
+	}),
+	s("pde", {
+		t('\tfmt.Printf("P_DEBUG: %+v '),
+		f(function()
+			return { utils.ts_function_surrounding_current_cursor() }
+		end, {}),
+		t('\\n",'),
+		i(1),
+		t(')'),
 	}),
 	s("pprof_heap", fmt([[
 			go func() {{

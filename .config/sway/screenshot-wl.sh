@@ -59,6 +59,7 @@ save_option=$(prompt "Destination?" "Clipboard\nFile")
 edit_option=$(prompt "Edit screenshot?" "No\nYes")
 delay_option=$(prompt "Delay of 5 seconds" "No\nYes")
 if [ "$delay_option" = "Yes" ]; then
+	swaymsg "focus_follows_mouse no"
 	sleep 5
 fi
 
@@ -66,10 +67,18 @@ tmp_filename="$screenshot_dir/tmp-screenshot.png"
 
 final_command="$grimshot_cmd $tmp_filename"
 echo "Running command: $final_command"
+
 disable_focus_flasher="/tmp/disable_focus_flasher"
 touch "$disable_focus_flasher"
+
+function cleanup {
+	rm "$disable_focus_flasher"
+}
+trap cleanup EXIT
+# Run the command
 eval "$final_command"
-rm "$disable_focus_flasher"
+
+swaymsg "focus_follows_mouse yes"
 
 if [ "$edit_option" = "Yes" ]; then
 	swappy --file "$tmp_filename" --output-file "$tmp_filename"
@@ -77,7 +86,7 @@ fi
 
 case $save_option in
 	"Clipboard")
-		cat "$tmp_filename" | wl-copy --type image/png
+		wl-copy --type image/png < "$tmp_filename"
 		#clean up
 		rm "$tmp_filename"
 		notify-send "Screenshot" "Copied screenshot to clipboard!"
