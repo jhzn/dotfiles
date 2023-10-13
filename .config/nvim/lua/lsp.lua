@@ -502,10 +502,10 @@ for _, server in pairs(servers) do
 				-- ... -- other settings. note this overrides the lspconfig defaults.
 				schemas = {
 					-- ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-					-- ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "docker-compose.yml",
-					-- ["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = ".gitlab-ci.yml",
+					["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "docker-compose.yml",
+					["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = ".gitlab-ci.yml",
 					-- ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = "deploy/cloudformation/*",
-					-- ["https://kubernetesjsonschema.dev/v1.10.3-standalone/service-v1.json"] = "k8s_*",
+					["https://kubernetesjsonschema.dev/v1.10.3-standalone/service-v1.json"] = "k8s_*",
 					["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.27.0/all.json"] = "k8s_*",
 					-- ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = "api.yaml"
 					-- ["https://kubernetesjsonschema.dev/v1.14.0/deployment-apps-v1.json"] = "",

@@ -190,10 +190,10 @@ label:focus {
 	color: @color6;
 }
 
-#network.disconnected {
-	background-color: #f53c3c;
-	color: @color0;
-}
+/* #network.disconnected { */
+	/* background-color: #f53c3c; */
+	/* color: @color0; */
+/* } */
 
 #pulseaudio {
 	color: @color5;

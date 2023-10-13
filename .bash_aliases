@@ -27,6 +27,7 @@ alias g="git"
 
 alias v="nvim"
 alias vim="nvim"
+alias vr="nvim -R" # Vim in readonly mode
 alias j='nvim -R -c "set ft=json"'
 alias y='nvim -R -c "set ft=yaml"'
 alias pager="nvim -R"
@@ -76,3 +77,4 @@ alias p="python3"
 
 alias tmux_dlv="tmux split-window -v -t sc \"zsh -ic 'dlv connect localhost:2345'\""
 alias kust="kustomize"
+alias kctx="kubectl config use-context"

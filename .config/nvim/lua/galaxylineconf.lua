@@ -49,7 +49,7 @@ local left = {
 		current_dir = {
 			provider = function()
 				local filepath = vim.fn.fnamemodify(vim.fn.expand('%:p:h'), ':~:.')
-				return "   " .. plenary_path.new(filepath):shorten(5) .. " "
+				return "   " .. plenary_path.new(filepath):shorten(5) .. " "
 			end,
 			highlight = highlight(colors.grey),
 			separator = separator,
@@ -104,6 +104,21 @@ local left = {
 	},
 }
 
+local function current_mode()
+	local mode = vim.fn.mode()
+	-- vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color[mode])
+	local alias = {
+		n = "Normal",
+		i = "Insert",
+		c = "Command",
+		V = "Visual",
+		[""] = "Visual",
+		v = "Visual",
+		R = "Replace"
+	}
+	return alias[mode]
+end
+
 local mid = {
 	{
 		ViMode = {
@@ -130,18 +145,7 @@ local mid = {
 					['!']  = colors.red,
 					t = colors.red,
 				}
-				local mode = vim.fn.mode()
-				-- vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color[mode])
-				local alias = {
-					n = "Normal",
-					i = "Insert",
-					c = "Command",
-					V = "Visual",
-					[""] = "Visual",
-					v = "Visual",
-					R = "Replace"
-				}
-				local current_Mode = alias[mode]
+				current_Mode = current_mode()
 
 				if current_Mode == nil then
 					return "  Terminal "
@@ -153,8 +157,21 @@ local mid = {
 		}
 	},
 }
-
 local right = {
+	{
+		VisualSelectCount = {
+			provider = function()
+				local mark1 = vim.api.nvim_buf_get_mark(0, "<")[1]
+				local mark2 = vim.api.nvim_buf_get_mark(0, ">")[1]
+				local calc = mark2-mark1
+				if calc > 0 then
+					return "Lines: " .. calc + 1
+				end
+				return ""
+			end,
+			highlight = highlight(colors.green),
+		}
+	},
 	{
 		SearchCount = {
 			-- Source: https://github.com/glepnir/galaxyline.nvim/pull/205
@@ -177,7 +194,7 @@ local right = {
 	{
 		GitIcon = {
 			provider = function()
-				return " "
+				return " "
 			end,
 			condition = require("galaxyline.condition").check_git_workspace,
 			highlight = { colors.grey, colors.statusline_bg },

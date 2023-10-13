@@ -40,7 +40,6 @@ local function map(mode, lhs, rhs, opts)
 end
 
 g.mapleader = " "
-
 -- Make VIM and X11 share the came clipboard
 -- opt.clipboard:append { "unnamed", "unnamedplus" }
 opt.clipboard:append { "unnamedplus" }
@@ -81,9 +80,8 @@ opt.undodir = HOME .. '/.cache/nvim_undo2'
 opt.undofile = true
 
 -- <Tab> to navigate the completion menu
-map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
-map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
-
+-- map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
+-- map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
 
 -- Detect filetype and set it, if vim cant figure it out
 Detect_ft = function()
@@ -96,6 +94,18 @@ Detect_ft = function()
 	end
 end
 -- cmd [[ autocmd BufEnter * lua Detect_ft() ]]
+--
+vim.api.nvim_create_autocmd('TextYankPost', {
+	group = vim.api.nvim_create_augroup('highlight_yank', {}),
+	desc = 'Hightlight selection on yank',
+	pattern = '*',
+	callback = function()
+		vim.highlight.on_yank { higroup = 'IncSearch', timeout = 500 }
+	end,
+})
+
+
+
 
 -- TODO port to lua
 cmd'source ~/.config/nvim/legacy.vim'

@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash -x
+#
+# Bash strict mode
+set -euo pipefail
+# Neat way to show the line and program which caused the error in a pipeline
+trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
 #Home made crontab good enough :=)
 
@@ -13,5 +18,6 @@ done &
 
 while true; do
 	~/.config/sway/wallpaper.sh
+	~/bin/scripts/backuper.sh
 	sleep $hour
 done &

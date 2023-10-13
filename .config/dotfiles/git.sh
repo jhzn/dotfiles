@@ -16,6 +16,7 @@ git config --global alias.c "commit -v"
 git config --global alias.ca "commit -v -a"
 git config --global alias.cam "commit -a -m"
 git config --global alias.camv "commit -a --no-verify -m"
+git config --global alias.cmv "commit --no-verify -m"
 git config --global alias.ap "add -p"
 git config --global alias.co "checkout"
 git config --global alias.cob '! git checkout $(git branch | fzf)'

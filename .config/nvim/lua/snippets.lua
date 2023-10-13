@@ -95,25 +95,34 @@ ls.add_snippets("go", {
 	s("pjson", {
 		t("{"),
 		newline(),
-		t("\tgurkaTempLog, _ := json.MarshalIndent("),
+		t("\tgurkaTempLog, gurkaErr := json.MarshalIndent("),
 		i(1),
 		t(', "", "\\t")'),
 		newline(),
-		t('\tfmt.Printf("P_DEBUG '),
+		t('\tfmt.Printf("P_DEBUG %s Func: '),
 		f(function()
 			return { utils.ts_function_surrounding_current_cursor() }
 		end, {}),
-		t(' \\n%s\\n\", gurkaTempLog)'),
+		t(' err: %v\\n%s\\n\", '),
+		newline(),
+		t('func() string { _, f, l, _ := runtime.Caller(0); return fmt.Sprintf("%s:%d", f, l) }(), gurkaErr, gurkaTempLog)'),
 		newline(),
 		t("}"),
 	}),
 	s("pde", {
-		t('\tfmt.Printf("P_DEBUG: %+v '),
+		t('\tfmt.Printf('),
+		newline(),
+		t('"P_DEBUG %s Func: '),
 		f(function()
 			return { utils.ts_function_surrounding_current_cursor() }
 		end, {}),
-		t('\\n",'),
+		t(' Value: %+v \\n",'),
+		newline(),
+		t('func() string { _, f, l, _ := runtime.Caller(0); return fmt.Sprintf("%s:%d", f, l) }(), '),
+		newline(),
 		i(1),
+		t(','),
+		newline(),
 		t(')'),
 	}),
 	s("pprof_heap", fmt([[

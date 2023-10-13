@@ -72,13 +72,14 @@ cmd trash %set -f; mv $fx ~/.trash
 # (xkcd link: https://xkcd.com/1168/)
 cmd extract ${{
     set -f
+	dir="${f%.*}"
     case $f in
-        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
-        *.tar.gz|*.tgz) tar xzvf $f;;
-        *.tar.xz|*.txz) tar xJvf $f;;
-        *.zip) unzip $f;;
-        *.rar) unrar x $f;;
-        *.7z) 7z x $f;;
+        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f --directory $dir;;
+        *.tar.gz|*.tgz) tar xzvf $f --directory $dir;;
+        *.tar.xz|*.txz) tar xJvf $f--directory $dir ;;
+        *.zip) unzip $f -d $dir;;
+        *.rar) unrar x $f $dir;;
+        *.7z) 7z x $f -o$dir;;
     esac
 }}
 

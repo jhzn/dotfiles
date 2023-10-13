@@ -81,4 +81,19 @@ function M.is_big_file(filepath)
 	return false
 end
 
+function M.longest_line(bufnr)
+	local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+	if #lines == 0 then
+		return 0
+	end
+	-- local width = #(lines[1])
+	local width = 0
+	for _, line in ipairs(lines) do
+		if #line > width then
+			width = #line
+		end
+	end
+	return width
+end
+
 return M

@@ -1,7 +1,7 @@
 font:
   normal:
-    # family: JetBrainsMono Nerd Font
-    family: FiraCode Nerd Font Mono
+    # family: JetBrainsMono Nerd Font Mono
+    family: FiraCode Nerd Font
 # Key bindings
 key_bindings:
   - {key: Return, mods: Control|Shift, action: SpawnNewInstance}

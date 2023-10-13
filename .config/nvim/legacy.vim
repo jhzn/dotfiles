@@ -18,6 +18,8 @@ autocmd BufEnter * setlocal scrolloff=999
 autocmd FileType help nnoremap <buffer> gd <C-]>
 autocmd FileType man nnoremap <buffer> gd <C-]>
 
+autocmd RecordingEnter * set cmdheight=1
+autocmd RecordingLeave * set cmdheight=0
 
 
 
@@ -117,8 +119,8 @@ nnoremap ,x :NvimTreeCollapse<CR>
 
 " Yarn $file:$line_number
 nnoremap <leader>yl <cmd>lua vim.fn.setreg("+", string.format("%s:%s", vim.api.nvim_buf_get_name(0), vim.fn.line(".")))<CR>
-" Yank '$MyFunctionName^'
-nnoremap <leader>yf <cmd>lua vim.fn.setreg("+", string.format("'^%s$'", require("utils").ts_function_surrounding_current_cursor())) <cr>
+" Yank 'gotest $relative_dir_path -run $MyFunctionName^'
+nnoremap <leader>yf <cmd>lua vim.fn.setreg("+", string.format("gotest -run '^%s$' ./%s", require("utils").ts_function_surrounding_current_cursor(), vim.fn.expand('%:.:h'))) <cr>
 nnoremap <leader>l <cmd>lua vim.fn.setreg("+", string.format("%s", require("utils").ts_function_surrounding_current_cursor())) <cr>
 
 " Telescope(fuzzy picker for file names and file content)
@@ -174,8 +176,8 @@ nnoremap <C-l> <C-w>l
 
 " delete without yanking
 nnoremap <leader>d "_d
-nnoremap <leader>D "_d$
-nnoremap <leader>dd 0"_d$
+nnoremap <leader>D "_d
+nnoremap <leader>dd 0"_dd
 
 "replace currently selected text with default register
 "without yanking it
@@ -196,14 +198,14 @@ nnoremap <BS> :
 vnoremap <BS> :
 
 "Keybinding to toggle syncronization of window scrolling
-map <leader>S :windo set scb!<CR>
+" map <leader>S :windo set scb!<CR>
 
 "Keybinding to refresh vim config
 nnoremap <F12> :source ~/.config/nvim/init.lua <CR>
 
 "Sweet way of previewing markdown
-map <leader>ö :execute
-			\ '!mkdir -p $HOME/tmp && pandoc --from=gfm % -o $HOME/tmp/nvim-markdown.pdf && (xdg-open $HOME/tmp/nvim-markdown.pdf ) 2> /dev/null & '<enter> | redraw!
+" map <leader>ö :execute
+			" \ '!mkdir -p $HOME/tmp && pandoc --from=gfm % -o $HOME/tmp/nvim-markdown.pdf && (xdg-open $HOME/tmp/nvim-markdown.pdf ) 2> /dev/null & '<enter> | redraw!
 
 " visual shifting and keep visual selection
 vnoremap < <gv

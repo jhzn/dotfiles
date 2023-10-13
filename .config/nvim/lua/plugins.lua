@@ -74,6 +74,7 @@ return require('packer').startup(function(use)
 		end,
 	}
 
+	use 'nvim-tree/nvim-web-devicons'
 	use {
 		'NTBBloodbath/galaxyline.nvim',
 		branch = 'main',
@@ -81,7 +82,7 @@ return require('packer').startup(function(use)
 			-- put(require('onedark.colors'))
 			require'galaxylineconf'
 		end,
-		requires = {'kyazdani42/nvim-web-devicons', opt = true},
+		requires = {'nvim-tree/nvim-web-devicons', opt = true},
 		after = "onedark.nvim",
 	}
 
@@ -95,12 +96,10 @@ return require('packer').startup(function(use)
 
 
 	use {
-		'kyazdani42/nvim-tree.lua',
-		requires = {
-			'ryanoasis/vim-devicons',
-			'kyazdani42/nvim-web-devicons', -- optional, for file icon
-		},
-		-- config = function() require("file-explorer") end
+		'nvim-tree/nvim-tree.lua',
+		-- requires = {
+			-- 'nvim-tree/nvim-web-devicons'
+		-- },
 		config = function()
 			require("file-explorer")
 		end
@@ -128,29 +127,22 @@ return require('packer').startup(function(use)
 		run = ':TSUpdate',
 		config = function()
 			require'nvim-treesitter.configs'.setup {
-				disable = function(lang, bufnr) -- Disable in large C++ buffers
-					return api.nvim_buf_line_count(bufnr) > 50000 or vim.fn.col('$')-1 > 10000
-				end,
 				ensure_installed = "all", -- one of "all or a list of languages
 				--ignore_install = { "javascript" }, -- List of parsers to ignore installing
 				highlight = {
 					enable = true,              -- false will disable the whole extension
+					disable = function(lang, bufnr) -- Disable in large C++ buffers
+						return require("utils").longest_line(bufnr) > 5000
+						-- return vim.api.nvim_buf_line_count(bufnr) > 50000
+					end,
 					additional_vim_regex_highlighting = true -- Makes highliting only comment when using :set spell
 				},
-				-- rainbow = {
-					-- enable = true,
-					-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-					-- extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-					-- max_file_lines = nil, -- Do not enable for files with more than n lines, int
-					-- colors = {}, -- table of hex strings
-					-- termcolors = {} -- table of colour name strings
-				-- }
 			}
 		end,
 	}
 
 	use {
-		'romgrk/nvim-treesitter-context',
+		'nvim-treesitter/nvim-treesitter-context',
 		config = function ()
 			require'treesitter-context'.setup{
 				enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
@@ -210,7 +202,60 @@ return require('packer').startup(function(use)
 	}
 
 	-- GO stuff
-	use { "kyoh86/vim-go-coverage", ft="go" }
+	-- use { "kyoh86/vim-go-coverage", ft="go" }
+	use { "rafaelsq/nvim-goc.lua", ft="go",
+		config = function()
+
+			-- if set, when we switch between buffers, it will not split more than once. It will switch to the existing buffer instead
+			vim.opt.switchbuf = 'useopen'
+
+			local goc = require'nvim-goc'
+			goc.setup({ verticalSplit = false })  -- default to horizontal
+
+
+			vim.keymap.set('n', '<Leader>gcf', goc.Coverage, {silent=true})       -- run for the whole File
+			vim.keymap.set('n', '<Leader>gct', goc.CoverageFunc, {silent=true})   -- run only for a specific Test unit
+			vim.keymap.set('n', '<Leader>gcc', goc.ClearCoverage, {silent=true})  -- clear coverage highlights
+
+			-- If you need custom arguments, you can supply an array as in the example below.
+			-- vim.keymap.set('n', '<Leader>gcf', function() goc.Coverage({ "-race", "-count=1" }) end, {silent=true})
+			-- vim.keymap.set('n', '<Leader>gct', function() goc.CoverageFunc({ "-race", "-count=1" }) end, {silent=true})
+
+			vim.keymap.set('n', ']a', goc.Alternate, {silent=true})
+			vim.keymap.set('n', '[a', goc.AlternateSplit, {silent=true})          -- set verticalSplit=true for vertical
+
+			cf = function(testCurrentFunction)
+				local cb = function(path)
+					if path then
+
+						-- `xdg-open|open` command performs the same function as double-clicking on the file.
+						-- change from `xdg-open` to `open` on MacOSx
+						vim.cmd(":silent exec \"!xdg-open " .. path .. "\"")
+					end
+				end
+
+				if testCurrentFunction then
+					goc.CoverageFunc(nil, cb, 0)
+				else
+					goc.Coverage(nil, cb)
+				end
+			end
+
+			-- If you want to open it in your browser, you can use the commands below.
+			-- You need to create a callback function to configure which command to use to open the HTML.
+			-- On Linux, `xdg-open` is generally used, on MacOSx it's just `open`.
+			vim.keymap.set('n', '<leader>gca', cf, {silent=true})
+			vim.keymap.set('n', '<Leader>gcb', function() cf(true) end, {silent=true})
+
+			-- default colors
+			-- vim.api.nvim_set_hl(0, 'GocNormal', {link='Comment'})
+			-- vim.api.nvim_set_hl(0, 'GocCovered', {link='String'})
+			-- vim.api.nvim_set_hl(0, 'GocUncovered', {link='Error'})
+
+
+		end
+	}
+
 
 	use 'scrooloose/nerdcommenter'
 	use 'tpope/vim-surround'

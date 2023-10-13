@@ -68,6 +68,14 @@ dc-restart(){
 	docker-compose create --force-recreate $@
 	docker-compose start $@
 }
+dct() {
+	file="$1"
+	cmd="docker-compose"
+	if [[ -n "$file" ]]; then
+		cmd="$cmd --file $file"
+	fi
+	eval "$cmd down && $cmd up"
+}
 
 # returns the default app for opening a certain file
 mime() {
@@ -142,14 +150,22 @@ notify_done() {
 # Better defaults for running "go test ..."
 gotest() {
 	set -o pipefail
+	export GORACE="strip_path_prefix=$PWD/ history_size=7"
 	time echo_and_run \
-		go test -cover -failfast -race -v "$@" | go_test_color
+		 go test -cover -failfast -race -v "$@" | go_test_color
 	code=$?
 	# Notifies us via pop up and sound in case the shell's terminal is not currently focused
 	# Helpful when multitasking
 	notify_done "Test" "$code"
 	set +o pipefail
 	return $code
+}
+
+gocover() {
+	gotest -count=1 -covermode=atomic -coverprofile /tmp/cover.out -coverpkg="$(go list ./... | grep -v protobufs | tr '\n' ',')" ./... && \
+	go tool cover -func /tmp/cover.out | grep total && \
+	go-cover-treemap -coverprofile /tmp/cover.out > /tmp/cover.svg && \
+	imv /tmp/cover.svg
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
@@ -186,7 +202,7 @@ create_branch() {
 	if [ ! -f "HEAD" ]; then
 		echo "You're not in the root of the bare repo. Aborting..."; return 1
 	fi
-
+set -x
 	branch_name="$1"
 	if [ -z "$branch_name" ]; then
 		branch_name="$(git branch -a --format '%(refname:short)' | fzf)"
@@ -203,6 +219,7 @@ create_branch() {
 	git worktree add "$dir" "$branch_name"
 	echo "Created dir: $dir"
 	cd "$dir"
+	set +x
 }
 
 retry() {
@@ -287,4 +304,26 @@ hex(){
 		return 1
 	fi
 	printf "%d\n" "$1"
+}
+
+tmp() {
+	nvim --cmd "setlocal buftype=nofile"
+}
+
+kubectl() {
+	command kubectl "$@" 2>&1 | tee |  grep -v memcache
+}
+alias k=kubectl
+
+escape_quotes() {
+	sed s/\"/'\\\"'/g
+}
+
+
+from_nano_to_readable() {
+	(( $# )) || { printf '%s\n' 'provide atleast one argument' >&2 ; }
+	input="$1"
+	withNano="$(( input % 1000000000 ))"
+	withoutNano="$(date -d@"$(( input / 1000000000 ))" +"%Y-%m-%d-%H:%M:%S")"
+	printf '%s\n' "$withoutNano.$withNano"
 }
