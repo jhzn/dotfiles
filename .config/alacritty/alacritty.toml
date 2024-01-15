@@ -1,0 +1,9 @@
+import = ["/home/johan/.config/alacritty/theme.toml"]
+
+[font.normal]
+family = "FiraCode Nerd Font"
+
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "Return"
+mods = "Control|Shift"
