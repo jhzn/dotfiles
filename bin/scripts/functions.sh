@@ -327,3 +327,7 @@ from_nano_to_readable() {
 	withoutNano="$(date -d@"$(( input / 1000000000 ))" +"%Y-%m-%d-%H:%M:%S")"
 	printf '%s\n' "$withoutNano.$withNano"
 }
+
+kubeport() {
+	ss -tupln | grep kubectl | awk '{print $5}' |  cut -d ":" -f 2 | head -n 1
+}

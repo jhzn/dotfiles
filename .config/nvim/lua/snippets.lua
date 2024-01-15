@@ -99,26 +99,30 @@ ls.add_snippets("go", {
 		i(1),
 		t(', "", "\\t")'),
 		newline(),
-		t('\tfmt.Printf("P_DEBUG %s Func: '),
+		t('\tfmt.Printf("P_DEBUG Func: '),
 		f(function()
 			return { utils.ts_function_surrounding_current_cursor() }
 		end, {}),
-		t(' err: %v\\n%s\\n\", '),
+		t(' Line: '),
+		f(function()
+			return { string.format("%s:%s", vim.fn.expand("%:."), vim.fn.line(".")) }
+		end, {}),
+		t(' err: %v\\n%s\\n\", gurkaErr, gurkaTempLog)'),
 		newline(),
-		t('func() string { _, f, l, _ := runtime.Caller(0); return fmt.Sprintf("%s:%d", f, l) }(), gurkaErr, gurkaTempLog)'),
-		newline(),
-		t("}"),
+		t('}'),
 	}),
 	s("pde", {
 		t('\tfmt.Printf('),
 		newline(),
-		t('"P_DEBUG %s Func: '),
+		t('"P_DEBUG Func: '),
 		f(function()
 			return { utils.ts_function_surrounding_current_cursor() }
 		end, {}),
-		t(' Value: %+v \\n",'),
-		newline(),
-		t('func() string { _, f, l, _ := runtime.Caller(0); return fmt.Sprintf("%s:%d", f, l) }(), '),
+		t(' Line: '),
+		f(function()
+			return { string.format("%s:%s", vim.fn.expand("%:."), vim.fn.line(".")) }
+		end, {}),
+		t(' Value: \\n%+v\\n",'),
 		newline(),
 		i(1),
 		t(','),
@@ -143,7 +147,27 @@ ls.add_snippets("go", {
 		label = i(1)
 	})),
 })
--- })
+
+local js_snippets = {
+	s("pde", {
+		t('console.log('),
+		t('"P_DEBUG Func: '),
+		f(function()
+			return { utils.ts_function_surrounding_current_cursor() }
+		end, {}),
+		t(' Line: '),
+		f(function()
+			return { string.format("%s:%s", vim.fn.expand("%:."), vim.fn.line(".")) }
+		end, {}),
+		t('"'),
+		t(','),
+		i(1),
+		t(')'),
+	}),
+}
+
+ls.add_snippets("javascript", js_snippets)
+ls.add_snippets("typescript", js_snippets)
 
 ls.add_snippets("sh", {
 	s("root", {

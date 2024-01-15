@@ -4,7 +4,7 @@ source ~/.config/dotfiles/bash_strict_mode.sh
 
 alacritty_theme() {
 	touch ~/.config/alacritty/theme.yml
-	cat "$HOME/.config/alacritty/$1.yml" > ~/.config/alacritty/theme.yml
+	cat "$HOME/.config/alacritty/$1.toml" > ~/.config/alacritty/theme.toml
 }
 nvim_theme() {
 	echo 'vim.g.theme_style = "'$1'"' > ~/.config/nvim/lua/theme.lua

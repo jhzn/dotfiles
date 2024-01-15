@@ -132,7 +132,7 @@ return require('packer').startup(function(use)
 				highlight = {
 					enable = true,              -- false will disable the whole extension
 					disable = function(lang, bufnr) -- Disable in large C++ buffers
-						return require("utils").longest_line(bufnr) > 5000
+						return require("utils").longest_line(bufnr) > 5000 or vim.api.nvim_buf_line_count(bufnr) > 50000
 						-- return vim.api.nvim_buf_line_count(bufnr) > 50000
 					end,
 					additional_vim_regex_highlighting = true -- Makes highliting only comment when using :set spell
@@ -147,7 +147,7 @@ return require('packer').startup(function(use)
 			require'treesitter-context'.setup{
 				enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
 				throttle = true, -- Throttles plugin updates (may improve performance)
-				max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+				max_lines = 5, -- How many lines the window should span. Values <= 0 mean no limit.
 				patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
 				-- For all filetypes
 				-- Note that setting an entry here replaces all other patterns for this entry.

@@ -176,7 +176,7 @@ nnoremap <C-l> <C-w>l
 
 " delete without yanking
 nnoremap <leader>d "_d
-nnoremap <leader>D "_d
+nnoremap <leader>D "_d$
 nnoremap <leader>dd 0"_dd
 
 "replace currently selected text with default register

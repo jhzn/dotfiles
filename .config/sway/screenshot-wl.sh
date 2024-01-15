@@ -31,8 +31,8 @@ mkdir -p "$screenshot_dir"
 
 
 #check if required programs/scripts are available
-grimshot_cmd="grimshot"
-[ ! -x "$(command -v $grimshot_cmd)" ] && echo "grimshot script was not found in \$PATH " && exit 1
+cmd="grimshot"
+[ ! -x "$(command -v $cmd)" ] && echo "grimshot script was not found in \$PATH " && exit 1
 [ ! -x "$(command -v swappy)" ] && echo "swappy was not found in \$PATH" && exit 2
 
 
@@ -45,13 +45,13 @@ opt5="Select window"
 opts=$(join_by  $'\n' "$opt1" "$opt2" "$opt3" "$opt4" "$opt5")
 target=$(prompt "Which target?" "$opts")
 
-grimshot_cmd+=" save"
+cmd+=" save"
 case $target in
-	"$opt1") grimshot_cmd+=" active";;
-	"$opt2") grimshot_cmd+=" output";;
-	"$opt3") grimshot_cmd+=" screen";;
-	"$opt4") grimshot_cmd+=" area";;
-	"$opt5") grimshot_cmd+=" window";;
+	"$opt1") cmd+=" active";;
+	"$opt2") cmd+=" output";;
+	"$opt3") cmd+=" screen";;
+	"$opt4") cmd+=" area";;
+	"$opt5") cmd+=" window";;
 	*) echo "Invalid option" && exit 3;;
 esac
 
@@ -60,12 +60,18 @@ edit_option=$(prompt "Edit screenshot?" "No\nYes")
 delay_option=$(prompt "Delay of 5 seconds" "No\nYes")
 if [ "$delay_option" = "Yes" ]; then
 	swaymsg "focus_follows_mouse no"
-	sleep 5
+	echo "$cmd"
+	sleep='notify-send --expire-time=3000 "Screenshot" "Taking in 5 seconds" && sleep 5'
+	if [[ "$cmd" == "grimshot save area" ]]; then
+		cmd='slurp=$(slurp) && '"$sleep"' && grim -g "$slurp"'
+	else
+		cmd="$sleep && $cmd"
+	fi
 fi
 
 tmp_filename="$screenshot_dir/tmp-screenshot.png"
 
-final_command="$grimshot_cmd $tmp_filename"
+final_command="$cmd $tmp_filename"
 echo "Running command: $final_command"
 
 disable_focus_flasher="/tmp/disable_focus_flasher"
