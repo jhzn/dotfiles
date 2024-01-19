@@ -289,6 +289,17 @@ local on_attach = function(client, bufnr)
 	if client.name == "gopls" then
 		go_lsp_client_conf()
 	end
+	if client.name == "templ" then
+		vim.api.nvim_create_autocmd(
+			{ "BufWritePre" },
+			{
+				pattern = {"*.templ"},
+				callback = function()
+					vim.lsp.buf.format()
+				end,
+			}
+		)
+	end
 	if client.name == "pylsp" and PylspAutoFormat then
 		vim.api.nvim_exec([[ autocmd BufWritePre *.py silent! lua Format_code() ]], false)
 	end
@@ -448,7 +459,8 @@ local servers = {
 	"tsserver",
 	"efm",
 	"bicep",
-	"yamlls"
+	"yamlls",
+	"templ"
 }
 for _, server in pairs(servers) do
 	local config = default_server_conf()

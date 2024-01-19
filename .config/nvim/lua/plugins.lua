@@ -12,8 +12,7 @@ if not vim.g.theme_style then
 	vim.g.theme_style = "darker"
 end
 
-return require('packer').startup(function(use)
-	-- Packer can manage itself
+return require('packer').startup(function(use) -- Packer can manage itself
 	use 'wbthomason/packer.nvim'
 
 	use {
@@ -256,6 +255,7 @@ return require('packer').startup(function(use)
 		end
 	}
 
+	use { "vrischmann/tree-sitter-templ" }
 
 	use 'scrooloose/nerdcommenter'
 	use 'tpope/vim-surround'
