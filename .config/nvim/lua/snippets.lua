@@ -78,6 +78,9 @@ ls.add_snippets("all", {
 })
 
 ls.add_snippets("go", {
+	s("ctx", {
+		t("ctx context.Context,"),
+	}),
 	s("iferrp", {
 		t("if err != nil {"),
 		newline(),
@@ -150,7 +153,7 @@ ls.add_snippets("go", {
 
 local js_snippets = {
 	s("pde", {
-		t('console.log('),
+		t('console.warn('),
 		t('"P_DEBUG Func: '),
 		f(function()
 			return { utils.ts_function_surrounding_current_cursor() }

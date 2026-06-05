@@ -89,5 +89,5 @@ fi
 
 export QT_QPA_PLATFORM=wayland
 
-exec "$swaybin"
+exec "$swaybin" --debug
 

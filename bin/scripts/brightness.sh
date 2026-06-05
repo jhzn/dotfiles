@@ -28,6 +28,10 @@ laptop_monitor() {
 
 regular_monitor() {
 	set_monitors() {
+		if  ! is_num "$1" ; then
+			echo "$1 is not a number"
+			exit 1
+		fi
 		displays=$(ddcutil detect | grep Display | awk '{print $2}')
 		for d in $displays; do
 			ddcutil --display="$d" setvcp 10 "$1"
@@ -45,6 +49,8 @@ regular_monitor() {
 			new_level=$(( $current_level + $increment));;
 		down )
 			new_level=$(( $current_level - $increment));;
+		* )
+			set_monitors "$1" && return 0;;
 	esac
 
 	# Protection against hitting above/below boundries
@@ -58,6 +64,13 @@ regular_monitor() {
 	set_monitors "$new_level"
 }
 
+is_num () {
+	re='^[0-9]+$'
+	if ! [[ "$1" =~ $re ]] ; then
+		return 1
+	fi
+	return 0
+}
 
 # Laptops have batteries.
 if [[ -d /sys/class/power_supply/BAT0 ]]; then

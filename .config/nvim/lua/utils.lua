@@ -8,9 +8,11 @@ function M.merge(a, b)
 end
 
 function M.ts_function_surrounding_current_cursor()
-	return M.ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor())
+	-- return M.ts_function_surrounding_cursor(require('nvim-treesitter.ts_utils').get_node_at_cursor())
+	return M.ts_function_surrounding_cursor(vim.treesitter.get_node())
 end
-
+-- lua print(require('nvim-treesitter.ts_utils').get_node_at_cursor():type())
+-- lua print(require("utils").get_function_name(require('nvim-treesitter.ts_utils').get_node_at_cursor(), "field_definition"))
 -- Retrieve the name of the function the cursor is in.
 -- Inspired by https://old.reddit.com/r/neovim/comments/pd8f07/using_treesitter_to_efficiently_show_the_function/hao7zl5/
 function M.ts_function_surrounding_cursor(current_node)
@@ -18,7 +20,10 @@ function M.ts_function_surrounding_cursor(current_node)
 	local res = M.get_function_name(current_node, 'function_declaration')
 	-- If that fails try finding a method_declaration
 	if res == "" then
-		return M.get_function_name(current_node, 'method_declaration')
+		res = M.get_function_name(current_node, 'method_declaration')
+		-- if res == "" then
+			-- return  M.get_function_name(current_node, 'field_definition')
+		-- end
 	end
 	return res
 end
@@ -27,6 +32,7 @@ function M.get_function_name(current_node, obj_name)
 	if not current_node then
 		return ""
 	end
+	-- put("Type: " .. current_node:type())
 	if current_node:type() ~= obj_name then
 		return M.get_function_name(current_node:parent(), obj_name)
 	end
@@ -35,16 +41,24 @@ function M.get_function_name(current_node, obj_name)
 		for i = 0, node:named_child_count() - 1, 1 do
 			local child = node:named_child(i)
 			local type = child:type()
-			if obj_name == 'method_declaration' then
-				if type == 'field_identifier' then
-					return vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf())
-				end
-			else
-				if type == 'identifier' or type == 'operator_name' then
-					return vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf())
-				end
-			end
 
+			local func_name = vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf())
+			-- Uncomment to debug
+			-- put(obj_name .. " | " .. type .. " | " .. func_name)
+
+
+
+
+			-- if obj_name == 'field_definition' and type == 'property_identifier' then -- Javascript
+				-- local t = vim.treesitter.get_node_text(child, vim.api.nvim_get_current_buf())
+				-- return t
+			-- end
+			if obj_name == 'method_declaration' and type == 'field_identifier' then -- Golang
+				return func_name
+			end
+			if obj_name == 'function_declaration' and type == 'identifier' then -- Golang
+				return func_name
+			end
 
 			local name = find_name(child)
 			if name then
@@ -96,4 +110,63 @@ function M.longest_line(bufnr)
 	return width
 end
 
+
+---Validates args for `throttle()` and  `debounce()`.
+local function td_validate(fn, ms)
+	vim.validate{
+		fn = { fn, 'f' },
+		ms = {
+			ms,
+			function(ms)
+				return type(ms) == 'number' and ms > 0
+			end,
+			"number > 0",
+		},
+	}
+end
+--- Throttles a function on the leading edge. Automatically `schedule_wrap()`s.
+---
+--@param fn (function) Function to throttle
+--@param timeout (number) Timeout in ms
+--@returns (function, timer) throttled function and timer. Remember to call
+---`timer:close()` at the end or you will leak memory!
+--
+-- Source: https://gist.github.com/runiq/31aa5c4bf00f8e0843cd267880117201
+function M.throttle_leading(fn, ms)
+	td_validate(fn, ms)
+	local timer = vim.loop.new_timer()
+	local running = false
+
+	local function wrapped_fn(...)
+		if not running then
+			timer:start(ms, 0, function()
+				running = false
+			end)
+			running = true
+			pcall(vim.schedule_wrap(fn), select(1, ...))
+		end
+	end
+	return wrapped_fn, timer
+end
+
+
+function M.debounce_leading(fn, ms)
+	td_validate(fn, ms)
+	local timer = vim.loop.new_timer()
+	local running = false
+
+	local function wrapped_fn(...)
+		timer:start(ms, 0, function()
+			running = false
+		end)
+
+		if not running then
+			running = true
+			pcall(vim.schedule_wrap(fn), select(1, ...))
+		end
+	end
+	return wrapped_fn, timer
+end
+
 return M
+

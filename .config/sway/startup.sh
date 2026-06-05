@@ -3,8 +3,7 @@
 #start keyring daemon
 #https://wiki.archlinux.org/index.php/GNOME/Keyring
 # TODO is this optimal? We still need to run 'export $(gnome-keyring-daemon --start)' in our .bashrc
-eval $(/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh)
-export SSH_AUTH_SOCK
+/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets &
 
 mako &
 ~/.config/sway/wlsunset-toggle.sh &

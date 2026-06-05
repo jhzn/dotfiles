@@ -45,8 +45,11 @@ PATH=~/.cargo/bin:$PATH
 PATH=~/.yarn/bin:$PATH
 PATH=~/.local/bin:$PATH
 PATH=/usr/lib:$PATH
-PATH=/usr/share/sway/scripts:$PATH
+PATH=/usr/share/sway-contrib:$PATH
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+
 
 # This is the list for lf icons:
 # Taken from:

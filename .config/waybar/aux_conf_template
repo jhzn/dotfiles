@@ -3,9 +3,9 @@
 	"position": "bottom",
 	"height": 30,
 	"margin-top": 1,
-	"modules-center": [ "cpu", "temperature", "memory", "sway/window", "sway/workspaces", "sway/mode", "clock" ],
+	"modules-center": [ "cpu", "temperature", "memory", "sway/window", "sway/workspaces", "sway/mode", "custom/clock" ],
 	"sway/workspaces": {
-		"persistent_workspaces": {}
+		"persistent-workspaces": { }
 	},
 	"sway/mode": {
 		"format": "<span style=\"italic\">{}</span>"
@@ -13,6 +13,10 @@
 	"clock": {
 		"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
 		"format": "{:%Y-%m-%d %a %H:%M}"
+	},
+	"custom/clock": {
+		"exec": "date +\"%Y-%m-%d %H:%M\"",
+		"interval": 10
 	},
 	"cpu": {
 		"format": "{usage}% CPU",

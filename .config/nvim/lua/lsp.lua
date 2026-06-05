@@ -1,9 +1,9 @@
-local lspconfig = require("lspconfig")
-local lsputil = require("lspconfig/util")
+local utils = require("utils")
 
 ---------------------------------------------
 -------------- Completion/Snippets ----------
 ---------------------------------------------
+
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menu,menuone,noselect"
@@ -162,7 +162,7 @@ local go_lsp_client_conf = function()
 				vim.api.nvim_buf_get_name(0),
 			}
 		else
-			local function_name = require("utils").ts_function_surrounding_current_cursor()
+			local function_name = utils.ts_function_surrounding_current_cursor()
 			if function_name == "" then
 				print("Failed to get function name.. Not continuing")
 				return
@@ -200,16 +200,16 @@ end
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 
-local get_clients_from_cmd_args = function(arg)
-	local result = {}
-	for id in (arg or ''):gmatch '(%d+)' do
-		result[id] = vim.lsp.get_client_by_id(tonumber(id))
-	end
-	if vim.tbl_isempty(result) then
-		return require('lspconfig.util').get_managed_clients()
-	end
-	return vim.tbl_values(result)
-end
+-- local get_clients_from_cmd_args = function(arg)
+	-- local result = {}
+	-- for id in (arg or ''):gmatch '(%d+)' do
+		-- result[id] = vim.lsp.get_client_by_id(tonumber(id))
+	-- end
+	-- if vim.tbl_isempty(result) then
+		-- return require('lspconfig.util').get_managed_clients()
+	-- end
+	-- return vim.tbl_values(result)
+-- end
 
 PylspAutoFormat = false
 
@@ -237,11 +237,32 @@ TogglePylspAutoFormat = function()
 end
 
 
-Format_code = function()
-	vim.lsp.buf.format({
-		async = true,
-		timeout_ms = 2000,
-	})
+Format_code = function(doDebounce)
+	local f = function()
+		vim.lsp.buf.format({ async = true, timeout_ms = 2000, })
+	end
+	if doDebounce then
+		local wrap_fn, timer = utils.debounce_leading(f, 2000)
+		wrap_fn()
+		timer:close()
+	else
+		f()
+	end
+end
+
+templ_format = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local filename = vim.api.nvim_buf_get_name(bufnr)
+    local cmd = "templ fmt " .. vim.fn.shellescape(filename)
+
+    vim.fn.jobstart(cmd, {
+        on_exit = function()
+            -- Reload the buffer only if it's still the current buffer
+            if vim.api.nvim_get_current_buf() == bufnr then
+                vim.cmd('e!')
+            end
+        end,
+    })
 end
 
 local on_attach = function(client, bufnr)
@@ -261,7 +282,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
 	buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
 
-	if client.name == "tsserver" then
+	if client.name == "ts_ls" then
 		client.server_capabilities.documentFormattingProvider = false
 	end
 
@@ -275,13 +296,10 @@ local on_attach = function(client, bufnr)
 
 	if client.name == "efm" then
 		-- Setup autoformatting on save
-		vim.api.nvim_exec(
-			[[
-			autocmd BufWritePre *.ts lua Format_code()
-			autocmd BufWritePre *.tsx lua Format_code()
-			]],
-			false
-		)
+		vim.api.nvim_create_augroup("lsp_efm_prettier", { clear = true })
+		vim.api.nvim_create_autocmd({ "BufWritePost" }, { pattern = "*.ts", command = "lua Format_code(true)", group = "lsp_efm_prettier", })
+		vim.api.nvim_create_autocmd({ "BufWritePost" }, { pattern = "*.tsx", command = "lua Format_code(true)", group = "lsp_efm_prettier", })
+		vim.api.nvim_create_autocmd({ "BufWritePost" }, { pattern = "*.js", command = "lua Format_code(true)", group = "lsp_efm_prettier", })
 	end
 	if client.name == "sumneko" then
 		vim.api.nvim_exec([[ autocmd BufWritePre *.lua lua Format_code() ]], false)
@@ -291,11 +309,11 @@ local on_attach = function(client, bufnr)
 	end
 	if client.name == "templ" then
 		vim.api.nvim_create_autocmd(
-			{ "BufWritePre" },
+			{ "BufWritePost" },
 			{
 				pattern = {"*.templ"},
 				callback = function()
-					vim.lsp.buf.format()
+					Format_code()
 				end,
 			}
 		)
@@ -378,28 +396,33 @@ end
 local utils = require("utils")
 
 local function efm_server_conf()
-	-- local eslint = {
-		-- lintCommand = "eslint_d --cache -f unix --stdin --stdin-filename ${INPUT}",
-		-- lintIgnoreExitCode = true,
-		-- lintStdin = true,
-		-- lintFormats = { "%f:%l:%c: %m" },
-		-- -- formatCommand = 'eslint --stdin --stdin-filename=${INPUT}',
-		-- -- formatStdin = true,
-	-- }
+	local eslint = {
+		lintCommand = "eslint_d --cache -f unix --stdin --stdin-filename ${INPUT}",
+		lintIgnoreExitCode = true,
+		lintStdin = true,
+		lintFormats = { "%f:%l:%c: %m" },
+		-- formatCommand = 'eslint --stdin --stdin-filename=${INPUT}',
+		-- formatStdin = true,
+	}
 
 	local prettier = { formatStdin = true }
 	local prettier_bin = "node_modules/prettier/bin-prettier.js"
 	if utils.file_exists(prettier_bin) then
 		prettier.formatCommand = "./" .. prettier_bin .. " --stdin-filepath ${INPUT}"
 	else
-		prettier.formatCommand = "prettier --stdin-filepath ${INPUT}"
+		-- "semi": true,
+		-- "singleQuote": false,
+		-- "bracketSpacing": false,
+		-- "jsxSingleQuote": false,
+		-- "printWidth": 200
+		prettier.formatCommand = "prettier --stdin-filepath ${INPUT} --use-tabs --tab-width 4 --trailing-comma 'es5' --print-width 200"
 	end
 
 	return {
 		-- css = { prettier },
 		-- html = { prettier },
-		-- javascript = { prettier, eslint },
-		-- javascriptreact = { prettier, eslint },
+		javascript = { prettier },
+		javascriptreact = { prettier },
 		-- json = { prettier },
 		-- lua = { formatCommand = "stylua" },
 		markdown = { prettier },
@@ -444,11 +467,16 @@ local function go_lsp_server_conf()
 			unusedvariable = true,
 		},
 		staticcheck = true,
+		annotations = {
+			escape = true,
+			inline = true,
+		},
 		-- ['local'] = goModule,
 		['local'] = "",
 	}
 
 end
+
 
 local servers = {
 	"rust_analyzer",
@@ -456,9 +484,9 @@ local servers = {
 	"pylsp",
 	"bashls",
 	-- "sumneko_lua",
-	"tsserver",
+	"ts_ls",
 	"efm",
-	"bicep",
+	-- "bicep",
 	"yamlls",
 	"templ"
 }
@@ -469,6 +497,17 @@ for _, server in pairs(servers) do
 		config.settings = {
 			gopls = go_lsp_server_conf()
 		}
+	end
+	if server == "templ" then
+		local cfg = {
+			-- /home/johan/code/w_github/templ/cmd/templ/templ
+			cmd = { "templ", "lsp", "-log=/tmp/templ.log" , "--prettier-command=prettier --stdin-filepath $TEMPL_PRETTIER_FILENAME --use-tabs --tab-width 4 --trailing-comma 'es5' --print-width 200"},
+			--cmd = { "templ", "lsp", "-log=/tmp/templ.log" , "-goplsRPCTrace"},
+			filetypes = { 'templ' },
+			-- root_dir = nvim_lsp.util.root_pattern("go.mod", ".git"),
+			settings = {}
+		}
+		config = utils.merge(config, cfg)
 	end
 	if server == "pylsp" then
 		config.settings = {
@@ -493,12 +532,11 @@ for _, server in pairs(servers) do
 			-- root_dir = lspconfig.util.root_pattern("."),
 			init_options = { documentFormatting = true },
 			filetypes = vim.tbl_keys(efm_config),
+			cmd = { "efm-langserver", "-logfile", "/tmp/efm.log", "-loglevel", "5"},
 			settings = {
-				lintDebounce = "5s",
+				lintDebounce = "10s",
 				-- rootMarkers = { "." },
 				languages = efm_config,
-				log_level = 4,
-				log_file = '/tmp/efm.log'
 			},
 		}
 		config = utils.merge(config, cfg)
@@ -547,11 +585,11 @@ for _, server in pairs(servers) do
 			},
 		}
 	end
-	if server == "bicep" then
-		config = utils.merge(config, {
-			cmd = { "dotnet", vim.env.HOME .. "/bin/bicep-langserver/Bicep.LangServer.dll" },
-		})
-	end
-
-	lspconfig[server].setup(config)
+	-- if server == "bicep" then
+		-- config = utils.merge(config, {
+			-- cmd = { "dotnet", vim.env.HOME .. "/bin/bicep-langserver/Bicep.LangServer.dll" },
+		-- })
+	-- end
+	vim.lsp.config(server, config)
+	vim.lsp.enable(server)
 end

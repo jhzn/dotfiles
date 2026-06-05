@@ -1,11 +1,11 @@
-vim.cmd [[packadd packer.nvim]]
-vim.cmd [[packadd vimball]]
-vim.cmd([[
-	augroup packer_user_config
-		autocmd!
-		autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-	augroup end
-]])
+--vim.cmd [[packadd packer.nvim]]
+--vim.cmd [[packadd vimball]]
+--vim.cmd([[
+--	augroup packer_user_config
+--		autocmd!
+--		autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+--	augroup end
+--]])
 
 require("theme")
 if not vim.g.theme_style then
@@ -17,6 +17,7 @@ return require('packer').startup(function(use) -- Packer can manage itself
 
 	use {
 		'navarasu/onedark.nvim',
+		priority = 1000, -- make sure to load this before all the other start plugins
 		config = function()
 
 
@@ -51,19 +52,36 @@ return require('packer').startup(function(use) -- Packer can manage itself
 					undercurl = true,   -- use undercurl for diagnostics
 					background = true,    -- use background color for virtual text
 				},
+				lualine = {
+					transparent = false, -- lualine center bar transparency
+				},
 			}
 			if vim.g.theme_style == "light" then
-				cfg.diagnostics.darker = false
-				cfg.highlights = {
-					CursorLine = {bg = '$bg2'},
-					Visual = {bg = '$bg3'},
-				}
-				vim.o.background = 'light'
+				-- cfg.diagnostics.darker = false
+				-- cfg.highlights = {
+					-- CursorLine = {bg = '$bg2'},
+					-- Visual = {bg = '$bg3'},
+					-- ["comments"] = {fg = '$grey'},
+					-- ["@comment"] = {fg = '$grey'},
+					-- ["@lsp.type.comment"] = {fg = '$grey'},
+				-- }
+				vim.o.background = 'dark'
 			else
 				cfg.diagnostics.darker = true
+				cfg.colors = {
+					bright_orange = "#ff8800",    -- define a new color
+					-- green = '#00ffaa',            -- redefine an existing color
+					dark_green = '#475a39'
+				}
 				cfg.highlights = {
-					CursorLine = {bg = '$bg2'},
-					Visual = {bg = '$bg0'},
+					-- CursorLine = {bg = '#494f5c'},
+					CursorLine = {bg = '$bg0'},
+					Visual = {bg = '$grey'},
+					["comments"] = {fg = '$dark_green'},
+					["@comment"] = {fg = '$dark_green'},
+					["@lsp.type.comment"] = {fg = '$dark_green'},
+
+					-- ["@comment"] = {fg="$orange"},
 				}
 				vim.o.background = 'dark'
 			end
@@ -74,20 +92,27 @@ return require('packer').startup(function(use) -- Packer can manage itself
 	}
 
 	use 'nvim-tree/nvim-web-devicons'
+	-- use {
+		-- 'NTBBloodbath/galaxyline.nvim',
+		-- branch = 'main',
+		-- config = function()
+			-- -- put(require('onedark.colors'))
+			-- require'galaxylineconf'
+		-- end,
+		-- requires = {'nvim-tree/nvim-web-devicons', opt = true},
+		-- after = "onedark.nvim",
+	-- }
 	use {
-		'NTBBloodbath/galaxyline.nvim',
-		branch = 'main',
+		'nvim-lualine/lualine.nvim',
+		requires = { 'nvim-tree/nvim-web-devicons', opt = true },
 		config = function()
 			-- put(require('onedark.colors'))
-			require'galaxylineconf'
+			require'lualineconf'
 		end,
-		requires = {'nvim-tree/nvim-web-devicons', opt = true},
-		after = "onedark.nvim",
 	}
 
-
 	use {
-		"windwp/nvim-spectre",
+		"nvim-pack/nvim-spectre",
 		config = function()
 			require('spectre').setup()
 		end,
@@ -112,32 +137,50 @@ return require('packer').startup(function(use) -- Packer can manage itself
 		end,
 	}
 
-	use {
-		'phaazon/hop.nvim',
-		branch = 'v1', -- optional but strongly recommended
-		config = function()
-			-- you can configure Hop the way you like here; see :h hop-config
-			require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-		end
-	}
+	-- use {
+		-- 'phaazon/hop.nvim',
+		-- branch = 'v1', -- optional but strongly recommended
+		-- config = function()
+			-- -- you can configure Hop the way you like here; see :h hop-config
+			-- require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+		-- end
+	-- }
 
+	-- use {
+		-- 'nvim-treesitter/nvim-treesitter',
+		-- run = ':TSUpdate',
+		-- config = function()
+			-- require'nvim-treesitter.configs'.setup {
+				-- ensure_installed = "all", -- one of "all or a list of languages
+				-- --ignore_install = { "javascript" }, -- List of parsers to ignore installing
+				-- highlight = {
+					-- enable = true,              -- false will disable the whole extension
+					-- disable = function(lang, bufnr) -- Disable in large C++ buffers
+						-- return require("utils").longest_line(bufnr) > 5000 or vim.api.nvim_buf_line_count(bufnr) > 50000
+						-- -- return vim.api.nvim_buf_line_count(bufnr) > 50000
+					-- end,
+					-- additional_vim_regex_highlighting = true -- Makes highliting only comment when using :set spell
+				-- },
+			-- }
+		-- end,
+	-- }
+	--
+	--
 	use {
-		'nvim-treesitter/nvim-treesitter',
-		run = ':TSUpdate',
+		"romus204/tree-sitter-manager.nvim",
+		dependencies = {}, -- tree-sitter CLI must be installed system-wide
 		config = function()
-			require'nvim-treesitter.configs'.setup {
-				ensure_installed = "all", -- one of "all or a list of languages
-				--ignore_install = { "javascript" }, -- List of parsers to ignore installing
-				highlight = {
-					enable = true,              -- false will disable the whole extension
-					disable = function(lang, bufnr) -- Disable in large C++ buffers
-						return require("utils").longest_line(bufnr) > 5000 or vim.api.nvim_buf_line_count(bufnr) > 50000
-						-- return vim.api.nvim_buf_line_count(bufnr) > 50000
-					end,
-					additional_vim_regex_highlighting = true -- Makes highliting only comment when using :set spell
-				},
-			}
-		end,
+			require("tree-sitter-manager").setup({
+				-- Default Options
+				-- ensure_installed = {}, -- list of parsers to install at the start of a neovim session
+				-- border = nil, -- border style for the window (e.g. "rounded", "single"), if nil, use the default border style defined by 'vim.o.winborder'. See :h 'winborder' for more info.
+				-- auto_install = false, -- if enabled, install missing parsers when editing a new file
+				-- highlight = true, -- treesitter highlighting is enabled by default
+				-- languages = {}, -- override or add new parser sources
+				-- parser_dir = vim.fn.stdpath("data") .. "/site/parser",
+				-- query_dir = vim.fn.stdpath("data") .. "/site/queries",
+			})
+		end
 	}
 
 	use {
@@ -193,12 +236,12 @@ return require('packer').startup(function(use) -- Packer can manage itself
 	use "L3MON4D3/LuaSnip"
 	use "saadparwaiz1/cmp_luasnip"
 
-	use {
-		"kosayoda/nvim-lightbulb",
-		config = function()
-			vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
-		end,
-	}
+	-- use {
+		-- "kosayoda/nvim-lightbulb",
+		-- config = function()
+			-- vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
+		-- end,
+	-- }
 
 	-- GO stuff
 	-- use { "kyoh86/vim-go-coverage", ft="go" }

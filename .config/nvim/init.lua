@@ -63,7 +63,8 @@ g.tabstop = 4       -- number of visual spaces per TAB
 opt.softtabstop = 4   -- number of spaces in tab when editing
 opt.shiftwidth = 4 -- Make tabbing 4 spaces wide
 opt.cursorline = true          -- highlight current line
-opt.showmatch = true           -- highlight matching [{()}]
+opt.showmatch = false           -- highlight matching [{()}]
+vim.g.loaded_matchparen = 0
 opt.incsearch = true           -- search as characters are entered
 opt.inccommand = "nosplit"  -- show substititions live
 opt.hlsearch = true            -- highlight matches
@@ -105,6 +106,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
+vim.filetype.add({ extension = { templ = "templ" } })
 
 
 -- TODO port to lua

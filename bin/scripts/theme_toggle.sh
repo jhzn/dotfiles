@@ -11,6 +11,13 @@ nvim_theme() {
 }
 delta_theme() {
 	git config --global delta.syntax-theme "$1"
+	if [[ "$1" == "OneHalfLight" ]]; then
+		git config --global delta.dark "false"
+		git config --global delta.light "true"
+		return
+	fi
+	git config --global delta.dark "true"
+	git config --global delta.light "false"
 }
 tmux_theme() {
 	theme_file=~/.cache/tmux_theme
@@ -50,6 +57,28 @@ zsh_theme() {
 	echo "$cfg" > "$theme_file"
 }
 
+k9s_theme() {
+	templ_theme_file="$HOME/.config/k9s/skins/one_dark.templ.yaml"
+	output_theme_file="$HOME/.config/k9s/skins/one_dark.yaml"
+	if [ "$1" == "light" ]; then
+		light=$(cat <<- EOF
+			# Light theme
+			foreground: &foreground "black"
+			background: &background "#fafafa"
+			EOF
+		)
+		cat <(echo "$light") "$templ_theme_file" > "$output_theme_file"
+	else
+		dark=$(cat <<- EOF
+			# Dark theme
+			foreground: &foreground "#abb2bf"
+			background: &background "#282c34"
+			EOF
+		)
+		cat <(echo "$dark") "$templ_theme_file" > "$output_theme_file"
+	fi
+}
+
 
 dark_theme_name="dark"
 light_theme_name="light"
@@ -65,7 +94,10 @@ set_dark_theme() {
 	tmux_theme "dark"
 	glow_theme "dark"
 	zsh_theme "dark"
+	k9s_theme "dark"
+	gsettings set org.gnome.desktop.interface gtk-theme 'Adapta-Nokto'
 	printf "$dark_theme_name" > "$current_theme_cache"
+	echo "Dark set!"
 }
 
 set_light_theme() {
@@ -75,7 +107,10 @@ set_light_theme() {
 	tmux_theme "light"
 	glow_theme "light"
 	zsh_theme "light"
+	k9s_theme "light"
+	gsettings set org.gnome.desktop.interface gtk-theme 'Adapta'
 	printf "$light_theme_name" > "$current_theme_cache"
+	echo "Light set!"
 }
 
 # Default theme is dark

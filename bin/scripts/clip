@@ -1,5 +1,6 @@
 #!/bin/bash -x
 
-echo "$(date -u +%Y-%m-%dT%H:%M:%S%Z) storing $(wl-paste)" >> ~/clipman.txt
+# echo "$(date -u +%Y-%m-%dT%H:%M:%S%Z) storing $(wl-paste)" >> ~/clipman.txt
+echo "$(date -u +%Y-%m-%dT%H:%M:%S%Z) storing something" >> ~/clipman.txt
 
 clipman store --max-items=30 &>> ~/clipman.txt

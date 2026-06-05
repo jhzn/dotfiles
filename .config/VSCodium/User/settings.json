@@ -70,5 +70,8 @@
 	"workbench.colorTheme": "One Dark Pro",
 	"go.formatTool": "goimports",
 	"go.useLanguageServer": true,
-	"editor.fontFamily": "JetBrainsMono Nerd Font Mono"
+	"editor.fontFamily": "JetBrainsMono Nerd Font Mono",
+	"[templ]": {
+		"editor.defaultFormatter": "a-h.templ"
+	}
 }

@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 # Allow users to override command-line options
@@ -8,7 +8,7 @@ if [[ -f $USER_FLAGS_FILE ]]; then
 fi
 
 export CHROME_VERSION_EXTRA="stable"
-
+set -x
 if [ -z "$BRAVE_BIN" ]; then
 	exec /usr/bin/brave "$@" $USER_FLAGS
 else

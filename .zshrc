@@ -1,4 +1,7 @@
 # zmodload zsh/zprof # For debugging zsh startup
+if [ -n "${ZSH_DEBUGRC+1}" ]; then
+    zmodload zsh/zprof
+fi
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -45,14 +48,23 @@ setopt extendedglob
 # Speed up compinit. Source: https://gist.github.com/ctechols/ca1035271ad134841284?permalink_comment_id=3994613#gistcomment-3994613
 zmodload zsh/complist
 autoload -Uz compinit
-for dump in ~/.zcompdump(N.mh+24); do
-	compinit
-done
+if [ "$(find ~/.zcompdump -mtime +1)" ] ; then
+    # compinit
+fi
 compinit -C
+# for dump in ~/.zcompdump(N.mh+24); do
+	# compinit
+# done
+# compinit -C
 # Auto complete with case insenstivity
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 source ~/.config/dotfiles/fzf-tab-completion/zsh/fzf-zsh-completion.sh
 
+# Use ~~ as the trigger sequence instead of the default **
+# export FZF_COMPLETION_TRIGGER='~~'
+
+# Options to fzf command
+# export FZF_COMPLETION_OPTS='--border --info=inline'
 
 
 
@@ -232,3 +244,6 @@ ZSH_HIGHLIGHT_STYLES[comment]=fg=245,standout
 ZSH_HIGHLIGHT_STYLES[comment]=fg=245,italic
 
 # zprof # For debugging zsh startup
+if [ -n "${ZSH_DEBUGRC+1}" ]; then
+    zprof
+fi

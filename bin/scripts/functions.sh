@@ -202,7 +202,7 @@ create_branch() {
 	if [ ! -f "HEAD" ]; then
 		echo "You're not in the root of the bare repo. Aborting..."; return 1
 	fi
-set -x
+	set -x
 	branch_name="$1"
 	if [ -z "$branch_name" ]; then
 		branch_name="$(git branch -a --format '%(refname:short)' | fzf)"
@@ -306,14 +306,30 @@ hex(){
 	printf "%d\n" "$1"
 }
 
-tmp() {
-	nvim --cmd "setlocal buftype=nofile"
-}
-
 kubectl() {
 	command kubectl "$@" 2>&1 | tee |  grep -v memcache
 }
-alias k=kubectl
+
+kctx() {
+	# To debug
+	# export BASH_COMP_DEBUG_FILE=~/kubectl_debuging.txt
+		# set -x
+	ctx=$(kubectl config get-contexts --no-headers | sed 's/\*/\ /' | awk '{print $1}' | sort | sed '/-00/D' | sed '/\.com/D' | fzf)
+	echo "Using '$ctx' in this session"
+	_k() {
+		# set -x
+		# Required voodoo for zsh completion to work.
+		# https://unix.stackexchange.com/a/747851
+		 # words="kubectl ${words[@]:1}"
+		 words="kubectl --context=${ctx} ${words[@]:1}"
+		 # echo "$words"
+		_kubectl
+	}
+	k(){
+		kubectl --context="$ctx" $@
+	}
+	compdef _k k
+}
 
 escape_quotes() {
 	sed s/\"/'\\\"'/g
@@ -331,3 +347,144 @@ from_nano_to_readable() {
 kubeport() {
 	ss -tupln | grep kubectl | awk '{print $5}' |  cut -d ":" -f 2 | head -n 1
 }
+
+go_trace() {
+	trace_file="/tmp/trace_$(date +%Y-%m-%d_%H:%M:%S).out"
+	echo "How many seconds to trace?"
+	read -r seconds
+	echo "Enter host+port, (empty == 127.0.0.1:x):"
+	read -r custom_hostport
+
+	if [[ -z "$custom_hostport" ]];then
+		port=${custom_hostport:-"127.0.0.1:$(kubeport)"}
+		if [[ -z "$port" ]]; then
+			echo "No kubectl port-forward active. Exiting..." && exit 1
+		fi
+	fi
+
+
+	echo_and_run curl -s -o "$trace_file" \
+		"http://${custom_hostport:-$port}/debug/pprof/trace?seconds=$seconds"
+	echo_and_run go tool trace \
+		-http "0.0.0.0:" "$trace_file"
+}
+
+
+_pprof_choice() {
+	items=("goroutine" "heap" "mutex" "block" "threadcreate" "allocs" "profile")
+	choice=$(printf "%s\n" "${items[@]}" | fzf)
+	echo "$choice"
+}
+
+go_pprof_diff() (
+	set -euo pipefail
+
+	choice=$(_pprof_choice)
+	echo "Using pprof: $choice"
+
+	echo "Enter diff minute:"
+	read -r diff_time
+
+	echo "Enter count"
+	read -r count
+
+	echo "Enter host+port, (empty == 127.0.0.1:x):"
+	read -r custom_hostport
+
+	if [[ -z "$custom_hostport" ]];then
+		port=${custom_hostport:-"127.0.0.1:$(kubeport)"}
+		if [[ -z "$port" ]]; then
+			echo "No kubectl port-forward active. Exiting..." && exit 1
+		fi
+	fi
+
+	suffix="$(date +%Y-%m-%d_%H:%M:%S)_$(pass_gen)"
+	base="/tmp/pprof_${choice}_base_$suffix.out"
+
+	url="http://${custom_hostport:-$port}/debug/pprof/$choice"
+	echo_and_run curl -s -o "$base" "$url"
+
+	n() {
+		echo "/tmp/${1}pprof_${choice}_$suffix.out"
+	}
+
+	files=()
+	for i in $(seq "$count"); do
+		sleepDur=$((diff_time/count*60))
+		echo "Sleeping for: $sleepDur seconds"
+		sleep "$sleepDur"
+		out="$(n "$i")"
+		echo "Fetch profile $i / $diff_time"
+		echo_and_run curl -s -o "$out" "$url"
+		files+=("$out")
+	done
+
+	notify-send "pprof" "Profiles are fetched. Starting Viewer"
+	echo_and_run go tool pprof \
+		-http 127.0.0.1: \
+		$(if [[ ! -z "$GO_PPROF_UTIL_FUNCS_TRIM_PATH" ]]; then echo "-trim_path $GO_PPROF_UTIL_FUNCS_TRIM_PATH"; fi) \
+		$(if [[ ! -z "$GO_PPROF_UTIL_FUNCS_GIT_REPO" ]]; then echo "-source_path $GO_PPROF_UTIL_FUNCS_GIT_REPO"; fi) \
+		-normalize \
+		-call_tree -lines \
+		-base "$base" $files
+)
+
+go_pprof() (
+
+	choice=${1:-$(_pprof_choice)}
+	echo "Using pprof: $choice"
+
+	if [[ -z "$2"  ]]; then
+		echo "Enter host+port, (empty == 127.0.0.1:x):"
+		read -r custom_hostport
+	else
+		custom_hostport="$2"
+	fi
+	set -euo pipefail
+	set -x
+	args=""
+	if [[ "$choice" == "profile" ]]; then
+		echo "Enter args"
+		read -r args
+	fi
+
+	if [[ -z "$custom_hostport" ]];then
+		port=${custom_hostport:-"127.0.0.1:$(kubeport)"}
+		if [[ -z "$port" ]]; then
+			echo "No kubectl port-forward active. Exiting..." && exit 1
+		fi
+	fi
+
+	echo_and_run go tool pprof \
+		-http 127.0.0.1: \
+		$(if [[ ! -z "$GO_PPROF_UTIL_FUNCS_TRIM_PATH" ]]; then echo "-trim_path $GO_PPROF_UTIL_FUNCS_TRIM_PATH"; fi) \
+		$(if [[ ! -z "$GO_PPROF_UTIL_FUNCS_GIT_REPO" ]]; then echo "-source_path $GO_PPROF_UTIL_FUNCS_GIT_REPO"; fi) \
+		-call_tree -lines -edgefraction 0 -nodefraction 0 -nodecount 100000 \
+		"http://${custom_hostport:-$port}/debug/pprof/$choice" \
+		$args
+)
+
+k8s_watcher() (
+	# Bash strict mode
+	set -euo pipefail
+	# Neat way to show the line and program which caused the error in a pipeline
+	trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+	set -x
+	pod=$(k get pods --no-headers | fzf | awk '{print $1}')
+	echo "Watching $pod"
+
+	port="9994"
+	k port-forward "$pod" "$port":6060 &
+
+	sleep 5
+
+	while true; do
+		num=$(k top pod "$pod" --no-headers=true | awk '{print $3}' | sed 's/Mi//')
+		if ((num > 1300)); then
+			go_pprof "heap" "127.0.0.1:$port" &
+			go_pprof "goroutine" "127.0.0.1:$port" &
+			return
+		fi
+		sleep 10;
+	done
+)

@@ -11,27 +11,30 @@ git config --global blame.date 'format:%Y-%m-%d %H:%M:%S'
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date-order"
 git config --global alias.st "status"
 git config --global alias.s "status"
-git config --global alias.cm "commit -m"
+git config --global alias.cm "commit --no-verify -m"
 git config --global alias.c "commit -v"
-git config --global alias.ca "commit -v -a"
-git config --global alias.cam "commit -a -m"
-git config --global alias.camv "commit -a --no-verify -m"
-git config --global alias.cmv "commit --no-verify -m"
+git config --global alias.ca "commit --no-verify -a"
+git config --global alias.cam "commit -a --no-verify -m"
+git config --global alias.camv "commit -a -v -m"
+git config --global alias.cmv "commit -v -m"
 git config --global alias.ap "add -p"
 git config --global alias.co "checkout"
 git config --global alias.cob '! git checkout $(git branch | fzf)'
 git config --global alias.br "branch"
 git config --global alias.d "diff"
+git config --global alias.dx 'diff -- ":!*_templ.go"'
 git config --global alias.ds "diff --staged"
+git config --global alias.dsx "diff --staged -- ':!*_templ.go'"
 git config --global alias.p "pull"
 git config --global alias.f "fetch"
 git config --global alias.sw "switch"
-git config --global alias.wip "! git add . && git commit -m 'WIP' && git push"
-git config --global alias.wipv "! git add . && git commit --no-verify -m 'WIP' && git push"
+git config --global alias.ok "! git commit --no-verify -m 'Fix' && git push"
+git config --global alias.wipv "! git add . && git commit -m 'WIP' && git push"
+git config --global alias.wip "! git add . && git commit --no-verify -m 'WIP' && git push"
 git config --global alias.authors "shortlog -s -n -e"
 git config --global alias.filehist "log -p"
 git config --global alias.filerev '! git show'
-git config --global alias.emp '! git commit --allow-empty -m "Empty commit"'
+git config --global alias.emp '! git commit --no-verify --allow-empty -m "Empty commit"'
 git config --global alias.cot '! file=$(git --no-pager diff --name-only --diff-filter=U | fzf); git checkout --theirs "$file" && git add "$file"'
 git config --global alias.coo '! file=$(git --no-pager diff --name-only --diff-filter=U | fzf); git checkout --ours "$file" && git add "$file"'
 

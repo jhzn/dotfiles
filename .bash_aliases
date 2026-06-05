@@ -1,6 +1,6 @@
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	alias xc="wl-copy --trim-newline"
-	alias xp='wl-paste --type text'
+	alias xp='wl-paste --no-newline'
 	alias screenshot='/usr/share/sway/scripts/grimshot'
 	alias codium="codium $WAYLAND_CHROMIUM_FLAGS"
 else
@@ -31,6 +31,7 @@ alias vr="nvim -R" # Vim in readonly mode
 alias j='nvim -R -c "set ft=json"'
 alias y='nvim -R -c "set ft=yaml"'
 alias pager="nvim -R"
+alias tmp='nvim --cmd "setlocal buftype=nofile"'
 
 alias grep='grep --colour=auto'
 alias egrep='egrep --colour=auto'
@@ -76,5 +77,10 @@ alias ne="nix-env"
 alias p="python3"
 
 alias tmux_dlv="tmux split-window -v -t sc \"zsh -ic 'dlv connect localhost:2345'\""
-alias kust="kustomize"
-alias kctx="kubectl config use-context"
+
+# alias kv="HTTPS_PROXY=socks5://127.0.0.1:9090 kubectl-vsphere"
+# alias kk="HTTPS_PROXY=socks5://127.0.0.1:9090 kubectl"
+# alias kk9s="HTTPS_PROXY=socks5://127.0.0.1:9090 k9s"
+alias gkctx="kubectl config use-context"
+
+alias dcat='docker run -it --rm -a stdout --entrypoint cat'

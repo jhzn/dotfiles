@@ -19,14 +19,16 @@ OG_USER="$1"
 #setup done, now we can do what we want to do
 
 #desktop
-pacman -S --needed xdg-user-dirs lxsession gnome-keyring libsecret alacritty tmux \
+pacman -S --needed xdg-user-dirs lxsession gnome-keyring gcr-4 libsecret alacritty tmux \
 	firefox transmission-gtk brightnessctl network-manager-applet kdeconnect
+
+systemctl enable --user gcr-ssh-agent.socket
 
 #hardens firefox a bit
 cp ~/.config/arch/firefox/policies.json /usr/lib/firefox/distribution/policies.json
 
 # wayland
-pacman -S --needed sway swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wtype autotiling-rs qt5-wayland qt6-wayland
+pacman -S --needed sway sway-contrib swaylock swayidle xorg-xwayland waybar gammastep mako grim slurp wl-clipboard wtype autotiling-rs qt5-wayland qt6-wayland
 
 #networking
 pacman -S --needed iptables-nft

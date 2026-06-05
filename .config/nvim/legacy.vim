@@ -45,6 +45,9 @@ let g:NERDCompactSexyComs = 1
 " PHP
 "replace PHP array() to []
 let @p='/\<array\>(dema%r]``ar['
+" Golang "if err :=" macro
+let @g="iif err := \<ESC>f(%A;err != nil {}\<ESC>i\<CR>slog.Error(\"err\",utils.ErrAttr(err))\<CR>\<ESC>"
+
 
 
 
@@ -119,6 +122,7 @@ nnoremap ,x :NvimTreeCollapse<CR>
 
 " Yarn $file:$line_number
 nnoremap <leader>yl <cmd>lua vim.fn.setreg("+", string.format("%s:%s", vim.api.nvim_buf_get_name(0), vim.fn.line(".")))<CR>
+nnoremap <leader>yg <cmd>lua vim.fn.setreg("+", string.format("%s%s?ref_type=heads#L%s", vim.env.CORP_GIT_REPO_BASE_URL, vim.fn.expand("%:."), vim.fn.line(".")))<CR>
 " Yank 'gotest $relative_dir_path -run $MyFunctionName^'
 nnoremap <leader>yf <cmd>lua vim.fn.setreg("+", string.format("gotest -run '^%s$' ./%s", require("utils").ts_function_surrounding_current_cursor(), vim.fn.expand('%:.:h'))) <cr>
 nnoremap <leader>l <cmd>lua vim.fn.setreg("+", string.format("%s", require("utils").ts_function_surrounding_current_cursor())) <cr>
@@ -248,3 +252,6 @@ inoremap <CR> <CR>
 
 
 nnoremap <leader>g :!git add %<CR>
+
+
+nnoremap <leader>y :execute "normal! ^ygn" \| call setreg('Z', getreg('0')."\n")<cr>

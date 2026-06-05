@@ -1,9 +1,10 @@
 {
+	"reload_style_on_change": true,
 	"output": [],
 	"position": "bottom",
 	"height": 30,
 	"margin-top": 1,
-	"modules-right": [ "custom/openweather", "idle_inhibitor", "network", "pulseaudio", "custom/media", "clock", "tray" ],
+	"modules-right": [ "custom/openweather", "idle_inhibitor", "network", "pulseaudio", "custom/media", "custom/clock", "tray" ],
 	"modules-center": [ "sway/workspaces", "sway/mode" ],
 	"modules-left": [
 		"cpu",
@@ -20,7 +21,7 @@
 		"interval": 1800
 	},
 	"sway/workspaces": {
-		"persistent_workspaces": {}
+		"persistent-workspaces": { }
 	},
 	"sway/mode": {
 		"format": "<span style=\"italic\">{}</span>"
@@ -35,6 +36,10 @@
 	"tray": {
 		"icon-size": 21,
 		"spacing": 10
+	},
+	"custom/clock": {
+		"exec": "date +\"%Y-%m-%d %H:%M\"",
+		"interval": 10
 	},
 	"clock": {
 		"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",

@@ -99,6 +99,7 @@ window#waybar.empty
 #workspaces,
 #window,
 #clock,
+#custom-clock,
 #battery,
 #cpu,
 #memory,
@@ -132,7 +133,8 @@ window#waybar.empty
 	padding-left: 10px;
 	padding-right: 10px;
 }
-#clock {
+#clock,
+#custom-clock {
 	color: @color2;
 }
 #custom-openweather {
@@ -252,3 +254,4 @@ label:focus {
 #mpd.paused {
 	background-color: #51a37a;
 }
+

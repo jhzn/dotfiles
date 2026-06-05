@@ -21,4 +21,4 @@ background = "#3e4451"
 text = "CellForeground"
 
 [window]
-opacity = 0.95
+opacity = 0.98

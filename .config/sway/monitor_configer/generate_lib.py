@@ -163,25 +163,25 @@ def waybar(monitor_map: models.MonitorMap) -> List[str]:
         aux_mon_vars.append(monitor.variable_name)
 
     out = []
-    primary_workspaces_var_name = "prim_waybar_persistent_workspaces"
+    primary_workspaces_var_name = "primary"
     out.append(create_shell_variable(primary_workspaces_var_name, primary_monitor_waybar_cfg))
 
     if len(aux_mon_vars) > 0:
-        aux_workspaces_var_name = "aux_waybar_persistent_workspaces"
+        aux_workspaces_var_name = "aux"
         out.append(create_shell_variable(aux_workspaces_var_name, aux_monitors_waybar_cfg))
 
         out.append(
             f"""{{
     echo -e '['
-    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "${primary_workspaces_var_name}" "{primary_mon_variable}")" {WAYBAR_PRIMARY_TEMPLATE}
+    jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "${primary_workspaces_var_name}" "{primary_mon_variable}")" {WAYBAR_PRIMARY_TEMPLATE}
     echo -e ','
-    jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "${aux_workspaces_var_name}" "{",".join(aux_mon_vars)}")" {WAYBAR_AUX_TEMPLATE}
+    jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "${aux_workspaces_var_name}" "{",".join(aux_mon_vars)}")" {WAYBAR_AUX_TEMPLATE}
     echo -e ']'
 }} > {WAYBAR_CONFIG_FILE}"""
         )
     else:
         out.append(
-            f"""jq "$(printf '."sway\/workspaces".persistent_workspaces = '%s' | ."output"= [ "%s" ]' "${primary_workspaces_var_name}" "{primary_mon_variable}")" {WAYBAR_PRIMARY_TEMPLATE} > {WAYBAR_CONFIG_FILE}"""
+            f"""jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "${primary_workspaces_var_name}" "{primary_mon_variable}")" {WAYBAR_PRIMARY_TEMPLATE} > {WAYBAR_CONFIG_FILE}"""
         )
 
     return out

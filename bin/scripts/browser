@@ -3,4 +3,6 @@
 source ~/.profile
 [ -f ~/.host_specific_settings.sh ] && source ~/.host_specific_settings.sh
 
+set -x
+
 exec "$BROWSER" "$@"
