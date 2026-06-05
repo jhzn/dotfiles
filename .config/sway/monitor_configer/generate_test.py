@@ -648,7 +648,7 @@ swaymsg "workspace 1 output $MON_0; workspace number 1; move workspace to $MON_0
 swaymsg output "$MON_0" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 1080 enable
 swaymsg output DP-1 disable
 
-prim_waybar_persistent-workspaces=$(cat << EOF
+primary=$(cat << EOF
 {
 "1": ["$MON_0"],
 "2": ["$MON_0"],
@@ -664,7 +664,7 @@ prim_waybar_persistent-workspaces=$(cat << EOF
 EOF
 )
 
-jq "$(printf '."sway\/workspaces".persistent-workspaces = '%s' | ."output"= [ "%s" ]' "$prim_waybar_persistent-workspaces" "$MON_0")" ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
+jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "$primary" "$MON_0")" ~/.config/waybar/primary_conf_template > ~/.config/waybar/config"""
     assert got == expected, "test with 1 monitor failed\n{}".format(diff_strings(expected, got))
 
 
@@ -694,7 +694,7 @@ swaymsg output "$MON_1" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 10
 swaymsg output "$MON_0" res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
 swaymsg output DP-1 disable
 
-prim_waybar_persistent-workspaces=$(cat << EOF
+primary=$(cat << EOF
 {
 "1": ["$MON_0"],
 "2": ["$MON_0"],
@@ -705,7 +705,7 @@ prim_waybar_persistent-workspaces=$(cat << EOF
 EOF
 )
 
-aux_waybar_persistent-workspaces=$(cat << EOF
+aux=$(cat << EOF
 {
 "6": ["$MON_1"],
 "7": ["$MON_1"],
@@ -718,9 +718,9 @@ EOF
 
 {
     echo -e '['
-    jq "$(printf '."sway\/workspaces".persistent-workspaces = '%s' | ."output"= [ "%s" ]' "$prim_waybar_persistent-workspaces" "$MON_0")" ~/.config/waybar/primary_conf_template
+    jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "$primary" "$MON_0")" ~/.config/waybar/primary_conf_template
     echo -e ','
-    jq "$(printf '."sway\/workspaces".persistent-workspaces = '%s' | ."output"= [ "%s" ]' "$aux_waybar_persistent-workspaces" "$MON_1")" ~/.config/waybar/aux_conf_template
+    jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "$aux" "$MON_1")" ~/.config/waybar/aux_conf_template
     echo -e ']'
 } > ~/.config/waybar/config"""
 
@@ -754,7 +754,7 @@ swaymsg output "$MON_1" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 10
 swaymsg output "$MON_0" res 3840x2160@59.997hz scale 1.5 transform normal pos 1920 0 enable
 swaymsg output "$MON_2" res 1920x1080@60.0hz scale 1.0 transform normal pos 0 0 enable
 
-prim_waybar_persistent-workspaces=$(cat << EOF
+primary=$(cat << EOF
 {
 "1": ["$MON_0"],
 "2": ["$MON_0"],
@@ -764,7 +764,7 @@ prim_waybar_persistent-workspaces=$(cat << EOF
 EOF
 )
 
-aux_waybar_persistent-workspaces=$(cat << EOF
+aux=$(cat << EOF
 {
 "5": ["$MON_1"],
 "6": ["$MON_1"],
@@ -778,9 +778,9 @@ EOF
 
 {
     echo -e '['
-    jq "$(printf '."sway\/workspaces".persistent-workspaces = '%s' | ."output"= [ "%s" ]' "$prim_waybar_persistent-workspaces" "$MON_0")" ~/.config/waybar/primary_conf_template
+    jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "$primary" "$MON_0")" ~/.config/waybar/primary_conf_template
     echo -e ','
-    jq "$(printf '."sway\/workspaces".persistent-workspaces = '%s' | ."output"= [ "%s" ]' "$aux_waybar_persistent-workspaces" "$MON_1,$MON_2")" ~/.config/waybar/aux_conf_template
+    jq "$(printf '."sway\/workspaces"."persistent-workspaces" = '%s' | ."output"= [ "%s" ]' "$aux" "$MON_1,$MON_2")" ~/.config/waybar/aux_conf_template
     echo -e ']'
 } > ~/.config/waybar/config"""
 
